@@ -1,3 +1,4 @@
+import React from 'react';
 import Header from 'components/Header';
 import 'styles/globals.scss';
 import type { AppProps } from 'next/app';
