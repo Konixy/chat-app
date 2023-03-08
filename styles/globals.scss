@@ -2,8 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer {
-  .clay-shadow {
-    box-shadow: none;
-  }
+// ----- Fonts -----
+
+@font-face {
+  font-family: 'NeueMetana';
+  src: url('../public/fonts/NeueMetana-Regular.otf') format('opentype');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'NeueMetana';
+  src: url('../public/fonts/NeueMetana-Bold.otf') format('opentype');
+  font-weight: bold;
 }
