@@ -4,6 +4,7 @@ import { useTheme as useNextTheme } from 'next-themes';
 import { useTheme } from '@nextui-org/react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Header() {
   const { setTheme } = useNextTheme();
@@ -27,7 +28,9 @@ export default function Header() {
     <Navbar isBordered variant="sticky">
       <Navbar.Toggle showIn="xs" />
       <Navbar.Brand>
-        <Link href="/" className="font-metana text-2xl font-bold text-black dark:text-white">
+        <Link href="/" className="flex flex-row items-center justify-center font-metana text-2xl font-bold text-black dark:text-white">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/icons/black-logo.svg" alt="" className="w-10" />
           Lyna
         </Link>
       </Navbar.Brand>
