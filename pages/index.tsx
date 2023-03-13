@@ -19,7 +19,7 @@ export default function Home() {
           </Button>
         </>
       ) : (
-        <Button light={false} icon={<i className="fab fa-google" />} as="button" onClick={() => signIn('google')} color="primary" auto>
+        <Button className="bg-blue-500" icon={<i className="fab fa-google" />} as="button" onClick={() => signIn('google')} color="primary" auto>
           Sign in with Google
         </Button>
       )}
