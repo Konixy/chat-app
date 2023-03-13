@@ -5,6 +5,7 @@ import prisma from 'lib/prismadb';
 
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
+  theme: { colorScheme: 'dark' },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,

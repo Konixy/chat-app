@@ -1,12 +1,28 @@
-import React from 'react';
-import { signIn, useSession } from 'next-auth/react';
+import React, { useEffect } from 'react';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { Button } from '@nextui-org/react';
 
 export default function Home() {
   const { data } = useSession();
-  console.log(data);
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
   return (
     <div>
-      <button onClick={() => signIn('google')}>Sign in</button>
+      {data ? (
+        <>
+          <Link href="app">My messages</Link>
+          <Button flat color="error" auto onClick={() => signOut({ redirect: false, callbackUrl: '/' })}>
+            Log out
+          </Button>
+        </>
+      ) : (
+        <Button light={false} icon={<i className="fab fa-google" />} as="button" onClick={() => signIn('google')} color="primary" auto>
+          Sign in with Google
+        </Button>
+      )}
     </div>
   );
 }

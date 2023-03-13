@@ -5,11 +5,14 @@ import { useTheme } from '@nextui-org/react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useSession } from 'next-auth/react';
+import User from 'components/User';
 
 export default function Header() {
   const { setTheme } = useNextTheme();
   const { isDark } = useTheme();
   const router = useRouter();
+  const { data } = useSession();
 
   const items = [
     { name: 'Home', url: '/', active: router.pathname === '/' },
@@ -50,13 +53,8 @@ export default function Header() {
             iconOff={<i className="fa-solid fa-sun text-black" />}
           />
         </Navbar.Item>
-        <Navbar.Link color="inherit" href="/account/new">
-          Sign up
-        </Navbar.Link>
         <Navbar.Item>
-          <Button auto flat as={Link} href="/account/login">
-            Log in
-          </Button>
+          <User />
         </Navbar.Item>
       </Navbar.Content>
       <Navbar.Collapse showIn="xs">
