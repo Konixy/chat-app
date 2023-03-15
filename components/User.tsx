@@ -1,14 +1,44 @@
 import React from 'react';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import { User as UserType } from 'lib/types';
+import { Dropdown, StyledLink, User } from '@nextui-org/react';
 import Link from 'next/link';
-import { User } from 'lib/types';
-import { StyledLink } from '@nextui-org/react';
 
-export default function User() {
+export default function Index() {
   const { data } = useSession();
   return data && data.user ? <UserDropdown user={data.user} /> : <StyledLink onClick={() => signIn('google')}>Sign in with Google</StyledLink>;
 }
 
-function UserDropdown({ user }: { user: User }) {
-  return <>{user.name}</>;
+function UserDropdown({ user }: { user: UserType }) {
+  return (
+    <Dropdown placement="bottom-left">
+      <Dropdown.Trigger>
+        <User
+          bordered
+          as="button"
+          size="lg"
+          color="primary"
+          name={user.name}
+          description={user.email as string}
+          {...(user.image ? { src: user.image } : { text: user.name as string })}
+        />
+      </Dropdown.Trigger>
+      <Dropdown.Menu color="primary" aria-label="User Actions">
+        <Dropdown.Section title={`Signed in as ${user.email}`}>
+          <Dropdown.Button as={Link} href="/me">
+            My profile
+          </Dropdown.Button>
+          <Dropdown.Button as={Link} href="/app">
+            My conversations
+          </Dropdown.Button>
+        </Dropdown.Section>
+        <Dropdown.Section>
+          <Dropdown.Item key="settings">Settings</Dropdown.Item>
+          <Dropdown.Button as="button" key="logout" color="error" onClick={() => signOut()}>
+            Log Out
+          </Dropdown.Button>
+        </Dropdown.Section>
+      </Dropdown.Menu>
+    </Dropdown>
+  );
 }
