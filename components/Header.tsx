@@ -18,7 +18,7 @@ export default function Header() {
     { name: 'Home', url: '/', active: router.pathname === '/' },
     {
       name: 'My chat',
-      url: '/chat',
+      url: '/app',
     },
     {
       name: 'Terms Of Uses',
