@@ -1,12 +1,18 @@
 import React from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { User as UserType } from 'lib/types';
-import { Dropdown, StyledLink, User } from '@nextui-org/react';
+import { Dropdown, Loading, StyledLink, User } from '@nextui-org/react';
 import Link from 'next/link';
 
 export default function Index() {
   const { data } = useSession();
-  return data && data.user ? <UserDropdown user={data.user} /> : <StyledLink onClick={() => signIn('google')}>Sign in with Google</StyledLink>;
+  return data && data.user ? (
+    <>{data.user?.name}</>
+  ) : data === undefined ? (
+    <Loading />
+  ) : (
+    <StyledLink onClick={() => signIn('google')}>Sign in with Google</StyledLink>
+  );
 }
 
 function UserDropdown({ user }: { user: UserType }) {

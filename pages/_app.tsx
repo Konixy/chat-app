@@ -37,7 +37,6 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
           }}
         >
           <NextUIProvider>
-            <Header />
             <Component {...pageProps} />
           </NextUIProvider>
         </NextThemesProvider>
