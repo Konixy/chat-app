@@ -28,6 +28,7 @@ module.exports = {
     'tailwindcss/no-custom-classname': 'off',
     'tailwindcss/no-contradicting-classname': 'error',
     'react-hooks/exhaustive-deps': 'off',
+    'react/react-in-jsx-scope': 'off',
   },
   plugins: ['tailwindcss'],
 };

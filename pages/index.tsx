@@ -1,9 +1,8 @@
-import React from 'react';
+import { Avatar, Button } from '@nextui-org/react';
+import Header from 'components/Header';
+import { NextPageContext } from 'next';
 import { getSession, signIn, signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { Avatar, Button } from '@nextui-org/react';
-import { NextPageContext } from 'next';
-import Header from 'components/Header';
 
 export default function Home() {
   const { data } = useSession();
@@ -12,7 +11,6 @@ export default function Home() {
     <>
       <Header />
       <div className="my-20 flex flex-row justify-center text-center">
-        <img src="/icons/logo.svg" alt="" width="50px" height="50px" />
         {data?.user ? (
           <>
             {data.user.image ? <Avatar src={data.user.image} /> : <Avatar text={data.user.name as string} />}
