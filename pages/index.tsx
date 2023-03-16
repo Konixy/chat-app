@@ -12,6 +12,7 @@ export default function Home() {
     <>
       <Header />
       <div className="my-20 flex flex-row justify-center text-center">
+        <img src="/icons/logo.svg" alt="" width="50px" height="50px" />
         {data?.user ? (
           <>
             {data.user.image ? <Avatar src={data.user.image} /> : <Avatar text={data.user.name as string} />}

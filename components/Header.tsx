@@ -31,10 +31,9 @@ export default function Header() {
     <Navbar isBordered variant="sticky">
       <Navbar.Toggle showIn="xs" />
       <Navbar.Brand>
-        <Link href="/" className="flex flex-row items-center justify-center font-metana text-2xl font-bold text-black dark:text-white">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/icons/black-logo.svg" alt="" className="w-10" />
-          Lyna
+        <Link href="/" className="flex flex-row items-center">
+          <Image src={`/icons/${isDark ? 'white' : 'black'}-logo.svg`} alt="" width={30} height={30} />
+          <div className="ml-2 items-center font-metana text-3xl font-bold text-black dark:text-white">Lyna</div>
         </Link>
       </Navbar.Brand>
       <Navbar.Content hideIn="xs">
@@ -49,8 +48,8 @@ export default function Header() {
           <Switch
             checked={isDark}
             onChange={(e) => setTheme(e.target.checked ? 'dark' : 'light')}
-            iconOn={<i className="fa-solid fa-moon text-white" />}
-            iconOff={<i className="fa-solid fa-sun text-black" />}
+            // iconOn={<i className="fa-solid fa-moon text-white" />}
+            // iconOff={<i className="fa-solid fa-sun text-black" />}
           />
         </Navbar.Item>
         <Navbar.Item>
