@@ -1,6 +1,8 @@
-import { Button } from '@nextui-org/react';
+import GoogleIcon from '@/components/GoogleIcon';
+import { Button, Link as StyledLink } from '@nextui-org/react';
 import { Session } from 'next-auth';
 import { getSession, signIn } from 'next-auth/react';
+import Link from 'next/link';
 import { NextPageContext } from 'next/types';
 
 interface IAuthProps {
@@ -10,18 +12,16 @@ interface IAuthProps {
 
 const Auth: React.FC<IAuthProps> = ({ session, reloadSession }) => {
   return (
-    <div className="h-[100vh] border border-red-500">
-      <div className="absolute top-1/2 -translate-y-1/2">
-        <Button icon={<i className="fab fa-google" />} as="button" onClick={() => signIn('google')} color="primary" auto>
+    <div className="h-[100vh]">
+      <div className="absolute top-1/2 right-1/2 inline-block translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center text-center">
+        <Button icon={<GoogleIcon />} as="button" onClick={() => signIn('google')} color="primary" auto>
           Sign in with Google
         </Button>
+        <StyledLink as={Link} href="/" className="mt-4" color="text">
+          <i className="fas fa-arrow-left mr-2" /> Back to homepage
+        </StyledLink>
       </div>
     </div>
-    // <div className="h-full min-h-full w-full min-w-full">
-    //   <div className="absolute left-1/2 top-1/2 flex -translate-y-1/2 -translate-x-1/2 flex-col justify-center">
-
-    //   </div>
-    // </div>
   );
 };
 

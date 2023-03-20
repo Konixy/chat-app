@@ -15,7 +15,7 @@ class MyDocument extends Document {
     return (
       <Html lang="fr">
         <Head>
-          <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/v6.2.0/css/pro.min.css" />
+          <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/v6.3.0/css/pro.min.css" />
           <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon" />
           {CssBaseline.flush()}
         </Head>
