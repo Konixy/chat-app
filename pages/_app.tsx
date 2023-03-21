@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from 'components/Header';
 import { createTheme, NextUIProvider } from '@nextui-org/react';
 import 'styles/globals.scss';
 import type { AppProps } from 'next/app';
