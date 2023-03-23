@@ -1,6 +1,6 @@
 import React from 'react';
 import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
-import { CssBaseline } from '@nextui-org/react';
+import { WithNextUI } from '../../NextUITailwind';
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -17,11 +17,12 @@ class MyDocument extends Document {
         <Head>
           <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/v6.3.0/css/pro.min.css" />
           <link rel="shortcut icon" href="/icons/favicon.ico" type="image/x-icon" />
-          {CssBaseline.flush()}
         </Head>
         <body>
-          <Main />
-          <NextScript />
+          <WithNextUI>
+            <Main />
+            <NextScript />
+          </WithNextUI>
         </body>
       </Html>
     );
