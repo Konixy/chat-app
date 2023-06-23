@@ -10,7 +10,6 @@ module.exports = {
       },
     },
   },
-  darkMode: ['class', '.dark-theme'],
-  plugins: [],
-  important: true,
+  darkMode: ['class'],
+  plugins: [require('rippleui')],
 };
