@@ -29,6 +29,7 @@ module.exports = {
     'tailwindcss/no-contradicting-classname': 'error',
     'react-hooks/exhaustive-deps': 'off',
     'react/react-in-jsx-scope': 'off',
+    'jsx-a11y/no-noninteractive-tabindex': 'off',
   },
   plugins: ['tailwindcss'],
 };

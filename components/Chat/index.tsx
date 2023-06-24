@@ -1,6 +1,9 @@
-import { Session } from 'next-auth/core/types';
-import React from 'react';
+import * as React from 'react';
 
-export default function Chat({ session }: { session: Session }) {
-  return <div>chat for {session.user.username}</div>;
-}
+interface IChatProps {}
+
+const Chat: React.FunctionComponent<IChatProps> = (props) => {
+  return <div>chat</div>;
+};
+
+export default Chat;

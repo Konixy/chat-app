@@ -10,13 +10,16 @@
     "sync": "git add -A && git commit -m \"Update\" && git push"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.16",
     "@next-auth/prisma-adapter": "^1.0.5",
     "@prisma/client": "^4.11.0",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "graphql": "^16.7.1",
     "next": "^13.4.7",
     "next-auth": "^4.20.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-loader-spinner": "^5.3.4",
     "rippleui": "^1.12.1",
     "sass": "^1.58.0"
   },
