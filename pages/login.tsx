@@ -2,8 +2,9 @@ import { getSession, signIn, useSession } from 'next-auth/react';
 import { NextPageContext } from 'next/types';
 import BackBtn from 'components/BackBtn';
 import { useEffect, useState } from 'react';
-import { Oval } from 'react-loader-spinner';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
+import Loader from 'components/Loader';
 
 export default function Auth() {
   const [isLoading, setIsLoading] = useState(false);
@@ -13,7 +14,7 @@ export default function Auth() {
   useEffect(() => {
     if (data?.user) {
       setIsLoading(true);
-      router.push('/');
+      router.push('/app');
     }
   }, [data]);
 
@@ -22,21 +23,26 @@ export default function Auth() {
       <BackBtn />
       <div className="h-[100vh]">
         <div className="absolute right-1/2 top-1/2 inline-block -translate-y-1/2 translate-x-1/2 flex-col items-center justify-center text-center">
-          <div className="text-4xl">Lyna</div>
+          <div className="mb-10 flex flex-row text-center">
+            <Image src="/icons/white-logo.svg" alt="" width={30} height={30} />
+            <div className="font-metana text-4xl font-bold">Lyna</div>
+          </div>
           <button
             className="btn-primary btn w-64"
             onClick={() => {
               signIn('google');
               setIsLoading(true);
             }}
+            disabled={isLoading}
           >
-            {isLoading ? (
-              <Oval width={25} color="#fff" secondaryColor="#f0f0f0" />
-            ) : (
-              <>
-                <i className="fab fa-google mr-2" /> Login or Signup with Google
-              </>
-            )}
+            <Loader
+              label={
+                <>
+                  <i className="fab fa-google mr-2" /> Login or Signup with Google
+                </>
+              }
+              loading={isLoading}
+            />
           </button>
         </div>
       </div>

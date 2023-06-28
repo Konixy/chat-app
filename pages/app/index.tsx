@@ -6,7 +6,7 @@ import Auth from 'components/Auth';
 
 export default function App() {
   const router = useRouter();
-  const { data } = useSession({
+  const { data: session } = useSession({
     required: true,
     onUnauthenticated: () => {
       router.push('/login');
@@ -14,9 +14,13 @@ export default function App() {
   });
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  function reloadSession() {}
+  function reloadSession() {
+    const event = new Event('visibilitychange');
+    document.dispatchEvent(event);
+  }
 
-  return data?.user.username ? <Chat /> : <Auth session={data} reloadSession={reloadSession} />;
+  return session?.user.username ? <Chat /> : <Auth reloadSession={reloadSession} />;
+  // return <Auth session={data} reloadSession={reloadSession} />;
 }
 
 export async function getServerSideProps(context: NextPageContext) {

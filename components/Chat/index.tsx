@@ -1,9 +1,12 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 
-interface IChatProps {}
+export default function Chat() {
+  const { data: session } = useSession();
 
-const Chat: React.FunctionComponent<IChatProps> = (props) => {
+  useEffect(() => {
+    console.log(session?.user);
+  }, [session]);
+
   return <div>chat</div>;
-};
-
-export default Chat;
+}
