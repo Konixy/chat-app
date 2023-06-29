@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import React from 'react';
+import ConversationsWrapper from './Conversations/ConversationsWrapper';
+import FeedWrapper from './Feed/FeedWrapper';
+import { Session } from 'next-auth';
 
-export default function Chat() {
-  const { data: session } = useSession();
-
-  useEffect(() => {
-    console.log(session?.user);
-  }, [session]);
-
-  return <div>chat</div>;
+export default function Chat({ session }: { session: Session }) {
+  return (
+    <div className="flex h-[100vh]">
+      <ConversationsWrapper session={session} />
+      <FeedWrapper session={session} />
+    </div>
+  );
 }

@@ -28,7 +28,6 @@ export default function Auth({ reloadSession }: { reloadSession: () => void }) {
         } else {
           setLoading(false);
           toast.error(data.error as string);
-          toast.loading('test');
         }
       })
       .catch((e) => {
