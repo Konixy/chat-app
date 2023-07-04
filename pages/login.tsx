@@ -35,14 +35,9 @@ export default function Auth() {
             }}
             disabled={isLoading}
           >
-            <Loader
-              label={
-                <>
-                  <i className="fab fa-google mr-2" /> Login or Signup with Google
-                </>
-              }
-              loading={isLoading}
-            />
+            <Loader loading={isLoading}>
+              <i className="fab fa-google mr-2" /> Login or Signup with Google
+            </Loader>
           </button>
         </div>
       </div>

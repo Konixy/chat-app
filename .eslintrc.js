@@ -14,7 +14,7 @@ module.exports = {
     },
     'import/resolver': {
       node: {
-        paths: ['pages', 'components', 'lib'],
+        paths: ['pages', 'components', 'lib', 'graphql', 'prisma', 'public'],
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
     },

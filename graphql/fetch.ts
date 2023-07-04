@@ -17,7 +17,7 @@ function getGqlString(doc: DocumentNode) {
   return doc.loc && doc.loc.source.body;
 }
 
-export default async function fetch<T = Response>(query: DocumentNode, options?: FetchOptions): Promise<AxiosResponse<{ data: T }>> {
+export default async function fetch<T = Record<string, Response>>(query: DocumentNode, options?: FetchOptions): Promise<AxiosResponse<{ data: T }>> {
   const response = axios.post(
     process.env.NEXT_PUBLIC_GRAPHQL_URI as string,
     {

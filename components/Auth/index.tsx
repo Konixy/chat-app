@@ -60,7 +60,7 @@ export default function Auth({ reloadSession }: { reloadSession: () => void }) {
           </div>
           {!isValid && <div className="form-label-alt text-red-500">Username don&apos;t match the regex</div>}
           <button type="submit" className="btn-primary btn-block btn mt-6" onClick={onSubmit} disabled={loading || !isValid}>
-            <Loader label="Save" loading={loading} />
+            <Loader loading={loading}>Save</Loader>
           </button>
         </div>
       </div>

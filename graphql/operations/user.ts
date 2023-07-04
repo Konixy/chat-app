@@ -1,7 +1,16 @@
 import { gql } from '@apollo/client';
 
 const user = {
-  Queries: {},
+  Queries: {
+    searchUsers: gql`
+      query SearchUsers($query: String!) {
+        searchUsers(query: $query) {
+          id
+          username
+        }
+      }
+    `,
+  },
   Mutations: {
     createUsername: gql`
       mutation CreateUsername($username: String!) {
