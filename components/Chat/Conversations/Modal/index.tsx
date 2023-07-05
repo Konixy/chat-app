@@ -1,23 +1,36 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { FormEvent, useState } from 'react';
 import fetchQl from 'graphql/fetch';
 import UserOperations from 'graphql/operations/user';
 import Loader from 'components/Loader';
 
+type Data = {
+  id: string;
+  username: string;
+};
+
 export default function Modal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (state: boolean) => void }) {
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<Data[] | undefined>();
+  const [error, setError] = useState();
 
   function onSearch(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
 
-    fetchQl(UserOperations.Queries.searchUsers, { variables: { query: value } })
+    fetchQl<{ searchUsers: Data[] }>(UserOperations.Queries.searchUsers, { variables: { query: value } })
       .then((r) => {
         const data = r.data.data.searchUsers;
         console.log(data);
+        setData(data);
+        setLoading(false);
       })
       .catch((e) => {
         console.log(e);
+        setLoading(false);
+        setError(e);
       });
   }
 
@@ -25,9 +38,7 @@ export default function Modal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpe
     <>
       <input type="checkbox" className="display-none modal-state" checked={isOpen} id="conversation-modal" readOnly />
       <div className="modal">
-        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
-        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-        <span className='modal-overlay' onClick={() => setIsOpen(false)} />
+        <span className="modal-overlay" onClick={() => setIsOpen(false)} />
         <div className="modal-content flex w-96 flex-col gap-5">
           <button className="btn-sm btn-circle btn-ghost btn absolute right-2 top-2" onClick={() => setIsOpen(false)}>
             ✕
@@ -46,7 +57,13 @@ export default function Modal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpe
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 autoComplete="off"
+                disabled={loading}
               />
+            </div>
+            <div className="flex flex-row">
+              {data?.map((e) => (
+                <div key={e.id}>{e.username}</div>
+              ))}
             </div>
             <button className="btn-primary btn-block btn" type="submit" disabled={!value || loading}>
               <Loader loading={loading}>Go</Loader>
