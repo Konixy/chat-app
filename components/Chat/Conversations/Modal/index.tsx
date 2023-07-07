@@ -4,8 +4,9 @@ import React, { FormEvent, useState } from 'react';
 import fetchQl from 'graphql/fetch';
 import UserOperations from 'graphql/operations/user';
 import Loader from 'components/Loader';
+import SearchUsersList from './SearchUsersList';
 
-type Data = {
+export type Data = {
   id: string;
   username: string;
 };
@@ -60,11 +61,13 @@ export default function Modal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpe
                 disabled={loading}
               />
             </div>
-            <div className="flex flex-row">
-              {data?.map((e) => (
-                <div key={e.id}>{e.username}</div>
+            {data &&
+              (data.length > 0 ? (
+                <SearchUsersList users={data} />
+              ) : (
+                <>Aucun résultat</>
               ))}
-            </div>
+
             <button className="btn-primary btn-block btn" type="submit" disabled={!value || loading}>
               <Loader loading={loading}>Go</Loader>
             </button>
