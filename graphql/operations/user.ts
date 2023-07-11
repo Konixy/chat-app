@@ -7,6 +7,7 @@ const user = {
         searchUsers(query: $query) {
           id
           username
+          name
         }
       }
     `,

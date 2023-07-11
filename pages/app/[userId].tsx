@@ -1,11 +1,23 @@
-import { getSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { NextPageContext } from 'next/types';
-import React from 'react';
+import React, { useEffect } from 'react';
+import Chat from 'components/Chat';
 
 export default function Index() {
   const router = useRouter();
-  return <div>{router.query.userId}</div>;
+  const { data: session } = useSession({
+    required: true,
+    onUnauthenticated: () => {
+      router.push('/login');
+    },
+  });
+
+  useEffect(() => {
+    if (!session?.user.username) router.push('/app');
+  }, [session]);
+
+  return <Chat session={session} userId={router.query.userId} />;
 }
 
 export async function getServerSideProps(context: NextPageContext) {

@@ -5,17 +5,15 @@ import fetchQl from 'graphql/fetch';
 import UserOperations from 'graphql/operations/user';
 import Loader from 'components/Loader';
 import SearchUsersList from './SearchUsersList';
+import { toast } from 'react-hot-toast';
+import { User } from '@prisma/client';
 
-export type Data = {
-  id: string;
-  username: string;
-};
+export type Data = Pick<User, 'id' | 'username' | 'name'>;
 
 export default function Modal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (state: boolean) => void }) {
   const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<Data[] | undefined>();
-  const [error, setError] = useState();
 
   function onSearch(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -31,7 +29,7 @@ export default function Modal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpe
       .catch((e) => {
         console.log(e);
         setLoading(false);
-        setError(e);
+        toast.error(e.message);
       });
   }
 
@@ -61,12 +59,7 @@ export default function Modal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpe
                 disabled={loading}
               />
             </div>
-            {data &&
-              (data.length > 0 ? (
-                <SearchUsersList users={data} />
-              ) : (
-                <>Aucun résultat</>
-              ))}
+            {data && (data.length > 0 ? <SearchUsersList users={data} /> : <>Aucun résultat</>)}
 
             <button className="btn-primary btn-block btn" type="submit" disabled={!value || loading}>
               <Loader loading={loading}>Go</Loader>

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Session } from 'next-auth';
 import ConversationModal from './Modal';
+import {ChatType} from "../.."
 
-export default function ConversationList({ session }: { session: Session }) {
+export default function ConversationList({ session, userId }: ChatType) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="w-[100%]">
