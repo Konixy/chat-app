@@ -19,7 +19,7 @@ export default function App() {
     document.dispatchEvent(event);
   }
 
-  return session?.user.username ? <Chat session={session} /> : <Auth reloadSession={reloadSession} />;
+  return session?.user.username ? <Chat session={session} userId={undefined} /> : <Auth reloadSession={reloadSession} />;
   // return <Auth session={data} reloadSession={reloadSession} />;
 }
 

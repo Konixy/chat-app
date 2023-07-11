@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ConversationModal from './Modal';
-import {ChatType} from "../.."
+import { ChatType } from '..';
 
 export default function ConversationList({ session, userId }: ChatType) {
   const [isOpen, setIsOpen] = useState(false);
