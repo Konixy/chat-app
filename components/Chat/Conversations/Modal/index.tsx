@@ -3,23 +3,28 @@
 import React, { FormEvent, useState } from 'react';
 import fetchQl from 'graphql/fetch';
 import UserOperations from 'graphql/operations/user';
+import ConversationOperations from 'graphql/operations/conversation';
 import Loader from 'components/Loader';
 import SearchUsersList from './SearchUsersList';
 import { toast } from 'react-hot-toast';
-import { User } from '@prisma/client';
+import { User as PrismaUser } from '@prisma/client';
+import Participants from './Participants';
+import { CreateConversationData } from 'lib/types';
 
-export type Data = Pick<User, 'id' | 'username' | 'name'>;
+export type User = Pick<PrismaUser, 'id' | 'username' | 'name' | 'image'>;
 
 export default function Modal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (state: boolean) => void }) {
   const [value, setValue] = useState('');
+  const [participants, setParticipants] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<Data[] | undefined>();
+  const [convLoading, setConvLoading] = useState(false);
+  const [data, setData] = useState<User[] | undefined>();
 
   function onSearch(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
 
-    fetchQl<{ searchUsers: Data[] }>(UserOperations.Queries.searchUsers, { variables: { query: value } })
+    fetchQl<{ searchUsers: User[] }>(UserOperations.Queries.searchUsers, { variables: { query: value } })
       .then((r) => {
         const data = r.data.data.searchUsers;
         console.log(data);
@@ -29,6 +34,30 @@ export default function Modal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpe
       .catch((e) => {
         console.log(e);
         setLoading(false);
+        toast.error(e.message);
+      });
+  }
+
+  function addParticipant(user: User) {
+    setParticipants((prev) => [...prev, user]);
+    setValue('');
+    setData(undefined);
+  }
+
+  function removeParticipant(userId: string) {
+    setParticipants((prev) => prev.filter((e) => e.id !== userId));
+  }
+
+  async function createConversation() {
+    setConvLoading(true);
+    return;
+    fetchQl<CreateConversationData>(ConversationOperations.Mutations.createConversation, { variables: { participantIds: participants.map((e) => e.id) } })
+      .then((r) => {
+        const data = r.data.data.createConversation;
+        console.log(data);
+      })
+      .catch((e) => {
+        console.log(e);
         toast.error(e.message);
       });
   }
@@ -49,21 +78,36 @@ export default function Modal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpe
                 <i className="fas fa-magnifying-glass" />
               </span>
               <input
-                className="input pl-10"
+                className="input input-block pl-10"
                 type="search"
                 name="search"
                 placeholder="Search for a user or a group"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 autoComplete="off"
-                disabled={loading}
+                disabled={loading || convLoading}
               />
             </div>
-            {data && (data.length > 0 ? <SearchUsersList users={data} /> : <>Aucun résultat</>)}
 
-            <button className="btn-primary btn-block btn" type="submit" disabled={!value || loading}>
-              <Loader loading={loading}>Go</Loader>
+            <button className="btn-block btn" type="submit" disabled={!value || loading || convLoading}>
+              <Loader loading={loading}>Search</Loader>
             </button>
+
+            {data &&
+              (data.length > 0 ? (
+                <SearchUsersList users={data} participants={participants} addParticipant={addParticipant} removeParticipant={removeParticipant} />
+              ) : (
+                <div className="text-center">Aucun résultat</div>
+              ))}
+
+            {participants.length > 0 && (
+              <>
+                <Participants participants={participants} removeParticipant={removeParticipant} disabled={convLoading} />
+                <button type="button" className="btn-primary btn" disabled={convLoading || loading} onClick={() => createConversation()}>
+                  <Loader loading={convLoading}>Create conversation</Loader>
+                </button>
+              </>
+            )}
           </form>
         </div>
       </div>

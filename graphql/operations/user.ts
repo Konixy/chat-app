@@ -8,6 +8,7 @@ const user = {
           id
           username
           name
+          image
         }
       }
     `,

@@ -11,6 +11,8 @@ export interface CreateUsernameData {
   };
 }
 
-export interface CreateUsernameVariables {
-  username: string;
+export interface CreateConversationData {
+  createConversation: {
+    conversationId: string;
+  }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import UserOperations from 'graphql/operations/user';
 import BackBtn from '../BackBtn';
 import fetchQl from '@/graphql/fetch';
@@ -16,7 +16,8 @@ export default function Auth({ reloadSession }: { reloadSession: () => void }) {
     else validate(false);
   }, [username]);
 
-  async function onSubmit() {
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     if (!isValid) return;
     setLoading(true);
     setError(undefined);
@@ -24,6 +25,7 @@ export default function Auth({ reloadSession }: { reloadSession: () => void }) {
       .then((r) => {
         const data = r.data.data.createUsername;
         if (data.success) {
+          toast.success('Username created successfully!');
           reloadSession();
         } else {
           setLoading(false);
@@ -41,7 +43,10 @@ export default function Auth({ reloadSession }: { reloadSession: () => void }) {
     <>
       <BackBtn />
       <div className="h-[100vh]">
-        <div className="absolute right-1/2 top-1/2 inline-block -translate-y-1/2 translate-x-1/2 flex-col items-center justify-center text-center">
+        <form
+          className="absolute right-1/2 top-1/2 inline-block -translate-y-1/2 translate-x-1/2 flex-col items-center justify-center text-center"
+          onSubmit={onSubmit}
+        >
           <div className="text-2xl">Please enter a username</div>
           {/* <div className="text-sm">The username must be unique</div> */}
           <div className="text-red-500">{error}</div>
@@ -59,10 +64,10 @@ export default function Auth({ reloadSession }: { reloadSession: () => void }) {
             </span>
           </div>
           {!isValid && <div className="form-label-alt text-red-500">Username don&apos;t match the regex</div>}
-          <button type="submit" className="btn-primary btn-block btn mt-6" onClick={onSubmit} disabled={loading || !isValid}>
+          <button type="submit" className="btn-primary btn-block btn mt-6" disabled={loading || !isValid}>
             <Loader loading={loading}>Save</Loader>
           </button>
-        </div>
+        </form>
       </div>
     </>
   );
