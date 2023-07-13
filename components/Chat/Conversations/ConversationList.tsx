@@ -9,7 +9,7 @@ export default function ConversationList({ session, userId }: ChatType) {
       <button className="btn-block btn mb-4" onClick={() => setIsOpen(true)}>
         Find or start a conversation
       </button>
-      <ConversationModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <ConversationModal session={session} isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
   );
 }

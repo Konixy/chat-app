@@ -10,10 +10,11 @@ import { toast } from 'react-hot-toast';
 import { User as PrismaUser } from '@prisma/client';
 import Participants from './Participants';
 import { CreateConversationData } from 'lib/types';
+import { Session } from 'next-auth';
 
 export type User = Pick<PrismaUser, 'id' | 'username' | 'name' | 'image'>;
 
-export default function Modal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (state: boolean) => void }) {
+export default function Modal({ session, isOpen, setIsOpen }: { session: Session; isOpen: boolean; setIsOpen: (state: boolean) => void }) {
   const [value, setValue] = useState('');
   const [participants, setParticipants] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
@@ -27,7 +28,6 @@ export default function Modal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpe
     fetchQl<{ searchUsers: User[] }>(UserOperations.Queries.searchUsers, { variables: { query: value } })
       .then((r) => {
         const data = r.data.data.searchUsers;
-        console.log(data);
         setData(data);
         setLoading(false);
       })
@@ -50,13 +50,17 @@ export default function Modal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpe
 
   async function createConversation() {
     setConvLoading(true);
-    return;
-    fetchQl<CreateConversationData>(ConversationOperations.Mutations.createConversation, { variables: { participantIds: participants.map((e) => e.id) } })
+
+    const participantsIds: string[] = [session.user.id, ...participants.map((e) => e.id)];
+
+    fetchQl<CreateConversationData>(ConversationOperations.Mutations.createConversation, { variables: { participantsIds } })
       .then((r) => {
+        setConvLoading(false);
         const data = r.data.data.createConversation;
         console.log(data);
       })
       .catch((e) => {
+        setConvLoading(false);
         console.log(e);
         toast.error(e.message);
       });

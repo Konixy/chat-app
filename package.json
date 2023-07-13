@@ -19,6 +19,7 @@
     "graphql": "^16.7.1",
     "next": "^13.4.9",
     "next-auth": "^4.20.1",
+    "prettier-plugin-prisma": "^4.17.0",
     "react": "^18.2.0",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.1",

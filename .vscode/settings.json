@@ -5,5 +5,8 @@
   "scss.lint.unknownAtRules": "ignore",
   "[xml]": {
     "editor.defaultFormatter": "j69.ejs-beautify"
+  },
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
   }
 }

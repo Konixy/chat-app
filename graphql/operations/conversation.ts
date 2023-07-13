@@ -3,8 +3,8 @@ import { gql } from '@apollo/client';
 const user = {
   Mutations: {
     createConversation: gql`
-      mutation CreateConversation($participantIds: [String]!) {
-        createConversation(participantIds: $participantIds) {
+      mutation CreateConversation($participantsIds: [String]!) {
+        createConversation(participantsIds: $participantsIds) {
           conversationId
         }
       }
