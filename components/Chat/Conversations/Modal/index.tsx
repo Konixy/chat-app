@@ -11,6 +11,7 @@ import { User as PrismaUser } from '@prisma/client';
 import Participants from './Participants';
 import { CreateConversationData } from 'lib/types';
 import { Session } from 'next-auth';
+import { useRouter } from 'next/router';
 
 export type User = Pick<PrismaUser, 'id' | 'username' | 'name' | 'image'>;
 
@@ -20,6 +21,7 @@ export default function Modal({ session, isOpen, setIsOpen }: { session: Session
   const [loading, setLoading] = useState(false);
   const [convLoading, setConvLoading] = useState(false);
   const [data, setData] = useState<User[] | undefined>();
+  const router = useRouter();
 
   function onSearch(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -56,8 +58,19 @@ export default function Modal({ session, isOpen, setIsOpen }: { session: Session
     fetchQl<CreateConversationData>(ConversationOperations.Mutations.createConversation, { variables: { participantsIds } })
       .then((r) => {
         setConvLoading(false);
+        if (r.data.errors) {
+          toast.error(r.data.errors[0].message);
+          console.log(r.data.errors[0]);
+        }
         const data = r.data.data.createConversation;
-        console.log(data);
+        const { conversationId } = data;
+        router.push(`/app/${conversationId}`);
+
+        setValue('');
+        setData(undefined);
+        setParticipants([]);
+        setIsOpen(false);
+        setLoading(false);
       })
       .catch((e) => {
         setConvLoading(false);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -38,7 +38,7 @@ export default function Header() {
             </Link>
           ))}
         </div>
-        <div className="navbar-end mr-10">
+        <div className="navbar-end">
           {session?.user ? (
             <div className="dropdown-container">
               <div className="dropdown">

@@ -1,8 +1,10 @@
 import Chat from 'components/Chat';
-import { NextPageContext } from 'next';
-import { getSession, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Auth from 'components/Auth';
+import { SSRFetchSession } from 'lib/session';
+import { ThreeDots } from 'react-loader-spinner';
+import BackBtn from '@/components/BackBtn';
 
 export default function App() {
   const router = useRouter();
@@ -19,16 +21,20 @@ export default function App() {
     document.dispatchEvent(event);
   }
 
-  return session?.user.username ? <Chat session={session} userId={undefined} /> : <Auth reloadSession={reloadSession} />;
-  // return <Auth session={data} reloadSession={reloadSession} />;
+  return session?.user ? (
+    session?.user.username ? (
+      <Chat session={session} userId={undefined} />
+    ) : (
+      <Auth reloadSession={reloadSession} />
+    )
+  ) : (
+    <>
+      <BackBtn />
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+        <ThreeDots width={50} height={50} color="white" />
+      </div>
+    </>
+  );
 }
 
-export async function getServerSideProps(context: NextPageContext) {
-  const session = await getSession(context);
-
-  return {
-    props: {
-      session,
-    },
-  };
-}
+export const getServerSideProps = SSRFetchSession;
