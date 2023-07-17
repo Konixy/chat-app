@@ -18,7 +18,7 @@ export default function Index() {
     if (!session?.user.username) router.push('/app');
   }, [session]);
 
-  return <Chat session={session as Session} userId={router.query.userId as string | undefined} />;
+  return <Chat session={session as Session} />;
 }
 
 export async function getServerSideProps(context: NextPageContext) {

@@ -5,14 +5,13 @@ import { Session } from 'next-auth';
 
 export type ChatType = {
   session: Session;
-  userId: string | undefined;
-}
+};
 
-export default function Chat({ session, userId }: ChatType) {
+export default function Chat({ session }: ChatType) {
   return (
     <div className="flex h-[100vh]">
-      <ConversationsWrapper session={session} userId={userId} />
-      <FeedWrapper session={session} userId={userId} />
+      <ConversationsWrapper session={session} />
+      <FeedWrapper session={session} />
     </div>
   );
 }

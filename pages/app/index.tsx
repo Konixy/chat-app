@@ -23,7 +23,7 @@ export default function App() {
 
   return session?.user ? (
     session?.user.username ? (
-      <Chat session={session} userId={undefined} />
+      <Chat session={session} />
     ) : (
       <Auth reloadSession={reloadSession} />
     )

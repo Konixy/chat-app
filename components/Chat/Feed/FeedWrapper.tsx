@@ -1,6 +1,11 @@
-import { Session } from 'next-auth';
 import React from 'react';
+import { ChatType } from '..';
+import { useRouter } from 'next/router';
 
-export default function FeedWrapper({ session, userId }: { session: Session; userId: string | undefined }) {
-  return <div>FeedWrapper {userId}</div>;
+export default function FeedWrapper({ session }: ChatType) {
+  const {
+    query: { convId },
+  } = useRouter();
+
+  return <div className={`${convId ? 'flex' : 'hidden'} w-full flex-col border border-red-600 md:flex`}>{convId}</div>;
 }

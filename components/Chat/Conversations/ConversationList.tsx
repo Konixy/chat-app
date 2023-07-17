@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ConversationModal from './Modal';
 import { ChatType } from '..';
 
-export default function ConversationList({ session, userId }: ChatType) {
+export default function ConversationList({ session }: ChatType) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="w-[100%]">
