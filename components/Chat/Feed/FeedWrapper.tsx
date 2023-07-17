@@ -7,5 +7,5 @@ export default function FeedWrapper({ session }: ChatType) {
     query: { convId },
   } = useRouter();
 
-  return <div className={`${convId ? 'flex' : 'hidden'} w-full flex-col border border-red-600 md:flex`}>{convId}</div>;
+  return <div className={`${convId ? 'flex' : 'hidden'} w-full flex-col md:flex`}>{convId}</div>;
 }

@@ -1,18 +1,12 @@
-import Header from 'components/Header';
+import React from 'react';
+import Navbar from 'components/Navbar';
 import { NextPageContext } from 'next';
-import { getSession, signIn, signOut, useSession } from 'next-auth/react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { useState } from 'react';
-import { Oval } from 'react-loader-spinner';
+import { getSession } from 'next-auth/react';
 
 export default function Home() {
-  const { data } = useSession();
-  const [isLoading, setIsLoading] = useState(false);
-
   return (
     <>
-      <Header />
+      <Navbar />
       <div className="my-20 flex flex-row justify-center text-center">
         <div className="text-6xl font-semibold">An awesome chat app</div>
       </div>

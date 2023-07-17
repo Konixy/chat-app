@@ -3,7 +3,7 @@ import ConversationList from './ConversationList';
 import { ChatType } from '..';
 import fetchQl from 'graphql/fetch';
 import ConversationOperations from 'graphql/operations/conversation';
-import { Conversation } from '@prisma/client';
+import { Conversation } from 'lib/types';
 
 export default function ConversationsWrapper({ session }: ChatType) {
   const [convsData, setConvsData] = useState<Conversation[] | undefined>();
@@ -26,11 +26,11 @@ export default function ConversationsWrapper({ session }: ChatType) {
         setConvsError(err.message);
         console.log(err);
       });
-  }, []);
+  }, [session.user]);
 
   return (
     <div className="w-[100%] bg-backgroundSecondary px-3 py-6 md:w-[400px]">
-      <ConversationList session={session} />
+      <ConversationList session={session} conversations={convsData || []} conversationsLoading={convsLoading} />
     </div>
   );
 }

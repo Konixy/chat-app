@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
 import ConversationModal from './Modal';
-import { ChatType } from '..';
+import { Session } from 'next-auth';
+import { Conversation } from '@/lib/types';
+import ConversationItem from './ConversationItem';
 
-export default function ConversationList({ session }: ChatType) {
+export default function ConversationList({
+  session,
+  conversations,
+  conversationsLoading,
+}: {
+  session: Session;
+  conversations: Conversation[];
+  conversationsLoading: boolean;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="w-[100%]">
@@ -10,6 +20,17 @@ export default function ConversationList({ session }: ChatType) {
         Find or start a conversation
       </button>
       <ConversationModal session={session} isOpen={isOpen} setIsOpen={setIsOpen} />
+      {conversationsLoading ? (
+        'Loading conversations...'
+      ) : (
+        <div>
+          {conversations
+            .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+            .map((e) => (
+              <ConversationItem conversation={e} key={e.id} userId={session.user.id} />
+            ))}
+        </div>
+      )}
     </div>
   );
 }
