@@ -4,15 +4,7 @@ import { Session } from 'next-auth';
 import { Conversation } from '@/lib/types';
 import ConversationItem from './ConversationItem';
 
-export default function ConversationList({
-  session,
-  conversations,
-  conversationsLoading,
-}: {
-  session: Session;
-  conversations: Conversation[];
-  conversationsLoading: boolean;
-}) {
+export default function ConversationList({ session, conversations }: { session: Session; conversations: Conversation[] | undefined }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="w-[100%]">
@@ -20,9 +12,7 @@ export default function ConversationList({
         Find or start a conversation
       </button>
       <ConversationModal session={session} isOpen={isOpen} setIsOpen={setIsOpen} />
-      {conversationsLoading ? (
-        'Loading conversations...'
-      ) : (
+      {conversations ? (
         <div>
           {conversations
             .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
@@ -30,6 +20,8 @@ export default function ConversationList({
               <ConversationItem conversation={e} key={e.id} userId={session.user.id} />
             ))}
         </div>
+      ) : (
+        'Loading conversations...'
       )}
     </div>
   );

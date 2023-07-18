@@ -30,7 +30,7 @@ export default function ConversationsWrapper({ session }: ChatType) {
 
   return (
     <div className="w-[100%] bg-backgroundSecondary px-3 py-6 md:w-[400px]">
-      <ConversationList session={session} conversations={convsData || []} conversationsLoading={convsLoading} />
+      <ConversationList session={session} conversations={convsData} />
     </div>
   );
 }
