@@ -1,15 +1,17 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import UserOperations from 'graphql/operations/user';
 import BackBtn from '../BackBtn';
-import fetchQl from '@/graphql/fetch';
 import Loader from '../Loader';
 import { toast } from 'react-hot-toast';
+import { useMutation } from '@apollo/client';
 
 export default function Auth({ reloadSession }: { reloadSession: () => void }) {
   const [username, setUsername] = useState('');
   const [isValid, validate] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
+  const [createUsernameMutation, { loading }] = useMutation<{ createUsername: { success?: boolean; error?: string } }, { username: string }>(
+    UserOperations.Mutations.createUsername,
+  );
 
   useEffect(() => {
     if (username.match(/^(?=.{4,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/)) validate(true);
@@ -19,23 +21,25 @@ export default function Auth({ reloadSession }: { reloadSession: () => void }) {
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!isValid) return;
-    setLoading(true);
     setError(undefined);
-    fetchQl<{ createUsername: { success?: boolean; error?: string } }>(UserOperations.Mutations.createUsername, { variables: { username } })
+    createUsernameMutation({ variables: { username } })
       .then((r) => {
-        const data = r.data.data.createUsername;
-        if (data.success) {
-          toast.success('Username created successfully!');
-          reloadSession();
-        } else {
-          setLoading(false);
-          toast.error(data.error as string);
+        if (r.errors) {
+          toast.error(r.errors[0].message);
+          console.log(r.errors);
+        } else if (r.data) {
+          const data = r.data.createUsername;
+          if (data.success) {
+            toast.success('Username created successfully!');
+            reloadSession();
+          } else {
+            toast.error(data.error as string);
+          }
         }
       })
       .catch((e) => {
-        setLoading(false);
         console.log(e);
-        setError(e);
+        toast.error(e);
       });
   }
 

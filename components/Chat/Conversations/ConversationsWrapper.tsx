@@ -1,36 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import ConversationList from './ConversationList';
 import { ChatType } from '..';
-import fetchQl from 'graphql/fetch';
 import ConversationOperations from 'graphql/operations/conversation';
 import { Conversation } from 'lib/types';
+import { useQuery } from '@apollo/client';
 
 export default function ConversationsWrapper({ session }: ChatType) {
-  const [convsData, setConvsData] = useState<Conversation[] | undefined>();
-  const [convsError, setConvsError] = useState<string | undefined>();
-  const [convsLoading, setConvsLoading] = useState(true);
+  const { data: convsData, error: convsError } = useQuery<{ conversations: Conversation[] }>(ConversationOperations.Query.conversations);
 
   useEffect(() => {
-    setConvsLoading(true);
-    fetchQl<{ conversations: Conversation[] }>(ConversationOperations.Query.conversations)
-      .then((r) => {
-        const data = r.data.data.conversations;
-
-        setConvsLoading(false);
-        setConvsData(data);
-        console.log(data);
-      })
-      .catch((err) => {
-        setConvsLoading(false);
-        setConvsData(undefined);
-        setConvsError(err.message);
-        console.log(err);
-      });
-  }, [session.user]);
+    console.log(convsError);
+  }, [convsError]);
 
   return (
     <div className="w-[100%] bg-backgroundSecondary px-3 py-6 md:w-[400px]">
-      <ConversationList session={session} conversations={convsData} />
+      <ConversationList session={session} conversations={convsData && [...convsData.conversations]} />
+      {/* <ConversationList session={session} conversations={undefined} /> */}
     </div>
   );
 }

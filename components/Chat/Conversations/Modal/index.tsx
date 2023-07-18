@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { FormEvent, useState } from 'react';
-import fetchQl from 'graphql/fetch';
+import React, { FormEvent, useEffect, useState } from 'react';
 import UserOperations from 'graphql/operations/user';
 import ConversationOperations from 'graphql/operations/conversation';
 import Loader from 'components/Loader';
@@ -9,33 +8,36 @@ import SearchUsersList from './SearchUsersList';
 import { toast } from 'react-hot-toast';
 import { User as PrismaUser } from '@prisma/client';
 import Participants from './Participants';
-import { CreateConversationData } from 'lib/types';
 import { Session } from 'next-auth';
 import { useRouter } from 'next/router';
+import { useLazyQuery, useMutation } from '@apollo/client';
 
 export type User = Pick<PrismaUser, 'id' | 'username' | 'name' | 'image'>;
 
 export default function Modal({ session, isOpen, setIsOpen }: { session: Session; isOpen: boolean; setIsOpen: (state: boolean) => void }) {
   const [value, setValue] = useState('');
   const [participants, setParticipants] = useState<User[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [convLoading, setConvLoading] = useState(false);
-  const [data, setData] = useState<User[] | undefined>();
   const router = useRouter();
+  const [data, setData] = useState<User[] | undefined>();
+  const [searchUsers, { loading, error }] = useLazyQuery<{ searchUsers: User[] }>(UserOperations.Queries.searchUsers);
+  const [createConversationMutation, { loading: convLoading }] = useMutation<{ createConversation: { conversationId: string } }, { participantsIds: string[] }>(
+    ConversationOperations.Mutations.createConversation,
+  );
 
   function onSearch(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setLoading(true);
 
-    fetchQl<{ searchUsers: User[] }>(UserOperations.Queries.searchUsers, { variables: { query: value } })
+    searchUsers({ variables: { query: value } })
       .then((r) => {
-        const data = r.data.data.searchUsers;
-        setData(data);
-        setLoading(false);
+        if (r.error) {
+          toast.error(r.error.message);
+          console.log(r.error);
+        }
+
+        setData(r.data?.searchUsers);
       })
       .catch((e) => {
         console.log(e);
-        setLoading(false);
         toast.error(e.message);
       });
   }
@@ -51,33 +53,35 @@ export default function Modal({ session, isOpen, setIsOpen }: { session: Session
   }
 
   async function createConversation() {
-    setConvLoading(true);
-
     const participantsIds: string[] = [session.user.id, ...participants.map((e) => e.id)];
 
-    fetchQl<CreateConversationData>(ConversationOperations.Mutations.createConversation, { variables: { participantsIds } })
+    createConversationMutation({ variables: { participantsIds } })
       .then((r) => {
-        setConvLoading(false);
-        if (r.data.errors) {
-          toast.error(r.data.errors[0].message);
-          console.log(r.data.errors[0]);
+        if (r.errors) {
+          toast.error(r.errors[0].message);
+          console.log(r.errors[0]);
+        } else if (r.data) {
+          const data = r.data.createConversation;
+          const { conversationId } = data;
+          router.push(`/app/${conversationId}`);
         }
-        const data = r.data.data.createConversation;
-        const { conversationId } = data;
-        router.push(`/app/${conversationId}`);
 
         setValue('');
-        setData(undefined);
         setParticipants([]);
         setIsOpen(false);
-        setLoading(false);
       })
       .catch((e) => {
-        setConvLoading(false);
         console.log(e);
         toast.error(e.message);
       });
   }
+
+  useEffect(() => {
+    if (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  }, [error]);
 
   return (
     <>

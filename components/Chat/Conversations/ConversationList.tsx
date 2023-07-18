@@ -6,6 +6,7 @@ import ConversationItem from './ConversationItem';
 
 export default function ConversationList({ session, conversations }: { session: Session; conversations: Conversation[] | undefined }) {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="w-[100%]">
       <button className="btn-block btn mb-4" onClick={() => setIsOpen(true)}>
@@ -21,7 +22,11 @@ export default function ConversationList({ session, conversations }: { session: 
             ))}
         </div>
       ) : (
-        'Loading conversations...'
+        <div className="flex flex-col space-y-4">
+          {[0, 1, 2, 3, 4, 5].map((e) => (
+            <div key={e} className="skeleton h-16 rounded-md"></div>
+          ))}
+        </div>
       )}
     </div>
   );
