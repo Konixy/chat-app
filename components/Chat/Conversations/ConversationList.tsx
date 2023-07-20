@@ -15,11 +15,13 @@ export default function ConversationList({ session, conversations }: { session: 
       <ConversationModal session={session} isOpen={isOpen} setIsOpen={setIsOpen} />
       {conversations ? (
         <div>
-          {conversations
-            .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
-            .map((e) => (
-              <ConversationItem conversation={e} key={e.id} userId={session.user.id} />
-            ))}
+          {conversations.length > 0 ? (
+            conversations
+              .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+              .map((e) => <ConversationItem conversation={e} key={e.id} userId={session.user.id} />)
+          ) : (
+            <div className="text-center">You don&apos;t have any conversations</div>
+          )}
         </div>
       ) : (
         <div className="flex flex-col space-y-4">

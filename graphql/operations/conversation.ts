@@ -23,7 +23,7 @@ const ConversationFields = `
   }
 `;
 
-const user = {
+const conversations = {
   Query: {
     conversations: gql`
       query Conversations {
@@ -40,7 +40,15 @@ const user = {
       }
     `,
   },
-  Subscriptions: {},
+  Subscriptions: {
+    conversationCreated: gql`
+      subscription ConversationCreated {
+        conversationCreated {
+          ${ConversationFields}
+        }
+      }
+    `,
+  },
 };
 
-export default user;
+export default conversations;

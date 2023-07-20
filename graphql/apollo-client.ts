@@ -2,6 +2,7 @@ import { ApolloClient, HttpLink, InMemoryCache, split } from '@apollo/client';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { createClient } from 'graphql-ws';
+import { getSession } from 'next-auth/react';
 
 const httpLink = new HttpLink({
   uri: process.env.NEXT_PUBLIC_GRAPHQL_URI,
@@ -13,6 +14,9 @@ const wsLink =
     ? new GraphQLWsLink(
         createClient({
           url: process.env.NEXT_PUBLIC_WEBSOCKET_URL as string,
+          connectionParams: async () => ({
+            session: await getSession(),
+          }),
         }),
       )
     : null;
