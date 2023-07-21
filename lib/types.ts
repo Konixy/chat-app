@@ -3,7 +3,10 @@ import type { ConversationPopulated } from '../../Lyna-api/src/lib/types';
 export type User = {
   name?: string | null;
   email?: string | null;
+  emailVerified: boolean | null;
   image?: string | null;
+  id?: string | null;
+  username?: string | null;
 };
 
 export interface CreateUsernameData {

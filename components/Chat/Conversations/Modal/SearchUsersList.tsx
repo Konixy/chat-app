@@ -2,6 +2,8 @@ import React from 'react';
 import type { User } from './index';
 import Image from 'next/image';
 
+export const defaultAvatar = 'https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg';
+
 export default function SearchUsersList({
   users,
   participants,
@@ -19,13 +21,7 @@ export default function SearchUsersList({
         <div key={user.id} className="flex flex-row items-center rounded-xl px-4 py-3 hover:bg-backgroundSecondary">
           <div className="flex flex-row items-center">
             <div className="avatar-ring avatar avatar-sm mr-3 flex flex-row items-center">
-              <Image
-                src={user.image || 'https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg'}
-                className="bg-gray-9"
-                alt={user.name as string}
-                width={45}
-                height={45}
-              />
+              <Image src={user.image || defaultAvatar} className="bg-gray-9" alt={user.name as string} width={45} height={45} />
             </div>
             <span>{user.username}</span>
           </div>

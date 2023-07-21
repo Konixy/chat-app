@@ -2,7 +2,6 @@ import Chat from 'components/Chat';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Auth from 'components/Auth';
-import { SSRFetchSession } from 'lib/session';
 import { ThreeDots } from 'react-loader-spinner';
 import BackBtn from '@/components/BackBtn';
 
@@ -36,5 +35,3 @@ export default function App() {
     </>
   );
 }
-
-export const getServerSideProps = SSRFetchSession;

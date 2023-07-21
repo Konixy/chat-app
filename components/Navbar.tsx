@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { signOut, useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 
-export default function Header() {
+export default function Navbar() {
   const router = useRouter();
   const { data: session } = useSession();
 
@@ -63,14 +63,14 @@ export default function Header() {
                     Account settings
                   </Link>
                   <button
-                    className="dropdown-item bg-error/25 px-3 text-sm transition-all hover:bg-error/50"
+                    className="dropdown-item flex flex-row items-center bg-error/25 px-3 text-sm font-semibold transition-all hover:bg-error/50"
                     onClick={() => {
                       signOut({ redirect: true, callbackUrl: '/login' }).then(() => {
                         toast.success('Successfully logged out.');
                       });
                     }}
                   >
-                    Log out
+                    <i className="fas fa-right-from-bracket mr-2" /> Log out
                   </button>
                 </div>
               </div>

@@ -83,6 +83,7 @@ model ConversationParticipant {
 
 model Message {
   id             String        @id @default(uuid()) @map("_id")
+  body           String
   conversationId String
   conversation   Conversation  @relation(fields: [conversationId], references: [id])
   senderId       String

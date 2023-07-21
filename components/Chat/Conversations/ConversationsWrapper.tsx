@@ -1,39 +1,18 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import ConversationList from './ConversationList';
+import { useRouter } from 'next/router';
 import { ChatType } from '..';
-import ConversationOperations from 'graphql/operations/conversation';
-import { Conversation } from 'lib/types';
-import { useQuery } from '@apollo/client';
 
-export default function ConversationsWrapper({ session }: ChatType) {
-  const { data: convsData, error: convsError, subscribeToMore } = useQuery<{ conversations: Conversation[] }>(ConversationOperations.Query.conversations);
+export default function ConversationsWrapper({ session, conversations }: ChatType) {
+  const router = useRouter();
 
-  useEffect(() => {
-    if (convsError) console.log(convsError);
-  }, [convsError]);
-
-  function subscribeToNewConversations() {
-    subscribeToMore({
-      document: ConversationOperations.Subscriptions.conversationCreated,
-      updateQuery: (prev, { subscriptionData }: { subscriptionData: { data: { conversationCreated: Conversation } } }) => {
-        if (!subscriptionData.data) return prev;
-
-        const newConversation = subscriptionData.data.conversationCreated;
-
-        return Object.assign({}, prev, {
-          conversations: [newConversation, ...prev.conversations],
-        });
-      },
-    });
+  function onViewConversation(conversationId: string) {
+    router.push(`/app/${conversationId}`);
   }
 
-  useEffect(() => {
-    subscribeToNewConversations();
-  }, []);
-
   return (
-    <div className="w-[100%] bg-backgroundSecondary px-3 py-6 md:w-[400px]">
-      <ConversationList session={session} conversations={convsData && [...convsData.conversations]} />
+    <div className={`${router.query.convId ? 'hidden' : 'block'} w-[100%] bg-backgroundSecondary px-3 py-6 md:block md:w-[400px]`}>
+      <ConversationList session={session} conversations={conversations && [...conversations]} onViewConversation={onViewConversation} />
       {/* <ConversationList session={session} conversations={undefined} /> */}
     </div>
   );
