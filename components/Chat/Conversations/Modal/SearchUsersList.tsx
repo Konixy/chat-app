@@ -2,7 +2,7 @@ import React from 'react';
 import type { User } from './index';
 import Image from 'next/image';
 
-export const defaultAvatar = 'https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg';
+export const defaultAvatar = '/icons/defaultAvatar.jpg';
 
 export default function SearchUsersList({
   users,

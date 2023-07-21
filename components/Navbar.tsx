@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { signOut, useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
+import { defaultAvatar } from './Chat/Conversations/Modal/SearchUsersList';
 
 export default function Navbar() {
   const router = useRouter();
@@ -44,15 +45,9 @@ export default function Navbar() {
               <div className="dropdown">
                 <div className="btn-ghost btn" tabIndex={0}>
                   <div className="mr-2">{session.user.name}</div>
-                  {session.user.image ? (
                     <div className="avatar-ring avatar avatar-sm">
-                      <Image src={session.user.image} alt="avatar" className="" width={45} height={45} />
+                      <Image src={session.user.image || defaultAvatar} alt="avatar" className="" width={45} height={45} />
                     </div>
-                  ) : (
-                    <div className="avatar-ring avatar-ring-primary avatar-squared avatar truncate">
-                      <div>{session.user.username}</div>
-                    </div>
-                  )}
                 </div>
                 <div className="dropdown-menu-bottom-left dropdown-menu gap-2">
                   <Link href="/app/me" className="dropdown-item text-sm">
