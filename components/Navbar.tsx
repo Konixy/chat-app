@@ -25,7 +25,7 @@ export default function Navbar() {
 
   return (
     <div>
-      <div className="navbar-no-boxShadow navbar m-6">
+      <div className="navbar navbar-no-boxShadow m-6">
         <div className="navbar-start">
           <Link href="/" className="flex flex-row items-center">
             <Image src={`/icons/white-logo.svg`} alt="" width={30} height={30} />
@@ -43,13 +43,13 @@ export default function Navbar() {
           {session?.user ? (
             <div className="dropdown-container">
               <div className="dropdown">
-                <div className="btn-ghost btn" tabIndex={0}>
+                <div className="btn btn-ghost" tabIndex={0}>
                   <div className="mr-2">{session.user.name}</div>
-                    <div className="avatar-ring avatar avatar-sm">
-                      <Image src={session.user.image || defaultAvatar} alt="avatar" className="" width={45} height={45} />
-                    </div>
+                  <div className="avatar avatar-ring avatar-sm">
+                    <Image src={session.user.image || defaultAvatar} alt="avatar" className="" width={45} height={45} />
+                  </div>
                 </div>
-                <div className="dropdown-menu-bottom-left dropdown-menu gap-2">
+                <div className="dropdown-menu dropdown-menu-bottom-left gap-2">
                   <Link href="/app/me" className="dropdown-item text-sm">
                     Profile
                   </Link>
@@ -72,7 +72,7 @@ export default function Navbar() {
             </div>
           ) : (
             <div>
-              <Link href="/login" className="btn-primary btn">
+              <Link href="/login" className="btn btn-primary">
                 Sign up
               </Link>
             </div>
