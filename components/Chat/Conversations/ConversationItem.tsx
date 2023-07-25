@@ -98,6 +98,9 @@ export default function ConversationItem({
       >
         <div className="relative mr-3 flex flex-row items-center">
           <div className={`dot dot-primary ml-[-6px] ${hasSeenAllMessages && 'opacity-0'}`}></div>
+
+          {/* Make an initial avatar using https://ui-avatars.com/ */}
+
           {conversation.participants.length > 2 ? (
             <div className="avatar-group">
               <div className="avatar ml-2">
