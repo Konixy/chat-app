@@ -10,7 +10,7 @@ const httpLink = new HttpLink({
 });
 
 const wsLink =
-  typeof window !== undefined
+  typeof window !== 'undefined'
     ? new GraphQLWsLink(
         createClient({
           url: process.env.NEXT_PUBLIC_WEBSOCKET_URL as string,
@@ -22,7 +22,7 @@ const wsLink =
     : null;
 
 const link =
-  typeof window !== undefined && wsLink != null
+  typeof window !== 'undefined' && wsLink != null
     ? split(
         ({ query }) => {
           const definition = getMainDefinition(query);
