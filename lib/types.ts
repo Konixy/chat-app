@@ -1,5 +1,4 @@
-import type { ConversationPopulated } from '../../Lyna-api/src/lib/types';
-
+import type { ConversationPopulated, Message } from '../../Lyna-api/src/lib/types';
 export type User = {
   name?: string | null;
   email?: string | null;
@@ -23,3 +22,5 @@ export interface CreateConversationData {
     conversationId: string;
   };
 }
+
+export { Message };

@@ -116,7 +116,7 @@ export default function ConversationItem({
               )}
             </div>
           ) : (
-            <div className="avatar-ring avatar ml-2">
+            <div className="avatar avatar-ring ml-2">
               <Image src={conversation.participants.filter((p) => p.userId !== userId)[0]?.user.image || defaultAvatar} alt="avatar" width={40} height={40} />
             </div>
           )}
@@ -134,10 +134,6 @@ export default function ConversationItem({
           <div className="float-right w-full text-right text-sm text-zinc-300">
             {formatDistance(new Date(conversation.updatedAt), new Date(), {
               addSuffix: true,
-              // locale: {
-              //   ...enUS,
-              //   formatRelative: (token) => formatRelativeLocale[token as keyof typeof formatRelativeLocale],
-              // },
             })}
           </div>
         </div>
@@ -145,14 +141,3 @@ export default function ConversationItem({
     </>
   );
 }
-
-// export default function ConversationItem({ conversation, userId }: { conversation: Conversation; userId: string }) {
-//   return (
-//     <Link href={`/app/${conversation.id}`} className="relative flex rounded-md p-4 hover:bg-gray-3">
-//       {conversation.participants
-//         .filter((e) => e.user.id !== userId)
-//         .map((e) => e.user.username)
-//         .join(', ')}
-//     </Link>
-//   );
-// }

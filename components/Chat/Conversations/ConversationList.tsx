@@ -5,6 +5,7 @@ import { Session } from 'next-auth';
 import { Conversation } from '@/lib/types';
 import ConversationItem from './ConversationItem';
 import { useRouter } from 'next/router';
+import SkeletonLoader from '@/components/SkeletonLoader';
 
 export default function ConversationList({
   session,
@@ -20,12 +21,12 @@ export default function ConversationList({
 
   return (
     <div className="w-[100%]">
-      <button className="btn-block btn mb-4" onClick={() => setIsOpen(true)}>
+      <button className="btn btn-block mb-4" onClick={() => setIsOpen(true)}>
         Find or start a conversation
       </button>
       <ConversationModal session={session} isOpen={isOpen} setIsOpen={setIsOpen} />
       {conversations ? (
-        <div>
+        <div className="w-full">
           {conversations.length > 0 ? (
             conversations
               .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
@@ -47,10 +48,22 @@ export default function ConversationList({
           )}
         </div>
       ) : (
-        <div className="flex flex-col space-y-4">
-          {[0, 1, 2, 3, 4, 5].map((e) => (
-            <div key={e} className="skeleton h-16 rounded-md"></div>
+        <div className="flex w-full flex-col space-y-4">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="flex w-full flex-row items-center justify-between p-4">
+              <div className="skeleton mx-3 h-10 w-10 rounded-full ring-2 ring-gray-7"></div>
+              <div className="flex w-[72%] flex-row items-center justify-between">
+                <div className="flex h-full w-[50%] flex-col space-y-2">
+                  <div className="skeleton h-6 rounded-lg" style={{ width: `${Math.round(Math.random() * 72 + 56)}px` }}></div>
+                  <div className="skeleton h-6 rounded-lg" style={{ width: `${Math.round(Math.random() * 48 + 72)}px` }}></div>
+                </div>
+                <div className="flex h-full items-center">
+                  <div className="skeleton h-6 w-20 rounded-lg"></div>
+                </div>
+              </div>
+            </div>
           ))}
+          <SkeletonLoader count={6} height="[72px]" width="full" />
         </div>
       )}
     </div>

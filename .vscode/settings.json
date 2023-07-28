@@ -1,7 +1,6 @@
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  // "prettier.configPath": "./prettier.config.js",
   "scss.lint.unknownAtRules": "ignore",
   "[xml]": {
     "editor.defaultFormatter": "j69.ejs-beautify"

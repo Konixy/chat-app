@@ -8,7 +8,7 @@ export default function Header({
   userId,
   conversations,
 }: {
-  conversationId: string | undefined;
+  conversationId: string;
   userId: string;
   conversations: Conversation[] | undefined;
 }) {
