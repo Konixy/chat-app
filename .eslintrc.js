@@ -30,6 +30,7 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'off',
     'react/react-in-jsx-scope': 'off',
     'jsx-a11y/no-noninteractive-tabindex': 'off',
+    '@typescript-eslint/no-unused-vars': 'warn',
   },
   plugins: ['tailwindcss'],
 };

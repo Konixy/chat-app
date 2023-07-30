@@ -21,7 +21,7 @@ export default function ConversationList({
 
   return (
     <div className="w-[100%]">
-      <button className="btn btn-block mb-4" onClick={() => setIsOpen(true)}>
+      <button className="btn-block btn mb-4" onClick={() => setIsOpen(true)}>
         Find or start a conversation
       </button>
       <ConversationModal session={session} isOpen={isOpen} setIsOpen={setIsOpen} />
@@ -40,7 +40,7 @@ export default function ConversationList({
                   onLeaveConversation={() => console.log('leave conversation')}
                   onClick={onViewConversation}
                   selectedConversationId={router.query.convId as string | undefined}
-                  hasSeenAllMessages={router.query.convId === e.id ? true : false}
+                  hasSeenAllMessages={e.participants.find((p) => p.id === session.user.id)?.hasSeenAllMessages}
                 />
               ))
           ) : (
