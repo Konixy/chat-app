@@ -29,10 +29,6 @@ export default function FeedWrapper({ session, conversations }: ChatType) {
   }
 
   useEffect(() => {
-    console.log(messages);
-  }, [messages]);
-
-  useEffect(() => {
     setMessages([]);
   }, [convId]);
 
