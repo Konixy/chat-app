@@ -13,8 +13,8 @@ export default function MessageInput({
 }: {
   session: Session;
   conversationId: string;
-  addMessage: (message: Message) => void;
-  editMessage: (messageId: string, newMessage: Message) => void;
+  addMessage: (convId: string, message: Message) => void;
+  editMessage: (convId: string, messageId: string, newMessage: Message) => void;
 }) {
   const [body, setBody] = useState('');
   const [validate, setValidate] = useState(false);
@@ -33,11 +33,12 @@ export default function MessageInput({
     if (!validate) return;
 
     try {
+      const convId = conversationId;
       const messageId = Date.now().toString();
       const message: Message & { loading?: boolean } = {
         senderId: session.user.id,
         sender: { id: session.user.id, username: session.user.username },
-        conversationId,
+        conversationId: convId,
         body,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -45,12 +46,12 @@ export default function MessageInput({
         seenByIds: [session.user.id],
         loading: true,
       };
-      addMessage(message);
+      addMessage(convId, message);
       setBody('');
-      sendMessage({ variables: { id: messageId, body, conversationId, senderId: session.user.id } }).then((r) => {
+      sendMessage({ variables: { id: messageId, body, conversationId: convId, senderId: session.user.id } }).then((r) => {
         const data = r.data?.sendMessage;
         if (data) {
-          editMessage(messageId, Object.assign({}, message, { loading: false }));
+          editMessage(convId, messageId, Object.assign({}, message, { loading: false }));
         }
       });
 

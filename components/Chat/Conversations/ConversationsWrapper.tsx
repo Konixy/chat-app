@@ -3,6 +3,8 @@ import ConversationList from './ConversationList';
 import { useRouter } from 'next/router';
 import { ChatType } from '..';
 import { useLocalStorage } from 'lib/util';
+import { useSubscription } from '@apollo/client';
+import ConversationOperations from 'graphql/operations/conversation';
 
 const minXwidth = 350;
 const sizeOnSmall = 100;
@@ -41,10 +43,6 @@ export default function ConversationsWrapper({ session, conversations }: ChatTyp
     document.body.addEventListener('mousemove', onMouseMove);
     document.body.addEventListener('mouseup', onMouseUp, { once: true });
   };
-
-  useEffect(() => {
-    console.log(isSmall);
-  }, [isSmall]);
 
   return (
     <div

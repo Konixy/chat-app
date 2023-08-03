@@ -14,7 +14,6 @@ export default function App() {
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   function reloadSession() {
     const event = new Event('visibilitychange');
     document.dispatchEvent(event);

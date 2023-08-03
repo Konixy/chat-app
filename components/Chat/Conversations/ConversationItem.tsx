@@ -113,8 +113,8 @@ export default function ConversationItem({
       >
         {isSmall ? (
           <div
-            className={`avatar avatar-lg transition-all ${
-              hasSeenAllMessages &&
+            className={`avatar avatar-lg transition ${
+              !hasSeenAllMessages &&
               `bg-transparent before:absolute before:right-0 before:h-4 before:w-4 before:rounded-full before:bg-primary ${
                 selectedConversationId === conversation.id && 'before:opacity-0'
               }`
@@ -136,7 +136,7 @@ export default function ConversationItem({
                     height={48}
                   />
                 </div>
-                <div className={`-ml-${conversation.participants.length > 4 ? '8' : '6'} avatar ring-0`}>
+                <div className={`${conversation.participants.length > 4 ? '-ml-8' : '-ml-6'} avatar ring-0`}>
                   <Image
                     src={conversation.participants.filter((p) => p.userId !== userId)[1]?.user.image || defaultAvatar}
                     alt="avatar"
