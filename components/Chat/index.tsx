@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ConversationsWrapper from './Conversations/ConversationsWrapper';
 import FeedWrapper from './Feed/FeedWrapper';
 import { Session } from 'next-auth';
 import { useQuery } from '@apollo/client';
 import { Conversation } from 'lib/types';
 import ConversationOperations from 'graphql/operations/conversation';
+import toast from 'react-hot-toast';
 
 export type ChatType = {
   session: Session;
@@ -12,11 +13,32 @@ export type ChatType = {
 };
 
 export default function Chat({ session }: { session: Session }) {
-  const { data: convsData, error: convsError, subscribeToMore } = useQuery<{ conversations: Conversation[] }>(ConversationOperations.Query.conversations);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const {
+    data: convsData,
+    error: convsError,
+    subscribeToMore,
+  } = useQuery<{ conversations: Conversation[] }>(ConversationOperations.Query.conversations, {
+    onError: (err) => {
+      toast.error(err.message);
+      console.log(err);
+    },
+    onCompleted: (r) => {
+      setConversations(r.conversations);
+    },
+  });
 
-  useEffect(() => {
-    if (convsError) console.log(convsError);
-  }, [convsError]);
+  function setConversation(conversationId: string, value: ((prev: Conversation) => Conversation) | Conversation) {
+    setConversations((prevAll) => {
+      const prev = conversations.find((c) => c.id === conversationId);
+      if (!prev) return prevAll;
+      const conv = value instanceof Function ? value(prev) : value;
+
+      const i = prevAll.findIndex((c) => c.id === conversationId);
+      prevAll[i] = conv;
+      return prevAll;
+    });
+  }
 
   function subscribeToNewConversations() {
     subscribeToMore({
@@ -40,9 +62,9 @@ export default function Chat({ session }: { session: Session }) {
   }, []);
 
   return (
-    <div className="flex h-[100vh]">
-      <ConversationsWrapper session={session} conversations={convsData?.conversations} />
-      <FeedWrapper session={session} conversations={convsData?.conversations} />
+    <div className="flex h-[100vh] flex-row">
+      <ConversationsWrapper session={session} conversations={conversations} setConversation={setConversation} />
+      <FeedWrapper session={session} conversations={conversations} />
     </div>
   );
 }

@@ -22,7 +22,7 @@ export default function ConversationItem({
 }: {
   userId: string;
   conversation: Conversation;
-  onClick: (convId: string) => void;
+  onClick: (convId: string, hasSeenAllMessages: boolean) => void;
   onEditConversation?: () => void;
   hasSeenAllMessages?: boolean;
   selectedConversationId?: string;
@@ -35,7 +35,7 @@ export default function ConversationItem({
 
   const handleClick = (event: React.MouseEvent) => {
     if (event.type === 'click') {
-      onClick(conversation.id);
+      onClick(conversation.id, hasSeenAllMessages || true);
     } else if (event.type === 'contextmenu') {
       event.preventDefault();
       setAnchorPoint({ x: event.clientX, y: event.clientY });
@@ -162,11 +162,10 @@ export default function ConversationItem({
           <div className="flex h-full w-[72%] justify-between">
             <div className="flex h-full w-[50%] flex-col">
               <div className="overflow-hidden truncate whitespace-nowrap font-semibold text-white">{formatUsernames(conversation.participants, userId)}</div>
-              {conversation.latestMessage && (
-                <div className="w-[140%] overflow-hidden whitespace-nowrap">
-                  <div className="text-ellipsis">{conversation.latestMessage.body}</div>
-                </div>
-              )}
+
+              <div className="w-[140%] overflow-hidden whitespace-nowrap">
+                <div className="text-ellipsis">{conversation.latestMessage ? conversation.latestMessage.body : 'Conversation created'}</div>
+              </div>
             </div>
             <div className="float-right w-full text-right text-sm">
               {formatDistance(new Date(conversation.updatedAt), new Date(), {

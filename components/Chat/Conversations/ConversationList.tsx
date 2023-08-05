@@ -15,7 +15,7 @@ export default function ConversationList({
 }: {
   session: Session;
   conversations: Conversation[] | undefined;
-  onViewConversation: (conversationId: string) => void;
+  onViewConversation: (conversationId: string, hasSeenAllMessages: boolean) => void;
   isSmall: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(false);
