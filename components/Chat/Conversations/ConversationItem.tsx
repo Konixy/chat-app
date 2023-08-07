@@ -22,7 +22,7 @@ export default function ConversationItem({
 }: {
   userId: string;
   conversation: Conversation;
-  onClick: (convId: string, hasSeenAllMessages: boolean) => void;
+  onClick: (convId: string, hasSeenAllMessages?: boolean) => void;
   onEditConversation?: () => void;
   hasSeenAllMessages?: boolean;
   selectedConversationId?: string;
@@ -35,7 +35,7 @@ export default function ConversationItem({
 
   const handleClick = (event: React.MouseEvent) => {
     if (event.type === 'click') {
-      onClick(conversation.id, hasSeenAllMessages || true);
+      onClick(conversation.id, hasSeenAllMessages);
     } else if (event.type === 'contextmenu') {
       event.preventDefault();
       setAnchorPoint({ x: event.clientX, y: event.clientY });
@@ -46,6 +46,8 @@ export default function ConversationItem({
   const showMenu = onEditConversation && onDeleteConversation && onLeaveConversation;
 
   const className = 'flex w-full cursor-pointer flex-row items-center rounded-md p-2 transition hover:bg-gray-5 active:scale-[.97] active:bg-gray-5';
+
+  console.log(conversation);
 
   return (
     <>
@@ -105,9 +107,9 @@ export default function ConversationItem({
           </div>
         </div> */}
       <div
-        className={`relative flex h-[80px] cursor-pointer flex-row items-center rounded-md transition ${
+        className={`relative flex h-20 cursor-pointer flex-row items-center rounded-md transition ${
           conversation.id === selectedConversationId ? 'bg-primary text-blue-200' : 'text-zinc-300 hover:bg-gray-3'
-        } ${isSmall ? 'w-[80px] justify-center' : 'justify-between p-4'}`}
+        } ${isSmall ? 'w-20 justify-center' : 'justify-between p-4'}`}
         onClick={handleClick}
         onContextMenu={handleClick}
       >

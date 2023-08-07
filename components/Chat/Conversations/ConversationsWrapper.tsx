@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import ConversationList from './ConversationList';
 import { useRouter } from 'next/router';
-import { useLocalStorage } from 'lib/util';
-import { useMutation } from '@apollo/client';
+import { SetAction, useLocalStorage } from 'lib/util';
+import { ApolloError, useMutation } from '@apollo/client';
 import ConversationOperations from 'graphql/operations/conversation';
 import toast from 'react-hot-toast';
 import { Session } from 'next-auth';
-import { Conversation } from '@/lib/types';
+import { Conversation, ConversationsMap } from '@/lib/types';
 
 const minXwidth = 350;
 const maxXwidth = typeof window !== 'undefined' ? window.innerWidth / 2 : 700;
@@ -15,11 +15,15 @@ const sizeOnSmall = 100;
 export default function ConversationsWrapper({
   session,
   conversations,
+  conversationsLoading,
+  conversationsError,
   setConversation,
 }: {
   session: Session;
-  conversations: Conversation[];
-  setConversation: (convId: string, value: ((value: Conversation) => Conversation) | Conversation) => void;
+  conversations: ConversationsMap;
+  conversationsLoading: boolean;
+  conversationsError: ApolloError | undefined;
+  setConversation: SetAction<string, Conversation>;
 }) {
   const router = useRouter();
   const {
@@ -37,7 +41,7 @@ export default function ConversationsWrapper({
     },
   );
 
-  async function onViewConversation(conversationId: string, hasSeenAllMessages: boolean) {
+  async function onViewConversation(conversationId: string, hasSeenAllMessages?: boolean) {
     router.push(`/app/${conversationId}`);
 
     if (hasSeenAllMessages) return;
@@ -48,11 +52,14 @@ export default function ConversationsWrapper({
       },
     });
     setConversation(conversationId, (prev) => {
-      const participantIndex = prev.participants.findIndex((p) => p.id === userId);
-      if (participantIndex === -1) return prev;
-      prev.participants[participantIndex].hasSeenAllMessages = true;
-      console.log('uo');
-      return prev;
+      if (!prev) return prev;
+      const prevCopy = prev;
+      const participantIndex = prevCopy.participants.findIndex((p) => p.user.id === userId);
+      if (participantIndex === -1) return prevCopy;
+      const participantCopy = prevCopy.participants;
+      participantCopy[participantIndex].hasSeenAllMessages = true;
+      prevCopy.participants = participantCopy;
+      return prevCopy;
     });
   }
 
@@ -92,7 +99,14 @@ export default function ConversationsWrapper({
         router.query.convId ? 'hidden' : 'block'
       } md:w-[${wrapperSizeX}px] w-full resize-x bg-backgroundSecondary px-3 py-6 md:block`}
     >
-      <ConversationList session={session} conversations={conversations && [...conversations]} onViewConversation={onViewConversation} isSmall={isSmall} />
+      <ConversationList
+        session={session}
+        conversations={conversations}
+        loading={conversationsLoading}
+        error={conversationsError}
+        onViewConversation={onViewConversation}
+        isSmall={isSmall}
+      />
       <button
         onMouseDown={dragHandler}
         style={{ left: `${wrapperSizeX - 2}px` }}

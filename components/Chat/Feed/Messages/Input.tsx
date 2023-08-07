@@ -4,17 +4,20 @@ import toast from 'react-hot-toast';
 import { Message } from 'lib/types';
 import { useMutation } from '@apollo/client';
 import MessageOperations from 'graphql/operations/message';
+import { cleanMessages } from './Messages';
+import { nanoid } from 'nanoid';
+
+export type MessageWithLoading = Message & { loading?: boolean };
 
 export default function MessageInput({
   session,
-  conversationId,
-  addMessage,
-  editMessage,
-}: {
+  conversationId, // addMessage,
+} // editMessage,
+: {
   session: Session;
   conversationId: string;
-  addMessage: (convId: string, message: Message) => void;
-  editMessage: (convId: string, messageId: string, newMessage: Message) => void;
+  // addMessage: (convId: string, message: Message) => void;
+  // editMessage: (convId: string, messageId: string, newMessage: Message) => void;
 }) {
   const [body, setBody] = useState('');
   const [validate, setValidate] = useState(false);
@@ -34,26 +37,51 @@ export default function MessageInput({
 
     try {
       const convId = conversationId;
-      const messageId = Date.now().toString();
-      const message: Message & { loading?: boolean } = {
+      const messageId = nanoid();
+      const message: MessageWithLoading = {
+        id: messageId,
         senderId: session.user.id,
-        sender: { id: session.user.id, username: session.user.username },
+        sender: {
+          id: session.user.id,
+          username: session.user.username,
+          image: session.user.image as string | undefined,
+        },
         conversationId: convId,
         body,
+        seenByIds: [session.user.id],
         createdAt: new Date(),
         updatedAt: new Date(),
-        id: messageId,
-        seenByIds: [session.user.id],
         loading: true,
       };
-      addMessage(convId, message);
+      // addMessage(convId, message);
       setBody('');
-      sendMessage({ variables: { id: messageId, body, conversationId: convId, senderId: session.user.id } }).then((r) => {
-        const data = r.data?.sendMessage;
-        if (data) {
-          editMessage(convId, messageId, Object.assign({}, message, { loading: false }));
-        }
+      sendMessage({
+        variables: { id: messageId, body, conversationId: convId, senderId: session.user.id },
+        optimisticResponse: {
+          sendMessage: true,
+        },
+        update: (cache) => {
+          const existing = cache.readQuery<{ messages: MessageWithLoading[] }>({
+            query: MessageOperations.Query.messages,
+            variables: { conversationId },
+          }) as { messages: MessageWithLoading[] };
+
+          cache.writeQuery<{ messages: MessageWithLoading[] }, { conversationId: string }>({
+            query: MessageOperations.Query.messages,
+            variables: { conversationId },
+            data: {
+              ...existing,
+              messages: [...cleanMessages([message, ...existing.messages])],
+            },
+          });
+        },
       });
+      // .then((r) => {
+      //   const data = r.data?.sendMessage;
+      //   if (data) {
+      //     editMessage(convId, messageId, Object.assign({}, message, { loading: false }));
+      //   }
+      // });
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

@@ -6,6 +6,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
+        sans: ['Lato', ...defaultTheme.fontFamily.sans],
         metana: ['NeueMetana', ...defaultTheme.fontFamily.sans],
       },
     },

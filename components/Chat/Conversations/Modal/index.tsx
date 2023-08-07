@@ -89,7 +89,7 @@ export default function Modal({ session, isOpen, setIsOpen }: { session: Session
       <div className="modal">
         <span className="modal-overlay" onClick={() => setIsOpen(false)} />
         <div className="modal-content flex w-96 flex-col gap-5">
-          <button className="btn-sm btn-circle btn-ghost btn absolute right-2 top-2" onClick={() => setIsOpen(false)}>
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={() => setIsOpen(false)}>
             ✕
           </button>
           <div className="text-xl">Search</div>
@@ -110,7 +110,7 @@ export default function Modal({ session, isOpen, setIsOpen }: { session: Session
               />
             </div>
 
-            <button className="btn-block btn" type="submit" disabled={!value || loading || convLoading}>
+            <button className="btn btn-block" type="submit" disabled={!value || loading || convLoading}>
               <Loader loading={loading}>Search</Loader>
             </button>
 
@@ -124,7 +124,7 @@ export default function Modal({ session, isOpen, setIsOpen }: { session: Session
             {participants.length > 0 && (
               <>
                 <Participants participants={participants} removeParticipant={removeParticipant} disabled={convLoading} />
-                <button type="button" className="btn-primary btn" disabled={convLoading || loading} onClick={() => createConversation()}>
+                <button type="button" className="btn btn-primary" disabled={convLoading || loading} onClick={() => createConversation()}>
                   <Loader loading={convLoading}>Create conversation</Loader>
                 </button>
               </>

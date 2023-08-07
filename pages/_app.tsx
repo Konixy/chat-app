@@ -1,11 +1,12 @@
 import React from 'react';
-import 'styles/globals.scss';
+import 'styles/globals.css';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { SessionProvider } from 'next-auth/react';
 import { Toaster } from 'react-hot-toast';
 import { ApolloProvider } from '@apollo/client';
 import { client } from 'graphql/apollo-client';
+import { ConversationsProvider } from 'lib/useConversations';
 
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
@@ -15,8 +16,10 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
       </Head>
       <ApolloProvider client={client}>
         <SessionProvider session={session}>
-          <Component {...pageProps} />
-          <Toaster position="bottom-right" />
+          <ConversationsProvider>
+            <Component {...pageProps} />
+            <Toaster position="bottom-right" />
+          </ConversationsProvider>
         </SessionProvider>
       </ApolloProvider>
     </>

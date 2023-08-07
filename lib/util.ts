@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { User } from 'lib/types';
 
 export function formatUsernames(participants: { user: Omit<User, 'emailVerified'> }[], userId: string) {
@@ -35,4 +35,61 @@ export function useLocalStorage<T>(key: string, defaultValue?: T): [T, React.Dis
   };
 
   return [storedValue, setValue];
+}
+
+export type MapOrEntries<K, V> = Map<K, V> | [K, V][];
+export type FunctionOrProperty<V> = ((prev: V | undefined) => V | undefined) | (V | undefined);
+
+export type SetAction<K, V> = (key: K, value: FunctionOrProperty<V>) => void;
+
+export interface Actions<K, V> {
+  set: SetAction<K, V>;
+  setAll: (entries: MapOrEntries<K, V>) => void;
+  remove: (key: K) => void;
+  reset: Map<K, V>['clear'];
+}
+
+// We hide some setters from the returned map to disable autocompletion
+export type Items<K, V> = Omit<Map<K, V>, 'set' | 'clear' | 'delete'>;
+export type Return<K, V> = [Items<K, V>, Actions<K, V>];
+
+export function useMap<K, V>(initialState: MapOrEntries<K, V> = new Map()): Return<K, V> {
+  const [map, setMap] = useState(new Map(initialState));
+
+  const actions: Actions<K, V> = {
+    set: useCallback((key, v) => {
+      setMap((prev) => {
+        const copy = new Map(prev);
+        const value = v instanceof Function ? v(copy.get(key)) : v;
+        value && copy.set(key, value);
+        return copy;
+      });
+    }, []),
+
+    setAll: useCallback((entries) => {
+      setMap(() => new Map(entries));
+    }, []),
+
+    remove: useCallback((key) => {
+      setMap((prev) => {
+        const copy = new Map(prev);
+        copy.delete(key);
+        return copy;
+      });
+    }, []),
+
+    reset: useCallback(() => {
+      setMap(() => new Map());
+    }, []),
+  };
+
+  return [map, actions];
+}
+
+export function randomNumber(min: number, max: number): number {
+  return Math.round(Math.random() * (max - min) + min);
+}
+
+export function randomBoolean(): boolean {
+  return Math.random() < 0.5;
 }

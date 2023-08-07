@@ -16,6 +16,18 @@
   font-weight: bold;
 }
 
+@font-face {
+  font-family: 'Lato';
+  src: url('../public/fonts/Lato-Regular.ttf') format('woff2');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('../public/fonts/Lato-Bold.ttf') format('woff2');
+  font-weight: bold;
+}
+
 @media (max-width: 768px) {
   .conversationsWrapper {
     width: 100% !important;
