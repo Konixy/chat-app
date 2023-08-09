@@ -28,7 +28,7 @@ export default function Auth() {
             <div className="font-metana text-4xl font-bold">Lyna</div>
           </div>
           <button
-            className="btn-primary btn w-64"
+            className="btn btn-primary w-64"
             onClick={() => {
               signIn('google');
               setIsLoading(true);

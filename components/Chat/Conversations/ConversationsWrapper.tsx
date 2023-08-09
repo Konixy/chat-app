@@ -53,13 +53,20 @@ export default function ConversationsWrapper({
     });
     setConversation(conversationId, (prev) => {
       if (!prev) return prev;
-      const prevCopy = prev;
-      const participantIndex = prevCopy.participants.findIndex((p) => p.user.id === userId);
-      if (participantIndex === -1) return prevCopy;
-      const participantCopy = prevCopy.participants;
-      participantCopy[participantIndex].hasSeenAllMessages = true;
-      prevCopy.participants = participantCopy;
-      return prevCopy;
+
+      const newPrev: Conversation = JSON.parse(JSON.stringify(prev));
+
+      newPrev.participants = newPrev.participants.map((participant) => {
+        if (participant.user.id === userId) {
+          return {
+            ...participant,
+            hasSeenAllMessages: true,
+          };
+        }
+        return participant;
+      });
+
+      return newPrev;
     });
   }
 
@@ -110,7 +117,7 @@ export default function ConversationsWrapper({
       <button
         onMouseDown={dragHandler}
         style={{ left: `${wrapperSizeX - 2}px` }}
-        className="absolute top-0 z-50 hidden h-full w-[4px] cursor-w-resize opacity-0 md:block"
+        className="absolute top-0 z-50 hidden h-full w-[4px] cursor-col-resize opacity-0 md:block"
       ></button>
     </div>
   );

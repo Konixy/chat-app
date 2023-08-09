@@ -1,7 +1,7 @@
 import React from 'react';
 import { formatRelative } from 'date-fns';
 import enUs from 'date-fns/locale/en-US';
-import { MessageWithLoading } from './Input';
+import { MessageWithLoading } from 'lib/types';
 import Image from 'next/image';
 import { defaultAvatar } from '../../Conversations/Modal/SearchUsersList';
 

@@ -54,7 +54,7 @@ export default function Navbar() {
                     Profile
                   </Link>
                   <div className="dropdown-divider" role="separator"></div>
-                  <Link href="/account/settings" className="dropdown-item text-sm">
+                  <Link href="/app/settings" className="dropdown-item text-sm">
                     Account settings
                   </Link>
                   <button

@@ -11,7 +11,7 @@ export default function NotFound() {
           </h2>
           <p className="text-2xl font-semibold md:text-3xl">Sorry, we couldn&apos;t find this page.</p>
           <div className="my-10 flex justify-center">
-            <Link href="/" className="btn-primary btn p-6 text-lg">
+            <Link href="/" className="btn btn-primary p-6 text-lg">
               Back to homepage
             </Link>
           </div>

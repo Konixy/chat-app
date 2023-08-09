@@ -1,19 +1,17 @@
 import { Session } from 'next-auth';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Message } from 'lib/types';
+import { MessageWithLoading } from 'lib/types';
 import { useMutation } from '@apollo/client';
 import MessageOperations from 'graphql/operations/message';
 import { cleanMessages } from './Messages';
 import { nanoid } from 'nanoid';
 
-export type MessageWithLoading = Message & { loading?: boolean };
-
 export default function MessageInput({
   session,
   conversationId, // addMessage,
-} // editMessage,
-: {
+  // editMessage,
+}: {
   session: Session;
   conversationId: string;
   // addMessage: (convId: string, message: Message) => void;
@@ -40,7 +38,6 @@ export default function MessageInput({
       const messageId = nanoid();
       const message: MessageWithLoading = {
         id: messageId,
-        senderId: session.user.id,
         sender: {
           id: session.user.id,
           username: session.user.username,
@@ -48,9 +45,9 @@ export default function MessageInput({
         },
         conversationId: convId,
         body,
-        seenByIds: [session.user.id],
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        // seenByIds: [session.user.id],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
         loading: true,
       };
       // addMessage(convId, message);

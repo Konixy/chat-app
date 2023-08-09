@@ -122,7 +122,7 @@ export default function ConversationItem({
               }`
             }`}
           >
-            <Image src={conversation.participants.filter((p) => p.userId !== userId)[0]?.user.image || defaultAvatar} alt="avatar" width={48} height={48} />
+            <Image src={conversation.participants.filter((p) => p.user.id !== userId)[0]?.user.image || defaultAvatar} alt="avatar" width={48} height={48} />
           </div>
         ) : (
           <div className="relative mr-3 flex flex-row items-center">
@@ -132,7 +132,7 @@ export default function ConversationItem({
               <div className="avatar-group">
                 <div className="avatar ml-2 ring-0">
                   <Image
-                    src={conversation.participants.filter((p) => p.userId !== userId)[0]?.user.image || defaultAvatar}
+                    src={conversation.participants.filter((p) => p.user.id !== userId)[0]?.user.image || defaultAvatar}
                     alt="avatar"
                     width={48}
                     height={48}
@@ -140,7 +140,7 @@ export default function ConversationItem({
                 </div>
                 <div className={`${conversation.participants.length > 4 ? '-ml-8' : '-ml-6'} avatar ring-0`}>
                   <Image
-                    src={conversation.participants.filter((p) => p.userId !== userId)[1]?.user.image || defaultAvatar}
+                    src={conversation.participants.filter((p) => p.user.id !== userId)[1]?.user.image || defaultAvatar}
                     alt="avatar"
                     width={48}
                     height={48}
@@ -154,7 +154,12 @@ export default function ConversationItem({
               </div>
             ) : (
               <div className="avatar avatar-lg ml-2">
-                <Image src={conversation.participants.filter((p) => p.userId !== userId)[0]?.user.image || defaultAvatar} alt="avatar" width={48} height={48} />
+                <Image
+                  src={conversation.participants.filter((p) => p.user.id !== userId)[0]?.user.image || defaultAvatar}
+                  alt="avatar"
+                  width={48}
+                  height={48}
+                />
               </div>
             )}
           </div>

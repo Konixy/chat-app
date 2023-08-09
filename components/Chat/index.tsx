@@ -30,7 +30,7 @@ export default function Chat({ session }: { session: Session }) {
   });
 
   function subscribeToNewConversations() {
-    subscribeToMore({
+    return subscribeToMore({
       document: ConversationOperations.Subscriptions.conversationCreated,
       updateQuery: (prev, { subscriptionData }: { subscriptionData: { data: { conversationCreated: Conversation } } }) => {
         if (!subscriptionData.data) return prev;
@@ -45,7 +45,9 @@ export default function Chat({ session }: { session: Session }) {
   }
 
   useEffect(() => {
-    subscribeToNewConversations();
+    const unsubscribe = subscribeToNewConversations();
+
+    return () => unsubscribe();
   }, []);
 
   return (
