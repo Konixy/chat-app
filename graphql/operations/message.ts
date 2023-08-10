@@ -1,13 +1,13 @@
 import { gql } from '@apollo/client';
+import { UserFields } from './user';
 
 export const MessageFields = `
   id
   sender {
-    id
-    username
-    image
+    ${UserFields}
   }
   body
+  conversationId
   createdAt
   updatedAt
 `;
@@ -30,9 +30,9 @@ const messages = {
     `,
   },
   Subscription: {
-    messageSent: gql`
-      subscription MessageSent($conversationId: String!) {
-        messageSent(conversationId: $conversationId) {
+    newMessage: gql`
+      subscription NewMessage {
+        newMessage {
           ${MessageFields}
         }
       }

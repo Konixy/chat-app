@@ -31,6 +31,8 @@ export default function ConversationItem({
   isSmall: boolean;
 }) {
   const [menuOpen, toggleMenu] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setHover] = useState(false);
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
 
   const handleClick = (event: React.MouseEvent) => {
@@ -46,8 +48,6 @@ export default function ConversationItem({
   const showMenu = onEditConversation && onDeleteConversation && onLeaveConversation;
 
   const className = 'flex w-full cursor-pointer flex-row items-center rounded-md p-2 transition hover:bg-gray-5 active:scale-[.97] active:bg-gray-5';
-
-  console.log(conversation);
 
   return (
     <>
@@ -93,25 +93,14 @@ export default function ConversationItem({
           )}
         </ControlledMenu>
       )}
-      {/* <div
-          className={`flex h-[76px] w-full cursor-pointer flex-row items-center rounded-lg text-center transition ${
-            conversation.id === selectedConversationId ? 'bg-primary' : 'hover:bg-gray-3'
-          }`}
-          onClick={handleClick}
-          onContextMenu={handleClick}
-        >
-          <div className="w-full">
-            <div className="avatar">
-              <Image src={conversation.participants.filter((p) => p.userId !== userId)[0]?.user.image || defaultAvatar} alt="avatar" width={48} height={48} />
-            </div>
-          </div>
-        </div> */}
       <div
         className={`relative flex h-20 cursor-pointer flex-row items-center rounded-md transition ${
           conversation.id === selectedConversationId ? 'bg-primary text-blue-200' : 'text-zinc-300 hover:bg-gray-3'
         } ${isSmall ? 'w-20 justify-center' : 'justify-between p-4'}`}
         onClick={handleClick}
         onContextMenu={handleClick}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
       >
         {isSmall ? (
           <div

@@ -1,14 +1,18 @@
 import { gql } from '@apollo/client';
 
+export const UserFields = `
+  id
+  username
+  image
+  name
+`;
+
 const user = {
   Queries: {
     searchUsers: gql`
       query SearchUsers($query: String!) {
         searchUsers(query: $query) {
-          id
-          username
-          name
-          image
+          ${UserFields}
         }
       }
     `,

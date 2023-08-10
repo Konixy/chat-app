@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
 import ConversationModal from './Modal';
 import { Session } from 'next-auth';
-import { ConversationsMap } from 'lib/types';
 import ConversationItem from './ConversationItem';
 import { useRouter } from 'next/router';
 import { ApolloError } from '@apollo/client';
 import ConversationsLoader from './ConversationsLoader';
+import { useConversations } from '@/lib/useConversations';
 
 export default function ConversationList({
   session,
-  conversations,
   loading,
   error,
   onViewConversation,
   isSmall,
 }: {
   session: Session;
-  conversations: ConversationsMap;
   loading: boolean;
   error: ApolloError | undefined;
   onViewConversation: (conversationId: string, hasSeenAllMessages?: boolean) => void;
@@ -24,6 +22,7 @@ export default function ConversationList({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const { conversations } = useConversations();
 
   if (error)
     return (

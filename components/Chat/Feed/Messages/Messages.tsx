@@ -1,34 +1,30 @@
-import { QueryResult, useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import React, { useEffect } from 'react';
 import MessageOperations from 'graphql/operations/message';
-import { ConversationsMap, Message } from 'lib/types';
 import MessageItem from './MessageItem';
 import { useRouter } from 'next/router';
 import MessagesLoader from './MessagesLoader';
+import { useConversations } from '@/lib/useConversations';
+import { Message } from 'lib/types';
 
-export function cleanMessages(array: Message[]): Message[] {
-  const uniqueArray: Message[] = [];
-  array.forEach((e) => {
-    if (!uniqueArray.find((f) => f.id === e.id)) {
-      uniqueArray.push(e);
-    }
-  });
-  return uniqueArray;
-}
+// export function cleanMessages(array: Message[]): Message[] {
+//   const uniqueArray: Message[] = [];
+//   array.forEach((e) => {
+//     if (!uniqueArray.find((f) => f.id === e.id)) {
+//       uniqueArray.push(e);
+//     }
+//   });
+//   return uniqueArray;
+// }
 
-export default function Messages({
-  userId,
-  convId,
-  conversations, // messages,
-} // setMessages,
-: {
-  userId: string;
-  convId: string;
-  conversations: ConversationsMap;
-  // messages: (Message & { loading?: boolean })[];
-  // setMessages: SetMessages;
-}) {
-  const [fetchMessagesQuery, { data, loading, error }] = useLazyQuery<{ messages: Message[] }, { conversationId: string }>(MessageOperations.Query.messages, {
+export default function Messages({ userId, convId }: { userId: string; convId: string }) {
+  const {
+    conversations,
+    messages: allMessages,
+    messagesActions: { setMessages },
+  } = useConversations();
+  const messages = allMessages[convId];
+  const [fetchMessagesQuery, { loading, error }] = useLazyQuery<{ messages: Message[] }, { conversationId: string }>(MessageOperations.Query.messages, {
     onError: (err) => {
       console.log(err);
     },
@@ -37,53 +33,13 @@ export default function Messages({
 
   function fetchMessages(conversationId: string) {
     fetchMessagesQuery({ variables: { conversationId } }).then((r) => {
-      // setMessages(conversationId, (prev) => [...cleanMessages([...prev, ...(r.data?.messages || [])])]);
-      subscribeToMoreMessages(conversationId, r);
+      if (r.data?.messages) setMessages(conversationId, r.data?.messages);
     });
   }
 
   useEffect(() => {
-    fetchMessages(convId);
+    if (!allMessages[convId]) fetchMessages(convId);
   }, [convId]);
-
-  function subscribeToMoreMessages(
-    conversationId: string,
-    r: QueryResult<
-      {
-        messages: Message[];
-      },
-      {
-        conversationId: string;
-      }
-    >,
-  ) {
-    r.subscribeToMore({
-      document: MessageOperations.Subscription.messageSent,
-      variables: {
-        conversationId,
-      },
-      updateQuery: (
-        prev,
-        {
-          subscriptionData,
-        }: {
-          subscriptionData: {
-            data: {
-              messageSent: Message;
-            };
-          };
-        },
-      ) => {
-        if (!subscriptionData) return prev;
-
-        const newMessage = subscriptionData.data.messageSent;
-
-        // setMessages(conversationId, (prev) => [...cleanMessages([...prev, newMessage])]);
-
-        return { messages: [...cleanMessages([...prev.messages, newMessage])] };
-      },
-    });
-  }
 
   if (error)
     return (
@@ -105,9 +61,9 @@ export default function Messages({
   return (
     <div className="flex h-full flex-col justify-end overflow-hidden">
       {loading && <MessagesLoader isGroup={isGroup} key={convId} />}
-      {data && (
+      {messages && (
         <div className="flex h-full flex-col-reverse overflow-y-auto overflow-x-hidden">
-          {[...data.messages]
+          {[...messages]
             .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
             .map((message) => (
               <MessageItem key={message.id} message={message} sentByMe={message.sender.id === userId} isGroup={isGroup} />
@@ -117,3 +73,42 @@ export default function Messages({
     </div>
   );
 }
+
+// function subscribeToMoreMessages(
+//   conversationId: string,
+//   r: QueryResult<
+//     {
+//       messages: Message[];
+//     },
+//     {
+//       conversationId: string;
+//     }
+//   >,
+// ) {
+//   return r.subscribeToMore({
+//     document: MessageOperations.Subscription.newMessage,
+//     variables: {
+//       conversationId,
+//     },
+//     updateQuery: (
+//       prev,
+//       {
+//         subscriptionData,
+//       }: {
+//         subscriptionData: {
+//           data: {
+//             messageSent: Message;
+//           };
+//         };
+//       },
+//     ) => {
+//       if (!subscriptionData) return prev;
+
+//       const newMessage = subscriptionData.data.messageSent;
+
+//       // setMessages(conversationId, (prev) => [...cleanMessages([...prev, newMessage])]);
+
+//       return { messages: [...cleanMessages([...prev.messages, newMessage])] };
+//     },
+//   });
+// }

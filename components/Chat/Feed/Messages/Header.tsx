@@ -1,23 +1,22 @@
 import React from 'react';
-import { ConversationsMap } from 'lib/types';
 import { useRouter } from 'next/router';
 import { formatUsernames } from '@/lib/util';
 import { ApolloError } from '@apollo/client';
+import { useConversations } from '@/lib/useConversations';
 
 export default function Header({
-  conversations,
   conversationsLoading,
   conversationId,
   userId,
   error,
 }: {
-  conversations: ConversationsMap;
   conversationsLoading: boolean;
   conversationId: string;
   userId: string;
   error: ApolloError | undefined;
 }) {
   const router = useRouter();
+  const { conversations } = useConversations();
 
   const conversation = conversations.get(conversationId);
 

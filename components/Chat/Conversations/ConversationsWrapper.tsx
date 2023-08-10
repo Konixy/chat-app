@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import ConversationList from './ConversationList';
 import { useRouter } from 'next/router';
-import { SetAction, useLocalStorage } from 'lib/util';
-import { ApolloError, useMutation } from '@apollo/client';
-import ConversationOperations from 'graphql/operations/conversation';
-import toast from 'react-hot-toast';
+import { useLocalStorage } from 'lib/util';
+import { ApolloError } from '@apollo/client';
 import { Session } from 'next-auth';
-import { Conversation, ConversationsMap } from '@/lib/types';
+import { useConversations } from '@/lib/useConversations';
 
 const minXwidth = 350;
 const maxXwidth = typeof window !== 'undefined' ? window.innerWidth / 2 : 700;
@@ -14,60 +12,29 @@ const sizeOnSmall = 100;
 
 export default function ConversationsWrapper({
   session,
-  conversations,
   conversationsLoading,
   conversationsError,
-  setConversation,
 }: {
   session: Session;
-  conversations: ConversationsMap;
   conversationsLoading: boolean;
   conversationsError: ApolloError | undefined;
-  setConversation: SetAction<string, Conversation>;
 }) {
   const router = useRouter();
+  const {
+    conversationsActions: { markAsRead: markConversationAsRead },
+  } = useConversations();
   const {
     user: { id: userId },
   } = session;
   const [wrapperSizeX, setWrapperSizeX] = useLocalStorage('conversationWrapperSizeX', 400);
   const [isSmall, setIsSmall] = useState(wrapperSizeX < minXwidth);
-  const [markConversationAsRead] = useMutation<{ markConversationAsRead: boolean }, { conversationId: string }>(
-    ConversationOperations.Mutations.markConversationAsRead,
-    {
-      onError: (err) => {
-        toast.error(err.message);
-        console.log(err);
-      },
-    },
-  );
 
   async function onViewConversation(conversationId: string, hasSeenAllMessages?: boolean) {
     router.push(`/app/${conversationId}`);
 
     if (hasSeenAllMessages) return;
 
-    await markConversationAsRead({
-      variables: {
-        conversationId,
-      },
-    });
-    setConversation(conversationId, (prev) => {
-      if (!prev) return prev;
-
-      const newPrev: Conversation = JSON.parse(JSON.stringify(prev));
-
-      newPrev.participants = newPrev.participants.map((participant) => {
-        if (participant.user.id === userId) {
-          return {
-            ...participant,
-            hasSeenAllMessages: true,
-          };
-        }
-        return participant;
-      });
-
-      return newPrev;
-    });
+    markConversationAsRead(conversationId, userId);
   }
 
   const dragHandler = (mouseDownEvent: React.MouseEvent<HTMLButtonElement>) => {
@@ -106,14 +73,7 @@ export default function ConversationsWrapper({
         router.query.convId ? 'hidden' : 'block'
       } md:w-[${wrapperSizeX}px] w-full resize-x bg-backgroundSecondary px-3 py-6 md:block`}
     >
-      <ConversationList
-        session={session}
-        conversations={conversations}
-        loading={conversationsLoading}
-        error={conversationsError}
-        onViewConversation={onViewConversation}
-        isSmall={isSmall}
-      />
+      <ConversationList session={session} loading={conversationsLoading} error={conversationsError} onViewConversation={onViewConversation} isSmall={isSmall} />
       <button
         onMouseDown={dragHandler}
         style={{ left: `${wrapperSizeX - 2}px` }}

@@ -1,5 +1,4 @@
 import { ISODateString } from 'next-auth';
-import { Items } from './util';
 export type User = {
   name?: string | null;
   email?: string | null;
@@ -29,8 +28,6 @@ export type Conversation = {
   latestMessage?: Message;
   updatedAt: ISODateString;
 };
-
-export type ConversationsMap = Items<string, Conversation>;
 
 export type Message = {
   id: string;

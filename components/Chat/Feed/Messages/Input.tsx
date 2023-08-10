@@ -4,21 +4,15 @@ import toast from 'react-hot-toast';
 import { MessageWithLoading } from 'lib/types';
 import { useMutation } from '@apollo/client';
 import MessageOperations from 'graphql/operations/message';
-import { cleanMessages } from './Messages';
 import { nanoid } from 'nanoid';
+import { useConversations } from '@/lib/useConversations';
 
-export default function MessageInput({
-  session,
-  conversationId, // addMessage,
-  // editMessage,
-}: {
-  session: Session;
-  conversationId: string;
-  // addMessage: (convId: string, message: Message) => void;
-  // editMessage: (convId: string, messageId: string, newMessage: Message) => void;
-}) {
+export default function MessageInput({ session, conversationId }: { session: Session; conversationId: string }) {
   const [body, setBody] = useState('');
   const [validate, setValidate] = useState(false);
+  const {
+    messagesActions: { addMessage, editMessage },
+  } = useConversations();
   const [sendMessage] = useMutation<{ sendMessage: boolean }, { id: string; conversationId: string; senderId: string; body: string }>(
     MessageOperations.Mutation.sendMessage,
     {
@@ -50,35 +44,16 @@ export default function MessageInput({
         updatedAt: new Date().toISOString(),
         loading: true,
       };
-      // addMessage(convId, message);
+      addMessage(convId, message);
       setBody('');
       sendMessage({
         variables: { id: messageId, body, conversationId: convId, senderId: session.user.id },
-        optimisticResponse: {
-          sendMessage: true,
-        },
-        update: (cache) => {
-          const existing = cache.readQuery<{ messages: MessageWithLoading[] }>({
-            query: MessageOperations.Query.messages,
-            variables: { conversationId },
-          }) as { messages: MessageWithLoading[] };
-
-          cache.writeQuery<{ messages: MessageWithLoading[] }, { conversationId: string }>({
-            query: MessageOperations.Query.messages,
-            variables: { conversationId },
-            data: {
-              ...existing,
-              messages: [...cleanMessages([message, ...existing.messages])],
-            },
-          });
-        },
+      }).then((r) => {
+        const success = r.data?.sendMessage;
+        if (!success) {
+          editMessage(convId, messageId, { ...message, failed: true, loading: false });
+        }
       });
-      // .then((r) => {
-      //   const data = r.data?.sendMessage;
-      //   if (data) {
-      //     editMessage(convId, messageId, Object.assign({}, message, { loading: false }));
-      //   }
-      // });
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

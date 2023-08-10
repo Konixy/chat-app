@@ -16,8 +16,6 @@ export default function MessagesLoader({ isGroup }: { isGroup: boolean }) {
     setItems((prev) => [...prev, item]);
   }
 
-  console.log(maxWidth);
-
   useEffect(() => {
     for (let i = 0; i < 20; i++) {
       const isLeft = randomBoolean();
@@ -35,11 +33,8 @@ export default function MessagesLoader({ isGroup }: { isGroup: boolean }) {
   }, [maxWidth]);
 
   useEffect(() => {
-    console.log(window.innerWidth);
     setMaxWidth(((document.querySelector('#loader-container') as HTMLDivElement | undefined)?.offsetWidth || 400) * 0.65);
   }, [window.innerWidth]);
-
-  console.log(items);
 
   return (
     <div id="loader-container" className="mx-4 flex h-full flex-col-reverse space-y-4 space-y-reverse overflow-y-hidden">

@@ -1,13 +1,12 @@
 import { gql } from '@apollo/client';
 import { MessageFields } from './message';
+import { UserFields } from './user';
 
 const ConversationFields = `
   id
   participants {
     user {
-      id
-      username
-      image
+      ${UserFields}
     }
     hasSeenAllMessages
   }
@@ -42,9 +41,9 @@ const conversations = {
     `,
   },
   Subscriptions: {
-    conversationCreated: gql`
-      subscription ConversationCreated {
-        conversationCreated {
+    conversationUpdated: gql`
+      subscription ConversationUpdated {
+        conversationUpdated {
           ${ConversationFields}
         }
       }
