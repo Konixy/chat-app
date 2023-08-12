@@ -1,8 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { formatUsernames } from '@/lib/util';
+import { formatUsernames } from 'lib/utils';
 import { ApolloError } from '@apollo/client';
-import { useConversations } from '@/lib/useConversations';
+import { useConversations } from 'lib/useConversations';
 
 export default function Header({
   conversationsLoading,

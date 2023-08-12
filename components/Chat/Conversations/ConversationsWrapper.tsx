@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ConversationList from './ConversationList';
 import { useRouter } from 'next/router';
-import { useLocalStorage } from 'lib/util';
+import { useLocalStorage } from 'lib/utils';
 import { ApolloError } from '@apollo/client';
 import { Session } from 'next-auth';
 import { useConversations } from '@/lib/useConversations';

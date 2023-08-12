@@ -29,7 +29,7 @@ export default function Navbar() {
         <div className="navbar-start">
           <Link href="/" className="flex flex-row items-center">
             <Image src={`/icons/white-logo.svg`} alt="" width={30} height={30} />
-            <div className="ml-2 items-center font-metana text-3xl font-bold">Lyna</div>
+            <div className="font-metana ml-2 items-center text-3xl font-bold">Lyna</div>
           </Link>
         </div>
         <div className="navbar-center">

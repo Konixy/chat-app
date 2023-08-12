@@ -1,4 +1,4 @@
-import { randomBoolean, randomNumber } from '@/lib/util';
+import { randomBoolean, randomNumber } from 'lib/utils';
 import React, { useEffect, useState } from 'react';
 
 type LoaderItem = {

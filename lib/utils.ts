@@ -1,5 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import { User } from 'lib/types';
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 export function formatUsernames(participants: { user: Omit<User, 'emailVerified'> }[], userId: string) {
   return participants

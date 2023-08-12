@@ -7,7 +7,7 @@ import { Conversation, Message, MessageWithLoading } from 'lib/types';
 import ConversationOperations from 'graphql/operations/conversation';
 import MessageOperations from 'graphql/operations/message';
 import { useConversations } from 'lib/useConversations';
-import { Items } from 'lib/util';
+import { Items } from 'lib/utils';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
 

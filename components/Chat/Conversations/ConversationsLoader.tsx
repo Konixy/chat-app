@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { randomNumber } from 'lib/util';
+import { randomNumber } from 'lib/utils';
 
 type LoaderItem = {
   firstFieldWidth: number;

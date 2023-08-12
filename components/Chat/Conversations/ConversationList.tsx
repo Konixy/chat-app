@@ -66,7 +66,7 @@ export default function ConversationList({
                 onEditConversation={() => console.log('edit conversation')}
                 onDeleteConversation={() => console.log('delete conversation')}
                 onLeaveConversation={() => console.log('leave conversation')}
-                onClick={onViewConversation}
+                onViewConversation={onViewConversation}
                 selectedConversationId={router.query.convId as string | undefined}
                 hasSeenAllMessages={conv.participants.find((p) => p.user.id === session.user.id)?.hasSeenAllMessages}
                 isSmall={isSmall}

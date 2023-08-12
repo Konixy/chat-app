@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createContext, useContext, useState } from 'react';
 import { Conversation, Message, MessageWithLoading } from './types';
-import { Actions, Items, useMap } from './util';
+import { Actions, Items, useMap } from './utils';
 import { useMutation } from '@apollo/client';
 import ConversationOperations from 'graphql/operations/conversation';
 import toast from 'react-hot-toast';
