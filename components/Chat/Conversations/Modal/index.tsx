@@ -3,7 +3,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import UserOperations from 'graphql/operations/user';
 import ConversationOperations from 'graphql/operations/conversation';
-import Loader from 'components/Loader';
 import SearchUsersList from './SearchUsersList';
 import { toast } from 'react-hot-toast';
 import { User as PrismaUser } from '@prisma/client';
@@ -11,10 +10,14 @@ import Participants from './Participants';
 import { Session } from 'next-auth';
 import { useRouter } from 'next/router';
 import { useLazyQuery, useMutation } from '@apollo/client';
+import { Button } from 'components/ui/button';
+import { Input } from 'components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTrigger, DialogTitle, DialogDescription } from 'components/ui/dialog';
 
 export type User = Pick<PrismaUser, 'id' | 'username' | 'name' | 'image'>;
 
-export default function Modal({ session, isOpen, setIsOpen }: { session: Session; isOpen: boolean; setIsOpen: (state: boolean) => void }) {
+export default function Modal({ session, isSmall }: { session: Session; isSmall: boolean }) {
+  const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
   const [participants, setParticipants] = useState<User[]>([]);
   const router = useRouter();
@@ -68,7 +71,7 @@ export default function Modal({ session, isOpen, setIsOpen }: { session: Session
 
         setValue('');
         setParticipants([]);
-        setIsOpen(false);
+        setOpen(false);
       })
       .catch((e) => {
         console.log(e);
@@ -84,54 +87,61 @@ export default function Modal({ session, isOpen, setIsOpen }: { session: Session
   }, [error]);
 
   return (
-    <>
-      <input type="checkbox" className="display-none modal-state" checked={isOpen} id="conversation-modal" readOnly />
-      <div className="modal">
-        <span className="modal-overlay" onClick={() => setIsOpen(false)} />
-        <div className="modal-content flex w-96 flex-col gap-5">
-          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={() => setIsOpen(false)}>
-            ✕
-          </button>
-          <div className="text-xl">Search</div>
-          <form className="flex flex-col gap-4" onSubmit={onSearch}>
-            <div className="relative w-full">
-              <span className="absolute inset-y-0 left-3 inline-flex items-center text-content3">
-                <i className="fas fa-magnifying-glass" />
-              </span>
-              <input
-                className="input input-block pl-10"
-                type="search"
-                name="search"
-                placeholder="Search for a user or a group"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-                autoComplete="off"
-                disabled={loading || convLoading}
-              />
-            </div>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        {isSmall ? (
+          <Button className="mb-7 rounded-full text-xl font-thin text-zinc-400 transition hover:text-zinc-300" onClick={() => setOpen(true)} disabled={loading}>
+            <i className="fas fa-pen-to-square" />
+          </Button>
+        ) : (
+          <Button className="mb-4 w-full" disabled={loading}>
+            Find or start a conversation
+          </Button>
+        )}
+      </DialogTrigger>
+      <DialogContent className="flex flex-col gap-5 sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Search</DialogTitle>
+          <DialogDescription>Create a conversation or a group by selecting multiple users</DialogDescription>
+        </DialogHeader>
+        <form className="flex flex-col gap-4" onSubmit={onSearch}>
+          <div className="relative w-full">
+            <span className="absolute inset-y-0 left-3 inline-flex items-center text-muted-foreground">
+              <i className="fas fa-magnifying-glass" />
+            </span>
+            <Input
+              className="w-full pl-10"
+              type="search"
+              name="search"
+              placeholder="Search for a user or a group"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              autoComplete="off"
+              disabled={loading || convLoading}
+            />
+          </div>
 
-            <button className="btn btn-block" type="submit" disabled={!value || loading || convLoading}>
-              <Loader loading={loading}>Search</Loader>
-            </button>
+          <Button className="w-full" type="submit" disabled={!value || loading || convLoading} isLoading={loading}>
+            Search
+          </Button>
 
-            {data &&
-              (data.length > 0 ? (
-                <SearchUsersList users={data} participants={participants} addParticipant={addParticipant} removeParticipant={removeParticipant} />
-              ) : (
-                <div className="text-center">Aucun résultat</div>
-              ))}
+          {data &&
+            (data.length > 0 ? (
+              <SearchUsersList users={data} participants={participants} addParticipant={addParticipant} removeParticipant={removeParticipant} />
+            ) : (
+              <div className="text-center">Aucun résultat</div>
+            ))}
 
-            {participants.length > 0 && (
-              <>
-                <Participants participants={participants} removeParticipant={removeParticipant} disabled={convLoading} />
-                <button type="button" className="btn btn-primary" disabled={convLoading || loading} onClick={() => createConversation()}>
-                  <Loader loading={convLoading}>Create conversation</Loader>
-                </button>
-              </>
-            )}
-          </form>
-        </div>
-      </div>
-    </>
+          {participants.length > 0 && (
+            <>
+              <Participants participants={participants} removeParticipant={removeParticipant} disabled={convLoading} />
+              <Button type="button" variant="secondary" disabled={convLoading || loading} onClick={() => createConversation()} isLoading={convLoading}>
+                Create conversation
+              </Button>
+            </>
+          )}
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }

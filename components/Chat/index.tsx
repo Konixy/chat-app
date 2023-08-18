@@ -10,6 +10,7 @@ import { useConversations } from 'lib/useConversations';
 import { Items } from 'lib/utils';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
+import { Separator } from '../ui/separator';
 
 // trouver un moyens de ne pas monter et démonter ce component a chaque changement de conversation
 
@@ -93,6 +94,7 @@ export default function Chat({ session }: { session: Session }) {
   return (
     <div className="flex h-[100vh] flex-row">
       <ConversationsWrapper session={session} conversationsLoading={convsLoading} conversationsError={convsError} />
+      <Separator orientation="vertical" />
       <FeedWrapper session={session} conversationsLoading={convsLoading} conversationsError={convsError} />
     </div>
   );

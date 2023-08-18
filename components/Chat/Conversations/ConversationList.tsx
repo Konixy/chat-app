@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ConversationModal from './Modal';
 import { Session } from 'next-auth';
 import ConversationItem from './ConversationItem';
@@ -20,7 +20,6 @@ export default function ConversationList({
   onViewConversation: (conversationId: string, hasSeenAllMessages?: boolean) => void;
   isSmall: boolean;
 }) {
-  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const { conversations } = useConversations();
 
@@ -42,17 +41,7 @@ export default function ConversationList({
     <ConversationsLoader isSmall={isSmall} />
   ) : (
     <div className={['w-full', isSmall && 'flex flex-col items-center'].join(' ')}>
-      {isSmall ? (
-        <button className="mb-7 rounded-full text-xl font-thin text-zinc-400 transition hover:text-zinc-300" onClick={() => setIsOpen(true)} disabled={loading}>
-          <i className="fas fa-pen-to-square" />
-        </button>
-      ) : (
-        <button className="btn btn-block mb-4" onClick={() => setIsOpen(true)} disabled={loading}>
-          Find or start a conversation
-        </button>
-      )}
-
-      <ConversationModal session={session} isOpen={isOpen} setIsOpen={setIsOpen} />
+      <ConversationModal session={session} isSmall={isSmall} />
 
       <div className={['w-full', isSmall && 'flex flex-col items-center'].join(' ')}>
         {conversations.size > 0 ? (

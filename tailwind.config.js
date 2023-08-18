@@ -67,5 +67,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate'), require('rippleui')],
+  plugins: [require('tailwindcss-animate')],
 };

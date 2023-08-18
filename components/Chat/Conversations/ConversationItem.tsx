@@ -45,7 +45,7 @@ export default function ConversationItem({
       <ContextMenuTrigger>
         <div
           className={`relative flex h-20 cursor-pointer flex-row items-center rounded-md transition ${
-            conversation.id === selectedConversationId ? 'bg-primary text-blue-200' : 'text-zinc-300 hover:bg-gray-3'
+            conversation.id === selectedConversationId ? 'bg-primary text-blue-200' : 'hover:bg-gray-3 text-zinc-300'
           } ${isSmall ? 'w-20 justify-center' : 'justify-between p-4'}`}
           onClick={handleClick}
           onMouseEnter={() => setHover(true)}

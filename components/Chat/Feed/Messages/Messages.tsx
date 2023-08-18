@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import MessagesLoader from './MessagesLoader';
 import { useConversations } from '@/lib/useConversations';
 import { Message } from 'lib/types';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 // export function cleanMessages(array: Message[]): Message[] {
 //   const uniqueArray: Message[] = [];
@@ -62,13 +63,13 @@ export default function Messages({ userId, convId }: { userId: string; convId: s
     <div className="flex h-full flex-col justify-end overflow-hidden">
       {loading && <MessagesLoader isGroup={isGroup} key={convId} />}
       {messages && (
-        <div className="flex h-full flex-col-reverse overflow-y-auto overflow-x-hidden">
+        <ScrollArea className="flex h-full flex-col-reverse overflow-y-auto overflow-x-hidden">
           {[...messages]
             .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
             .map((message) => (
               <MessageItem key={message.id} message={message} sentByMe={message.sender.id === userId} isGroup={isGroup} />
             ))}
-        </div>
+        </ScrollArea>
       )}
     </div>
   );

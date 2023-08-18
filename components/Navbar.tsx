@@ -5,10 +5,13 @@ import Image from 'next/image';
 import { signOut, useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import { defaultAvatar } from './Chat/Conversations/Modal/SearchUsersList';
+import { ThemeToggle } from './ui/theme-toggle';
+import { useTheme } from 'next-themes';
 
 export default function Navbar() {
   const router = useRouter();
   const { data: session } = useSession();
+  const { resolvedTheme: theme } = useTheme();
 
   const items = [
     { name: 'Home', url: '/', active: router.pathname === '/' },
@@ -28,7 +31,7 @@ export default function Navbar() {
       <div className="navbar navbar-no-boxShadow m-6">
         <div className="navbar-start">
           <Link href="/" className="flex flex-row items-center">
-            <Image src={`/icons/white-logo.svg`} alt="" width={30} height={30} />
+            <Image src={theme === 'dark' ? '/icons/white-logo.svg' : '/icons/black-logo.svg'} alt="" width={30} height={30} />
             <div className="font-metana ml-2 items-center text-3xl font-bold">Lyna</div>
           </Link>
         </div>
@@ -40,6 +43,7 @@ export default function Navbar() {
           ))}
         </div>
         <div className="navbar-end mr-10">
+          <ThemeToggle />
           {session?.user ? (
             <div className="dropdown-container">
               <div className="dropdown">
@@ -58,7 +62,7 @@ export default function Navbar() {
                     Account settings
                   </Link>
                   <button
-                    className="dropdown-item flex flex-row items-center bg-error/25 px-3 text-sm font-semibold transition-all hover:bg-error/50"
+                    className="dropdown-item bg-error/25 hover:bg-error/50 flex flex-row items-center px-3 text-sm font-semibold transition-all"
                     onClick={() => {
                       signOut({ redirect: true, callbackUrl: '/login' }).then(() => {
                         toast.success('Successfully logged out.');

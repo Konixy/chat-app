@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-// ----- Fonts -----
+/* ----- Fonts ----- */
 
 @font-face {
   font-family: 'NeueMetana';
@@ -28,7 +28,7 @@
   font-weight: bold;
 }
 
-// ----- Shadcn-ui configuration -----
+/* ----- Shadcn-ui configuration ----- */
 
 @layer base {
   :root {

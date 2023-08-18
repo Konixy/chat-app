@@ -7,6 +7,7 @@ import { Toaster } from 'react-hot-toast';
 import { ApolloProvider } from '@apollo/client';
 import { client } from 'graphql/apollo-client';
 import { ConversationsProvider } from 'lib/useConversations';
+import { ThemeProvider } from 'next-themes';
 
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
@@ -17,8 +18,10 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
       <ApolloProvider client={client}>
         <SessionProvider session={session}>
           <ConversationsProvider>
-            <Component {...pageProps} />
-            <Toaster position="bottom-right" />
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <Component {...pageProps} />
+              <Toaster position="bottom-right" />
+            </ThemeProvider>
           </ConversationsProvider>
         </SessionProvider>
       </ApolloProvider>

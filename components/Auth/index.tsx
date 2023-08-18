@@ -1,9 +1,10 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import UserOperations from 'graphql/operations/user';
 import BackBtn from '../BackBtn';
-import Loader from '../Loader';
 import { toast } from 'react-hot-toast';
 import { useMutation } from '@apollo/client';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
 
 export default function Auth({ reloadSession }: { reloadSession: () => void }) {
   const [username, setUsername] = useState('');
@@ -55,7 +56,7 @@ export default function Auth({ reloadSession }: { reloadSession: () => void }) {
           {/* <div className="text-sm">The username must be unique</div> */}
           <div className="text-red-500">{error}</div>
           <div className="relative mt-10 w-full">
-            <input
+            <Input
               type="text"
               name="username"
               placeholder="example76"
@@ -63,14 +64,14 @@ export default function Auth({ reloadSession }: { reloadSession: () => void }) {
               onChange={(e) => setUsername(e.target.value.toLowerCase())}
               className="input pl-10"
             />
-            <span className="absolute inset-y-0 left-3 inline-flex items-center text-content3">
-              <i className="fas fa-at" />
+            <span className="absolute inset-y-0 left-3 inline-flex items-center text-muted-foreground">
+              <i className="fal fa-at" />
             </span>
           </div>
           {!isValid && <div className="form-label-alt text-red-500">Username don&apos;t match the regex</div>}
-          <button type="submit" className="btn btn-primary btn-block mt-6" disabled={loading || !isValid}>
-            <Loader loading={loading}>Save</Loader>
-          </button>
+          <Button type="submit" className="mt-6 w-full" disabled={loading || !isValid} isLoading={loading}>
+            Submit
+          </Button>
         </form>
       </div>
     </>
