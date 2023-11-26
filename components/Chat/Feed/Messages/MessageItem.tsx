@@ -2,8 +2,8 @@ import React from 'react';
 import { formatRelative } from 'date-fns';
 import enUs from 'date-fns/locale/en-US';
 import { MessageWithLoading } from 'lib/types';
-import Image from 'next/image';
 import { defaultAvatar } from '../../Conversations/Modal/SearchUsersList';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
 
 const formatRelativeLocale = {
   lastWeek: "eeee 'at' p",
@@ -17,9 +17,9 @@ export default function MessageItem({ message, sentByMe, isGroup }: { message: M
     <div className={`flex flex-row items-center space-x-2 break-words p-4 ${sentByMe ? 'justify-end' : 'justify-start'}`}>
       {isGroup && !sentByMe && (
         <div className="mt-6 flex h-full min-w-[40px] justify-start">
-          <div className="avatar">
-            <Image src={message.sender.image || defaultAvatar} alt={message.sender.username} width={40} height={40} />
-          </div>
+          <Avatar>
+            <AvatarImage src={message.sender.image || defaultAvatar} alt={message.sender.username} width={40} height={40} />
+          </Avatar>
         </div>
       )}
       <div className="flex w-full flex-col space-y-1">
@@ -39,9 +39,9 @@ export default function MessageItem({ message, sentByMe, isGroup }: { message: M
         <div className={`flex ${sentByMe ? 'justify-end' : 'justify-start'}`}>
           <div className={`flex w-[65%] ${sentByMe ? 'justify-end' : 'justify-start'}`}>
             <div
-              className={`${sentByMe ? (message.loading ? 'bg-blue-8' : 'bg-primary') : 'bg-gray-4'} ${
-                message.loading ? 'text-zinc-400' : 'text-white'
-              } max-w-full rounded-xl px-2 py-1`}
+              className={`${sentByMe ? `text-primary-foreground ${message.loading ? 'bg-primary/70' : 'bg-primary'}` : 'bg-muted'} ${
+                message.loading && 'text-muted-foreground'
+              } max-w-full rounded-lg px-2 py-1`}
             >
               {message.body}
             </div>

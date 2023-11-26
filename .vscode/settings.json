@@ -1,7 +1,7 @@
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "scss.lint.unknownAtRules": "ignore",
+  "css.lint.unknownAtRules": "ignore",
   "[xml]": {
     "editor.defaultFormatter": "j69.ejs-beautify"
   },

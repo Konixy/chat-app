@@ -34,8 +34,6 @@ const buttonVariants = cva(
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   isLoading?: boolean;
-  loaderColor?: string;
-  loaderSecondaryColor?: string;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({ children, className, variant, size, asChild = false, isLoading = false, ...props }, ref) => {

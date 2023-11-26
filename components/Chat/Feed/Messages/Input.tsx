@@ -6,6 +6,7 @@ import { useMutation } from '@apollo/client';
 import MessageOperations from 'graphql/operations/message';
 import { nanoid } from 'nanoid';
 import { useConversations } from '@/lib/useConversations';
+import { Input } from '@/components/ui/input';
 
 export default function MessageInput({ session, conversationId }: { session: Session; conversationId: string }) {
   const [body, setBody] = useState('');
@@ -69,12 +70,12 @@ export default function MessageInput({ session, conversationId }: { session: Ses
   return (
     <div className="w-full px-4 py-6">
       <form onSubmit={onSendMessage} className="flex flex-row items-center">
-        <input
-          type="text"
+        <Input
           value={body}
           onChange={(e) => setBody(e.target.value)}
-          className="input input-block transition focus:border-2 focus:border-gray-7 focus:shadow-none"
+          className="focus:border-gray-7 text-lg transition focus:border-2 focus:shadow-none md:text-base"
           placeholder="New message"
+          autoComplete="off"
         />
         <button
           type="submit"

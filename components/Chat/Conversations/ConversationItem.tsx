@@ -6,7 +6,7 @@ import { formatUsernames } from 'lib/utils';
 import { Conversation } from 'lib/types';
 import Image from 'next/image';
 import { defaultAvatar } from './Modal/SearchUsersList';
-import { ContextMenu, ContextMenuItem, ContextMenuTrigger } from 'components/ui/context-menu';
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from 'components/ui/context-menu';
 
 export default function ConversationItem({
   userId,
@@ -121,37 +121,39 @@ export default function ConversationItem({
           )}
         </div>
       </ContextMenuTrigger>
-      <ContextMenuItem
-        onClick={(event) => {
-          event.stopPropagation();
-          onEditConversation();
-        }}
-        className={className}
-      >
-        <i className="fas fa-pen mr-2" />
-        Edit
-      </ContextMenuItem>
-      {conversation.participants.length > 2 ? (
+      <ContextMenuContent>
         <ContextMenuItem
           onClick={(event) => {
             event.stopPropagation();
-            onLeaveConversation(conversation);
+            onEditConversation();
           }}
           className={className}
         >
-          <i className="fas fa-right-from-bracket mr-2" /> Leave
+          <i className="fas fa-pen mr-2" />
+          Edit
         </ContextMenuItem>
-      ) : (
-        <ContextMenuItem
-          onClick={(event) => {
-            event.stopPropagation();
-            onDeleteConversation(conversation.id);
-          }}
-          className={className}
-        >
-          <i className="fas fa-trash mr-2" /> Delete
-        </ContextMenuItem>
-      )}
+        {conversation.participants.length > 2 ? (
+          <ContextMenuItem
+            onClick={(event) => {
+              event.stopPropagation();
+              onLeaveConversation(conversation);
+            }}
+            className={className}
+          >
+            <i className="fas fa-right-from-bracket mr-2" /> Leave
+          </ContextMenuItem>
+        ) : (
+          <ContextMenuItem
+            onClick={(event) => {
+              event.stopPropagation();
+              onDeleteConversation(conversation.id);
+            }}
+            className={className}
+          >
+            <i className="fas fa-trash mr-2" /> Delete
+          </ContextMenuItem>
+        )}
+      </ContextMenuContent>
     </ContextMenu>
   );
 }
