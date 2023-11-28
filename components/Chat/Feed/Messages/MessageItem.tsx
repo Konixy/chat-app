@@ -2,7 +2,7 @@ import React from 'react';
 import { formatRelative } from 'date-fns';
 import enUs from 'date-fns/locale/en-US';
 import { MessageWithLoading } from 'lib/types';
-import { defaultAvatar } from '../../Conversations/Modal/SearchUsersList';
+import { defaultAvatar } from '../../Conversations/CreateConversationModal/SearchUsersList';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 
 const formatRelativeLocale = {

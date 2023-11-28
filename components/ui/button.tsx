@@ -34,25 +34,28 @@ const buttonVariants = cva(
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   isLoading?: boolean;
+  childrenClassName?: string;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({ children, className, variant, size, asChild = false, isLoading = false, ...props }, ref) => {
-  const Comp = asChild ? Slot : 'button';
-  return (
-    <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props}>
-      {/* {isLoading ? (
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ children, className, childrenClassName, variant, size, asChild = false, isLoading = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : 'button';
+    return (
+      <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props}>
+        {/* {isLoading ? (
           // <Oval width={25} height={25} color={loaderColor || '#000'} secondaryColor={loaderSecondaryColor || '#0f0f0f'} />
           <Spinner />
         ) : (
           children
         )} */}
-      <div className={isLoading ? 'opacity-0' : ''}>{children}</div>
-      <div className={`absolute ${isLoading ? 'opacity-100' : 'opacity-0'} flex `}>
-        <Spinner />
-      </div>
-    </Comp>
-  );
-});
+        <div className={`${isLoading ? 'opacity-0' : ''} ${childrenClassName}`}>{children}</div>
+        <div className={`absolute ${isLoading ? 'opacity-100' : 'opacity-0'} flex `}>
+          <Spinner />
+        </div>
+      </Comp>
+    );
+  },
+);
 Button.displayName = 'Button';
 
 export { Button, buttonVariants };

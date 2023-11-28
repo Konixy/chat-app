@@ -4,10 +4,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { signOut, useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
-import { defaultAvatar } from './Chat/Conversations/Modal/SearchUsersList';
 import { ThemeToggle } from './ui/theme-toggle';
 import { useTheme } from 'next-themes';
-import { Button, buttonVariants } from './ui/button';
+import { buttonVariants } from './ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
+import UserAvatar from './UserAvatar';
 
 export default function Navbar() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export default function Navbar() {
   const { resolvedTheme: theme } = useTheme();
 
   const items = [
-    { name: 'Home', url: '/', active: router.pathname === '/' },
+    { name: 'Home', url: '/' },
     {
       name: 'My chat',
       url: '/app',
@@ -23,64 +24,70 @@ export default function Navbar() {
     {
       name: 'Terms Of Uses',
       url: '/tos',
-      active: router.pathname === '/tos',
     },
   ];
 
   return (
     <div className="mx-20 my-6 flex flex-row items-center justify-between">
-      <div>
-        <Link href="/" className="flex flex-row items-center">
-          <Image src={theme === 'dark' ? '/icons/white-logo.svg' : '/icons/black-logo.svg'} alt="" width={30} height={30} />
+      <div className="flex flex-row items-center justify-center">
+        <Link href="/" className="mr-6 flex translate-y-[-3px] flex-row items-center justify-center">
+          <Image src={theme === 'dark' ? '/icons/white-logo.svg' : '/icons/black-logo.svg'} alt="Logo" width={30} height={30} />
           <div className="font-metana ml-2 items-center text-3xl font-bold">Lyna</div>
         </Link>
+        <div className="flex flex-row items-center">
+          {items.map((e, i) => (
+            <Link
+              key={i}
+              className={`px-2 transition-colors ${router.pathname === e.url ? 'text-foreground' : 'text-foreground/60 hover:text-foreground/80'}`}
+              href={e.url}
+            >
+              {e.name}
+            </Link>
+          ))}
+        </div>
       </div>
-      <div className="flex flex-row items-center justify-center gap-2">
-        {items.map((e, i) => (
-          <Link key={i} className={`${buttonVariants({ variant: 'link' })}  ${e.active ? 'underline' : ''}`} href={e.url}>
-            {e.name}
-          </Link>
-        ))}
-      </div>
-      <div className="navbar-end mr-10">
+      <div className="flex flex-row gap-2">
         <ThemeToggle />
         {session?.user ? (
-          <div className="dropdown-container">
-            <div className="dropdown">
-              <div className="btn btn-ghost" tabIndex={0}>
-                <div className="mr-2">{session.user.name}</div>
-                <div className="avatar avatar-ring avatar-sm">
-                  <Image src={session.user.image || defaultAvatar} alt="avatar" className="" width={45} height={45} />
-                </div>
-              </div>
-              <div className="dropdown-menu dropdown-menu-bottom-left gap-2">
-                <Link href="/app/me" className="dropdown-item text-sm">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="flex select-none flex-row items-center justify-center px-4 text-sm text-foreground/80 outline-none transition-colors hover:text-foreground">
+                <UserAvatar user={session.user} className="-ml-2 mr-2 h-8 w-8" />
+                {session.user.name}
+                <i className="fas fa-caret-down ml-2 text-base" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem asChild className="cursor-pointer">
+                <Link href="/app/me">
+                  <i className="fas fa-user mr-2"></i>
                   Profile
                 </Link>
-                <div className="dropdown-divider" role="separator"></div>
-                <Link href="/app/settings" className="dropdown-item text-sm">
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild className="cursor-pointer">
+                <Link href="/app/settings">
+                  <i className="fas fa-gear mr-2"></i>
                   Account settings
                 </Link>
-                <button
-                  className="dropdown-item bg-error/25 hover:bg-error/50 flex flex-row items-center px-3 text-sm font-semibold transition-all"
-                  onClick={() => {
-                    signOut({ redirect: true, callbackUrl: '/login' }).then(() => {
-                      toast.success('Successfully logged out.');
-                    });
-                  }}
-                >
-                  <i className="fas fa-right-from-bracket mr-2 translate-y-[1px]" />
-                  <div> Log out</div>
-                </button>
-              </div>
-            </div>
-          </div>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  signOut({ redirect: true, callbackUrl: '/login' }).then(() => {
+                    toast.success('Successfully logged out.');
+                  });
+                }}
+                className="cursor-pointer"
+              >
+                <i className="fas fa-right-from-bracket mr-2"></i>
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         ) : (
-          <div>
-            <Link href="/login" className="btn btn-primary">
-              Sign up
-            </Link>
-          </div>
+          <Link href="/login" className={buttonVariants()}>
+            Sign up
+          </Link>
         )}
       </div>
     </div>

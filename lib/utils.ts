@@ -14,6 +14,13 @@ export function formatUsernames(participants: { user: Omit<User, 'emailVerified'
     .join(', ');
 }
 
+export function shortenName(name: string): string {
+  return name
+    .split(' ')
+    .map((e, i) => (i < 2 ? e.split('')[0]?.toUpperCase() : ''))
+    .join('');
+}
+
 export function useLocalStorage<T>(key: string, defaultValue?: T): [T, React.Dispatch<React.SetStateAction<T>>] {
   const [storedValue, setStoredValue] = useState(() => {
     if (typeof window === 'undefined') {

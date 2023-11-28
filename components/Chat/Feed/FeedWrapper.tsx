@@ -5,6 +5,9 @@ import MessageInput from './Messages/Input';
 import Messages from './Messages/Messages';
 import { Session } from 'next-auth';
 import { ApolloError } from '@apollo/client';
+import Image from 'next/image';
+import { useTheme } from 'next-themes';
+import { useConversations } from '@/lib/useConversations';
 
 export default function FeedWrapper({
   session,
@@ -16,6 +19,8 @@ export default function FeedWrapper({
   conversationsError: ApolloError | undefined;
 }) {
   const router = useRouter();
+  const theme = useTheme();
+  const { conversations } = useConversations();
 
   const {
     query: { convId },
@@ -33,7 +38,14 @@ export default function FeedWrapper({
           <MessageInput session={session} conversationId={convId as string} />
         </>
       ) : (
-        <>No Conversation Selected</>
+        <div className={`ml-4 ${conversations.size > 0 ? 'mt-28' : 'mt-10'}`}>
+          <div>
+            <Image src={`/icons/${theme.resolvedTheme === 'dark' ? 'white' : 'black'}-arrow.png`} alt="arrow" width={33} height={88} />
+          </div>
+          <div className="-mt-4 ml-12 font-lato text-2xl font-bold">
+            {conversations.size > 0 ? 'Select a conversation and start chatting!' : 'Create a conversation and start chatting!'}
+          </div>
+        </div>
       )}
     </div>
   );

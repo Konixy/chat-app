@@ -39,7 +39,6 @@ export default function Chat({ session }: { session: Session }) {
         console.log(err);
       },
       onCompleted(r) {
-        console.log('conversations query completed');
         r.conversations.forEach((e) => {
           setConversation(e.id, e);
         });
@@ -49,9 +48,7 @@ export default function Chat({ session }: { session: Session }) {
   );
 
   useEffect(() => {
-    console.log('inside useEffect');
     fetchConversations();
-    return () => console.log('component unmount');
   }, []);
 
   useSubscription<{ newMessage: Message }>(MessageOperations.Subscription.newMessage, {
@@ -76,8 +73,6 @@ export default function Chat({ session }: { session: Session }) {
     },
     onData({ data }) {
       const newConversation = data.data?.conversationUpdated;
-
-      console.log('new conversation', newConversation);
 
       if (newConversation) {
         if (

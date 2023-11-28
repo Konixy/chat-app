@@ -12,12 +12,19 @@ import { useRouter } from 'next/router';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { Button } from 'components/ui/button';
 import { Input } from 'components/ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTrigger, DialogTitle, DialogDescription } from 'components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from 'components/ui/dialog';
 
 export type User = Pick<PrismaUser, 'id' | 'username' | 'name' | 'image'>;
 
-export default function Modal({ session, isSmall }: { session: Session; isSmall: boolean }) {
-  const [open, setOpen] = useState(false);
+export default function ConversationModal({
+  session,
+  open,
+  setOpen,
+}: {
+  session: Session;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [value, setValue] = useState('');
   const [participants, setParticipants] = useState<User[]>([]);
   const router = useRouter();
@@ -88,9 +95,9 @@ export default function Modal({ session, isSmall }: { session: Session; isSmall:
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+      {/* <DialogTrigger asChild>
         {isSmall ? (
-          <Button className="mb-7 rounded-full text-xl font-thin text-zinc-400 transition hover:text-zinc-300" onClick={() => setOpen(true)} disabled={loading}>
+          <Button className="mb-7 rounded-full text-xl font-thin text-white transition" onClick={() => setOpen(true)} disabled={loading}>
             <i className="fas fa-pen-to-square" />
           </Button>
         ) : (
@@ -98,7 +105,7 @@ export default function Modal({ session, isSmall }: { session: Session; isSmall:
             Find or start a conversation
           </Button>
         )}
-      </DialogTrigger>
+      </DialogTrigger> */}
       <DialogContent className="flex flex-col gap-5 sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Search</DialogTitle>

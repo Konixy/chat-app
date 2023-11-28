@@ -1,11 +1,13 @@
-import React from 'react';
-import ConversationModal from './Modal';
+import React, { useState } from 'react';
+import ConversationModal from './CreateConversationModal';
 import { Session } from 'next-auth';
 import ConversationItem from './ConversationItem';
 import { useRouter } from 'next/router';
 import { ApolloError } from '@apollo/client';
 import ConversationsLoader from './ConversationsLoader';
 import { useConversations } from '@/lib/useConversations';
+import { Button } from '@/components/ui/button';
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from 'components/ui/tooltip';
 
 export default function ConversationList({
   session,
@@ -20,6 +22,7 @@ export default function ConversationList({
   onViewConversation: (conversationId: string, hasSeenAllMessages?: boolean) => void;
   isSmall: boolean;
 }) {
+  const [isModalOpen, openModal] = useState(false);
   const router = useRouter();
   const { conversations } = useConversations();
 
@@ -28,12 +31,12 @@ export default function ConversationList({
       <div className="flex h-full w-full flex-col items-center justify-center space-y-4">
         <i className="fas fa-cloud-exclamation text-6xl" />
         <div className="text-center text-3xl">Failed to fetch conversations</div>
-        <div className="text-zinc-500">
+        <div className="text-foreground/50">
           {error.name}: {error.message}
         </div>
-        <button className="btn font-semibold" onClick={() => router.reload()}>
+        <Button className="font-semibold" onClick={() => router.reload()}>
           <i className="fas fa-arrow-rotate-right mr-2" /> Reload page
-        </button>
+        </Button>
       </div>
     );
 
@@ -41,7 +44,18 @@ export default function ConversationList({
     <ConversationsLoader isSmall={isSmall} />
   ) : (
     <div className={['w-full', isSmall && 'flex flex-col items-center'].join(' ')}>
-      <ConversationModal session={session} isSmall={isSmall} />
+      <TooltipProvider delayDuration={0}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button size="icon" variant="outline" className="ml-auto rounded-full" onClick={() => openModal(true)}>
+              <i className="fas fa-message-plus text-base" />
+              <span className="sr-only">New conversation</span>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent className="bg-secondary">New conversation</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      <ConversationModal session={session} open={isModalOpen} setOpen={openModal} />
 
       <div className={['w-full', isSmall && 'flex flex-col items-center'].join(' ')}>
         {conversations.size > 0 ? (

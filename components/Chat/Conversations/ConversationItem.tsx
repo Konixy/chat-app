@@ -5,8 +5,9 @@ import { formatDistance } from 'date-fns';
 import { formatUsernames } from 'lib/utils';
 import { Conversation } from 'lib/types';
 import Image from 'next/image';
-import { defaultAvatar } from './Modal/SearchUsersList';
+import { defaultAvatar } from './CreateConversationModal/SearchUsersList';
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from 'components/ui/context-menu';
+import UserAvatar from '@/components/UserAvatar';
 
 export default function ConversationItem({
   userId,
@@ -38,14 +39,14 @@ export default function ConversationItem({
     onViewConversation(conversation.id, hasSeenAllMessages);
   };
 
-  const className = 'flex w-full cursor-pointer flex-row items-center rounded-md p-2 transition hover:bg-gray-5 active:scale-[.97] active:bg-gray-5';
+  const className = 'cursor-pointer transition active:scale-[.97]';
 
   return (
     <ContextMenu>
       <ContextMenuTrigger>
         <div
           className={`relative flex h-20 cursor-pointer flex-row items-center rounded-md transition ${
-            conversation.id === selectedConversationId ? 'bg-primary text-blue-200' : 'hover:bg-gray-3 text-zinc-300'
+            conversation.id === selectedConversationId ? 'bg-primary text-foreground' : 'text-foreground/60 hover:bg-foreground/50'
           } ${isSmall ? 'w-20 justify-center' : 'justify-between p-4'}`}
           onClick={handleClick}
           onMouseEnter={() => setHover(true)}
@@ -54,7 +55,7 @@ export default function ConversationItem({
           {isSmall ? (
             <div
               className={`avatar avatar-lg transition ${
-                !hasSeenAllMessages &&
+                hasSeenAllMessages &&
                 `bg-transparent before:absolute before:right-0 before:h-4 before:w-4 before:rounded-full before:bg-primary ${
                   selectedConversationId === conversation.id && 'before:opacity-0'
                 }`
@@ -66,47 +67,22 @@ export default function ConversationItem({
             <div className="relative mr-3 flex flex-row items-center">
               <div className={`dot dot-primary ml-[-6px] ${hasSeenAllMessages && 'opacity-0'}`}></div>
 
-              {conversation.participants.length > 2 ? (
-                <div className="avatar-group">
-                  <div className="avatar ml-2 ring-0">
-                    <Image
-                      src={conversation.participants.filter((p) => p.user.id !== userId)[0]?.user.image || defaultAvatar}
-                      alt="avatar"
-                      width={48}
-                      height={48}
-                    />
-                  </div>
-                  <div className={`${conversation.participants.length > 4 ? '-ml-8' : '-ml-6'} avatar ring-0`}>
-                    <Image
-                      src={conversation.participants.filter((p) => p.user.id !== userId)[1]?.user.image || defaultAvatar}
-                      alt="avatar"
-                      width={48}
-                      height={48}
-                    />
-                  </div>
-                  {conversation.participants.length > 4 && (
-                    <div className="avatar -ml-8 ring-0">
-                      <div className="text-lg font-semibold">+{conversation.participants.length - 3}</div>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="avatar avatar-lg ml-2">
-                  <Image
-                    src={conversation.participants.filter((p) => p.user.id !== userId)[0]?.user.image || defaultAvatar}
-                    alt="avatar"
-                    width={48}
-                    height={48}
-                  />
-                </div>
-              )}
+              <UserAvatar
+                user={
+                  conversation.latestMessage && conversation.latestMessage.sender.id !== userId
+                    ? conversation.latestMessage.sender
+                    : conversation.participants.filter((p) => p.user.id !== userId)[0]?.user
+                }
+              />
             </div>
           )}
 
           {!isSmall && (
-            <div className="flex h-full w-[72%] justify-between">
+            <div className="flex h-full w-[85%] justify-between">
               <div className="flex h-full w-[50%] flex-col">
-                <div className="overflow-hidden truncate whitespace-nowrap font-semibold text-white">{formatUsernames(conversation.participants, userId)}</div>
+                <div className="overflow-hidden truncate whitespace-nowrap font-semibold text-foreground">
+                  {formatUsernames(conversation.participants, userId)}
+                </div>
 
                 <div className="w-[140%] overflow-hidden whitespace-nowrap">
                   <div className="text-ellipsis">{conversation.latestMessage ? conversation.latestMessage.body : 'Conversation created'}</div>

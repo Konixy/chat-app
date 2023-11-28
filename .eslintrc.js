@@ -31,6 +31,7 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'jsx-a11y/no-noninteractive-tabindex': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',
+    'react/prop-types': 'off',
   },
   plugins: ['tailwindcss'],
 };

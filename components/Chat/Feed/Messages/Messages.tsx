@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import MessagesLoader from './MessagesLoader';
 import { useConversations } from '@/lib/useConversations';
 import { Message } from 'lib/types';
+import { Button } from '@/components/ui/button';
 
 // export function cleanMessages(array: Message[]): Message[] {
 //   const uniqueArray: Message[] = [];
@@ -47,12 +48,12 @@ export default function Messages({ userId, convId }: { userId: string; convId: s
         <i className="fas fa-cloud-exclamation text-9xl" />
         <div className="text-5xl">Failed to fetch messages</div>
         <div className="text-lg">Please check your internet connection</div>
-        <div className="text-zinc-500">
+        <div className="text-foreground/50">
           {error.name}: {error.message}
         </div>
-        <button className="btn btn-primary items-center text-base font-semibold" onClick={() => router.reload()}>
+        <Button className="items-center text-base font-semibold" onClick={() => router.reload()}>
           <i className="fas fa-arrow-rotate-right mr-2" /> Reload page
-        </button>
+        </Button>
       </div>
     );
 

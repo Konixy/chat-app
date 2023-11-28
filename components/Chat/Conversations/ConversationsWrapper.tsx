@@ -69,9 +69,7 @@ export default function ConversationsWrapper({
   return (
     <div
       style={{ width: `${wrapperSizeX}px`, minWidth: `${wrapperSizeX}px` }}
-      className={`conversationsWrapper ${
-        router.query.convId ? 'hidden' : 'block'
-      } md:w-[${wrapperSizeX}px] w-full resize-x bg-backgroundSecondary px-3 py-6 md:block`}
+      className={`conversationsWrapper ${router.query.convId ? 'hidden' : 'block'} md:w-[${wrapperSizeX}px] w-full resize-x bg-background px-3 py-6 md:block`}
     >
       <ConversationList session={session} loading={conversationsLoading} error={conversationsError} onViewConversation={onViewConversation} isSmall={isSmall} />
       <button
