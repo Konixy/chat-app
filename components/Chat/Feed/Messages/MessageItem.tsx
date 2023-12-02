@@ -2,8 +2,7 @@ import React from 'react';
 import { formatRelative } from 'date-fns';
 import enUs from 'date-fns/locale/en-US';
 import { MessageWithLoading } from 'lib/types';
-import { defaultAvatar } from '../../Conversations/CreateConversationModal/SearchUsersList';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import UserAvatar from '@/components/UserAvatar';
 
 const formatRelativeLocale = {
   lastWeek: "eeee 'at' p",
@@ -17,9 +16,10 @@ export default function MessageItem({ message, sentByMe, isGroup }: { message: M
     <div className={`flex flex-row items-center space-x-2 break-words p-4 ${sentByMe ? 'justify-end' : 'justify-start'}`}>
       {isGroup && !sentByMe && (
         <div className="mt-6 flex h-full min-w-[40px] justify-start">
-          <Avatar>
+          {/* <Avatar>
             <AvatarImage src={message.sender.image || defaultAvatar} alt={message.sender.username} width={40} height={40} />
-          </Avatar>
+          </Avatar> */}
+          <UserAvatar user={message.sender} className="h-10 w-10" />
         </div>
       )}
       <div className="flex w-full flex-col space-y-1">

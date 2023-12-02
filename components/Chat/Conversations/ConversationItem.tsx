@@ -4,8 +4,6 @@ import React, { useState } from 'react';
 import { formatDistance } from 'date-fns';
 import { formatUsernames } from 'lib/utils';
 import { Conversation } from 'lib/types';
-import Image from 'next/image';
-import { defaultAvatar } from './CreateConversationModal/SearchUsersList';
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from 'components/ui/context-menu';
 import UserAvatar from '@/components/UserAvatar';
 
@@ -46,7 +44,7 @@ export default function ConversationItem({
       <ContextMenuTrigger>
         <div
           className={`relative flex h-20 cursor-pointer flex-row items-center rounded-md transition ${
-            conversation.id === selectedConversationId ? 'bg-primary text-foreground' : 'text-foreground/60 hover:bg-foreground/50'
+            conversation.id === selectedConversationId ? 'bg-primary text-foreground' : 'text-foreground/60 hover:bg-foreground/20'
           } ${isSmall ? 'w-20 justify-center' : 'justify-between p-4'}`}
           onClick={handleClick}
           onMouseEnter={() => setHover(true)}
@@ -61,11 +59,11 @@ export default function ConversationItem({
                 }`
               }`}
             >
-              <Image src={conversation.participants.filter((p) => p.user.id !== userId)[0]?.user.image || defaultAvatar} alt="avatar" width={48} height={48} />
+              <UserAvatar user={conversation.participants.filter((p) => p.user.id !== userId)[0]?.user} className="h-12 w-12" />
             </div>
           ) : (
             <div className="relative mr-3 flex flex-row items-center">
-              <div className={`dot dot-primary ml-[-6px] ${hasSeenAllMessages && 'opacity-0'}`}></div>
+              <div className={`ml-[-6px] mr-1 h-3 w-3 rounded-full bg-red-500 ${hasSeenAllMessages && 'opacity-0'}`}></div>
 
               <UserAvatar
                 user={

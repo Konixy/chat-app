@@ -16,6 +16,13 @@ const user = {
         }
       }
     `,
+    getUsers: gql`
+      query GetUsers {
+        getUsers {
+          ${UserFields}
+        }
+      }
+  `,
   },
   Mutations: {
     createUsername: gql`

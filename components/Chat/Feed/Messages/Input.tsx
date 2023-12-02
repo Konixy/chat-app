@@ -7,8 +7,12 @@ import MessageOperations from 'graphql/operations/message';
 import { nanoid } from 'nanoid';
 import { useConversations } from '@/lib/useConversations';
 import { Input } from '@/components/ui/input';
+import EmojiPicker, { Theme } from 'emoji-picker-react';
+import { useTheme } from 'next-themes';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 export default function MessageInput({ session, conversationId }: { session: Session; conversationId: string }) {
+  const { resolvedTheme: theme } = useTheme();
   const [body, setBody] = useState('');
   const [validate, setValidate] = useState(false);
   const {
@@ -70,6 +74,12 @@ export default function MessageInput({ session, conversationId }: { session: Ses
   return (
     <div className="w-full px-4 py-6">
       <form onSubmit={onSendMessage} className="flex flex-row items-center">
+        <Popover>
+          <PopoverTrigger>Emojis</PopoverTrigger>
+          <PopoverContent>
+            <EmojiPicker theme={theme as Theme} />
+          </PopoverContent>
+        </Popover>
         <Input
           value={body}
           onChange={(e) => setBody(e.target.value)}

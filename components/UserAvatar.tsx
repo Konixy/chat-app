@@ -1,7 +1,8 @@
 import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { shortenName } from '@/lib/utils';
-import { defaultAvatar } from './Chat/Conversations/CreateConversationModal/SearchUsersList';
+
+export const defaultAvatar = '/icons/defaultAvatar.jpg';
 
 export default function UserAvatar(
   Props: {
@@ -9,14 +10,14 @@ export default function UserAvatar(
     user: {
       name?: string | null;
       image?: string | null;
-      username: string;
+      username?: string | null;
     };
   } & { className?: string },
 ) {
   const { user } = Props;
   return (
     <Avatar {...Props}>
-      <AvatarImage src={user.image || (user.name ? undefined : defaultAvatar)} alt={user.name || user.username} />
+      <AvatarImage src={user.image || (user.name ? undefined : defaultAvatar)} alt={user.name || user.username || 'avatar'} />
       {user.name && <AvatarFallback>{Props.literralName ? user.name : shortenName(user.name)}</AvatarFallback>}
     </Avatar>
   );

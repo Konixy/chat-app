@@ -8,6 +8,7 @@ import ConversationsLoader from './ConversationsLoader';
 import { useConversations } from '@/lib/useConversations';
 import { Button } from '@/components/ui/button';
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from 'components/ui/tooltip';
+import SearchConversation from './SearchConversation';
 
 export default function ConversationList({
   session,
@@ -26,6 +27,10 @@ export default function ConversationList({
   const router = useRouter();
   const { conversations } = useConversations();
 
+  function onDeleteConversation(conversationId: string) {
+    console.log('delete conversation', conversationId);
+  }
+
   if (error)
     return (
       <div className="flex h-full w-full flex-col items-center justify-center space-y-4">
@@ -43,21 +48,9 @@ export default function ConversationList({
   return loading ? (
     <ConversationsLoader isSmall={isSmall} />
   ) : (
-    <div className={['w-full', isSmall && 'flex flex-col items-center'].join(' ')}>
-      <TooltipProvider delayDuration={0}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button size="icon" variant="outline" className="ml-auto rounded-full" onClick={() => openModal(true)}>
-              <i className="fas fa-message-plus text-base" />
-              <span className="sr-only">New conversation</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent className="bg-secondary">New conversation</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-      <ConversationModal session={session} open={isModalOpen} setOpen={openModal} />
-
+    <div className="flex h-full flex-col justify-between">
       <div className={['w-full', isSmall && 'flex flex-col items-center'].join(' ')}>
+        <SearchConversation />
         {conversations.size > 0 ? (
           Array.from(conversations.values())
             .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
@@ -67,7 +60,7 @@ export default function ConversationList({
                 conversation={conv}
                 userId={session.user.id}
                 onEditConversation={() => console.log('edit conversation')}
-                onDeleteConversation={() => console.log('delete conversation')}
+                onDeleteConversation={onDeleteConversation}
                 onLeaveConversation={() => console.log('leave conversation')}
                 onViewConversation={onViewConversation}
                 selectedConversationId={router.query.convId as string | undefined}
@@ -78,6 +71,21 @@ export default function ConversationList({
         ) : (
           <div className="text-center">You don&apos;t have any conversations</div>
         )}
+      </div>
+
+      <div className={`flex ${isSmall ? 'flex-col' : 'flex-row'} items-center justify-center`}>
+        <TooltipProvider delayDuration={0}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button size="icon" variant="outline" className="ml-auto rounded-full" onClick={() => openModal(true)}>
+                <i className="fas fa-message-plus text-base" />
+                <span className="sr-only">New conversation</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent className="bg-secondary text-foreground">New conversation</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <ConversationModal session={session} open={isModalOpen} setOpen={openModal} />
       </div>
     </div>
   );

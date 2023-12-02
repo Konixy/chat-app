@@ -48,6 +48,13 @@ const conversations = {
         }
       }
     `,
+    conversationDeleted: gql`
+      subscription ConversationDeleted {
+        conversationDeleted {
+          id: String
+        }
+      }
+    `,
   },
 };
 
