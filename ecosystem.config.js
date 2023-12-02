@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'lyna',
-      script: 'npx next start -p 1000',
+      script: 'npx next start -p 82',
     },
   ],
 };
