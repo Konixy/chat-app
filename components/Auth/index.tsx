@@ -46,7 +46,7 @@ export default function Auth({ reloadSession }: { reloadSession: () => void }) {
 
   return (
     <>
-      <BackBtn />
+      <BackBtn url="/" />
       <div className="h-[100vh]">
         <form
           className="absolute right-1/2 top-1/2 inline-block -translate-y-1/2 translate-x-1/2 flex-col items-center justify-center text-center"
