@@ -7,8 +7,9 @@ import { getSession } from 'next-auth/react';
 const httpLink = new HttpLink({
   uri: process.env.NEXT_PUBLIC_GRAPHQL_URI,
   credentials: 'include',
-  headers: {
-    SameSite: 'None',
+  async fetch(input, init) {
+    console.log(init?.headers);
+    return await fetch(input, init);
   },
 });
 
