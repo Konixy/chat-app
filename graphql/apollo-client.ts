@@ -8,8 +8,7 @@ const httpLink = new HttpLink({
   uri: process.env.NEXT_PUBLIC_GRAPHQL_URI,
   credentials: 'include',
   async fetch(input, init) {
-    console.log(init?.headers);
-    return await fetch(input, init);
+    return await fetch(input, { ...init, headers: { ...init?.headers, Cookie: document.cookie } });
   },
 });
 
