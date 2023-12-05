@@ -32,7 +32,7 @@ export default function Navbar() {
       <div className="flex flex-row items-center justify-center">
         <Link href="/" className="mr-6 flex translate-y-[-3px] flex-row items-center justify-center">
           <Image src={theme === 'dark' ? '/icons/white-logo.svg' : '/icons/black-logo.svg'} alt="Logo" width={30} height={30} />
-          <div className="font-metana ml-2 items-center text-3xl font-bold">Lyna</div>
+          <div className="font-metana ml-2 items-center text-3xl font-bold">Chat</div>
         </Link>
         <div className="flex flex-row items-center">
           {items.map((e, i) => (
