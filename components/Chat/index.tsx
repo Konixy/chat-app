@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ConversationsWrapper from './Conversations/ConversationsWrapper';
 import FeedWrapper from './Feed/FeedWrapper';
 import { Session } from 'next-auth';
@@ -28,9 +28,11 @@ export default function Chat({ session }: { session: Session }) {
   const router = useRouter();
   const {
     conversationsActions: { set: setConversation, markAsRead: markConversationAsRead },
+    conversations,
     messages,
     messagesActions: { editMessage, addMessage },
   } = useConversations();
+  const [focus, setFocus] = useState(true);
 
   const [fetchConversations, { loading: convsLoading, error: convsError }] = useLazyQuery<{ conversations: Conversation[] }>(
     ConversationOperations.Query.conversations,
@@ -75,16 +77,40 @@ export default function Chat({ session }: { session: Session }) {
       const newConversation = data.data?.conversationUpdated;
 
       if (newConversation) {
+        console.log(newConversation);
+        setConversation(newConversation.id, newConversation);
         if (
           newConversation.id === router.query.convId &&
-          newConversation.participants.find((p) => p.user.id === session.user.id)?.hasSeenAllMessages === false
+          newConversation.participants.find((p) => p.user.id === session.user.id)?.hasSeenAllMessages === false &&
+          focus
         ) {
-          setConversation(newConversation.id, newConversation);
           markConversationAsRead(newConversation.id, session.user.id);
-        } else setConversation(newConversation.id, newConversation);
+        }
       }
     },
   });
+
+  useEffect(() => {
+    const onFocusIn = () => {
+      setFocus(true);
+      console.log('focus', conversations.get(router.query.convId as string));
+      if (router.query.convId && conversations.get(router.query.convId as string)) {
+        markConversationAsRead(router.query.convId as string, session.user.id);
+      }
+    };
+
+    const onFocusOut = () => {
+      setFocus(false);
+    };
+
+    window.addEventListener('focus', onFocusIn);
+    window.addEventListener('blur', onFocusOut);
+
+    return () => {
+      window.removeEventListener('focus', onFocusIn);
+      window.removeEventListener('blur', onFocusOut);
+    };
+  }, [router.query.convId]);
 
   return (
     <div className="flex h-[100vh] flex-row">

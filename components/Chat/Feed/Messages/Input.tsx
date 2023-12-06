@@ -83,15 +83,11 @@ export default function MessageInput({ session, conversationId }: { session: Ses
         <Input
           value={body}
           onChange={(e) => setBody(e.target.value)}
-          className="focus:border-gray-7 text-lg transition focus:border-2 focus:shadow-none md:text-base"
+          className="focus:border-gray-7 px-4 py-5 text-xl ring-0 transition focus:border-2 focus:shadow-none active:ring-0 md:text-base"
           placeholder="New message"
           autoComplete="off"
         />
-        <button
-          type="submit"
-          className="absolute right-0 mr-8 text-blue-500 transition hover:text-blue-400 active:text-blue-300 disabled:text-blue-300 disabled:hover:text-blue-300"
-          disabled={!validate}
-        >
+        <button type="submit" className="absolute right-0 mr-8 text-primary transition disabled:text-primary/70" disabled={!validate}>
           <i className="fas fa-paper-plane text-lg" />
         </button>
       </form>

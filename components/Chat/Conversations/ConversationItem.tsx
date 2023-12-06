@@ -44,7 +44,7 @@ export default function ConversationItem({
       <ContextMenuTrigger>
         <div
           className={`relative flex h-20 cursor-pointer flex-row items-center rounded-md transition ${
-            conversation.id === selectedConversationId ? 'bg-primary text-foreground' : 'text-foreground/60 hover:bg-foreground/20'
+            conversation.id === selectedConversationId ? 'bg-secondary text-foreground' : 'text-foreground/60 hover:bg-secondary/50'
           } ${isSmall ? 'w-20 justify-center' : 'justify-between p-4'}`}
           onClick={handleClick}
           onMouseEnter={() => setHover(true)}
@@ -53,17 +53,14 @@ export default function ConversationItem({
           {isSmall ? (
             <div
               className={`avatar avatar-lg transition ${
-                hasSeenAllMessages &&
-                `bg-transparent before:absolute before:right-0 before:h-4 before:w-4 before:rounded-full before:bg-primary ${
-                  selectedConversationId === conversation.id && 'before:opacity-0'
-                }`
+                !hasSeenAllMessages && `bg-transparent before:absolute before:right-0 before:h-4 before:w-4 before:rounded-full before:bg-primary`
               }`}
             >
               <UserAvatar user={conversation.participants.filter((p) => p.user.id !== userId)[0]?.user} className="h-12 w-12" />
             </div>
           ) : (
             <div className="relative mr-3 flex flex-row items-center">
-              <div className={`ml-[-6px] mr-1 h-3 w-3 rounded-full bg-red-500 ${hasSeenAllMessages && 'opacity-0'}`}></div>
+              <div className={`ml-[-6px] mr-1 h-3 w-3 rounded-full bg-primary ${hasSeenAllMessages && 'opacity-0'}`}></div>
 
               <UserAvatar
                 user={
@@ -103,7 +100,7 @@ export default function ConversationItem({
           }}
           className={className}
         >
-          <i className="fas fa-pen mr-2" />
+          <i className="fas fa-pen mr-4" />
           Edit
         </ContextMenuItem>
         {conversation.participants.length > 2 ? (
@@ -114,7 +111,7 @@ export default function ConversationItem({
             }}
             className={className}
           >
-            <i className="fas fa-right-from-bracket mr-2" /> Leave
+            <i className="fas fa-right-from-bracket mr-4" /> Leave
           </ContextMenuItem>
         ) : (
           <ContextMenuItem
@@ -124,7 +121,7 @@ export default function ConversationItem({
             }}
             className={className}
           >
-            <i className="fas fa-trash mr-2" /> Delete
+            <i className="fas fa-trash mr-4" /> Delete
           </ContextMenuItem>
         )}
       </ContextMenuContent>
