@@ -15,14 +15,17 @@ export interface CreateUsernameData {
   };
 }
 
+export type ApiUser = {
+  name?: string;
+  username: string;
+  image?: string;
+  id: string;
+};
+
 export type Conversation = {
   id: string;
   participants: {
-    user: {
-      id: string;
-      username: string;
-      image?: string;
-    };
+    user: ApiUser;
     hasSeenAllMessages: boolean;
   }[];
   latestMessage?: Message;
@@ -31,11 +34,7 @@ export type Conversation = {
 
 export type Message = {
   id: string;
-  sender: {
-    id: string;
-    username: string;
-    image?: string;
-  };
+  sender: ApiUser;
   body: string;
   conversationId: string;
   createdAt: ISODateString;

@@ -7,7 +7,8 @@ import MessageOperations from 'graphql/operations/message';
 import { nanoid } from 'nanoid';
 import { useConversations } from '@/lib/useConversations';
 import { Input } from '@/components/ui/input';
-import EmojiPicker, { Theme } from 'emoji-picker-react';
+import Picker from '@emoji-mart/react';
+import data from '@emoji-mart/data';
 import { useTheme } from 'next-themes';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
@@ -15,6 +16,7 @@ export default function MessageInput({ session, conversationId }: { session: Ses
   const { resolvedTheme: theme } = useTheme();
   const [body, setBody] = useState('');
   const [validate, setValidate] = useState(false);
+  const [emojiOpen, setEmojiOpen] = useState(false);
   const {
     messagesActions: { addMessage, editMessage },
   } = useConversations();
@@ -74,18 +76,31 @@ export default function MessageInput({ session, conversationId }: { session: Ses
   return (
     <div className="w-full px-4 py-6">
       <form onSubmit={onSendMessage} className="flex flex-row items-center">
-        <Popover>
-          <PopoverTrigger>Emojis</PopoverTrigger>
-          <PopoverContent>
-            <EmojiPicker theme={theme as Theme} />
+        <Popover open={emojiOpen} onOpenChange={(e) => setEmojiOpen(e)}>
+          <PopoverTrigger asChild>
+            <div className="z-50 -mr-9 ml-4 cursor-pointer text-xl text-primary/80 transition-colors hover:text-primary">
+              <i className="fas fa-smile" />
+            </div>
+          </PopoverTrigger>
+          <PopoverContent className="h-[435px] w-[352px] border-0 bg-transparent p-0 shadow">
+            <Picker
+              data={data}
+              onEmojiSelect={(e: { native: string }) => {
+                setBody((prev) => prev + e.native);
+                document.getElementById('chat-input')?.focus();
+                setEmojiOpen(true);
+              }}
+              theme={theme}
+            />
           </PopoverContent>
         </Popover>
         <Input
           value={body}
           onChange={(e) => setBody(e.target.value)}
-          className="focus:border-gray-7 px-4 py-5 text-xl ring-0 transition focus:border-2 focus:shadow-none active:ring-0 md:text-base"
+          className="focus:border-gray-7 py-5 pl-12 pr-4 text-lg transition focus:shadow-none md:text-base"
           placeholder="New message"
           autoComplete="off"
+          id="chat-input"
         />
         <button type="submit" className="absolute right-0 mr-8 text-primary transition disabled:text-primary/70" disabled={!validate}>
           <i className="fas fa-paper-plane text-lg" />
