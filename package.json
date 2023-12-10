@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run prisma && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "sync": "git add -A && git commit -m \"Update\" && git push",
