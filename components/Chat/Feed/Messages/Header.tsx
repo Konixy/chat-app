@@ -35,7 +35,7 @@ export default function Header({
         {convNotFound && <div className="mx-6">Conversation Not Found</div>}
         {conversationsLoading && <div className="mx-6">Loading...</div>}
         {conversation && (
-          <div className="mx-10 flex flex-row items-center justify-center gap-4 text-center">
+          <div className="mx-10 flex h-12 flex-row items-center justify-center gap-4 text-center">
             {conversation.participants.length > 2 ? (
               <div
                 className={`flex ${
