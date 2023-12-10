@@ -27,7 +27,11 @@ export default function Auth() {
       <div className="h-[100vh]">
         <div className="absolute right-1/2 top-1/2 inline-block -translate-y-1/2 translate-x-1/2 flex-col items-center justify-center text-center">
           <div className="mb-10 flex w-full flex-row justify-center text-center">
-            <Image src={theme === 'dark' ? '/icons/white-logo.svg' : '/icons/black-logo.svg'} alt="Chat" width={50} height={50} />
+            {theme === 'dark' ? (
+              <Image src={'/icons/white-logo.svg'} alt="Chat" width={50} height={50} />
+            ) : (
+              <Image src={'/icons/black-logo.svg'} alt="Chat" width={50} height={50} />
+            )}
             <div className="font-metana ml-4 text-6xl font-bold">Chat</div>
           </div>
           <Button
