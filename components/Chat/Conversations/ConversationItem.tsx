@@ -14,6 +14,7 @@ export default function ConversationItem({
   hasSeenAllMessages,
   onViewConversation,
   onEditConversation,
+  onAddParticipant,
   onDeleteConversation,
   onLeaveConversation,
   isSmall,
@@ -22,10 +23,11 @@ export default function ConversationItem({
   conversation: Conversation;
   onViewConversation: (convId: string, hasSeenAllMessages?: boolean) => void;
   onEditConversation: () => void;
+  onAddParticipant: (conv: Conversation) => void;
   hasSeenAllMessages?: boolean;
   selectedConversationId?: string;
   onDeleteConversation: (conversationId: string) => void;
-  onLeaveConversation: (conversation: Conversation) => void;
+  onLeaveConversation: (conversationId: string) => void;
   isSmall: boolean;
 }) {
   // const [menuOpen, toggleMenu] = useState(false);
@@ -96,6 +98,16 @@ export default function ConversationItem({
         <ContextMenuItem
           onClick={(event) => {
             event.stopPropagation();
+            onAddParticipant(conversation);
+          }}
+          className={className}
+        >
+          <i className="fas fa-user-plus mr-3" />
+          Add members
+        </ContextMenuItem>
+        <ContextMenuItem
+          onClick={(event) => {
+            event.stopPropagation();
             onEditConversation();
           }}
           className={className}
@@ -107,7 +119,7 @@ export default function ConversationItem({
           <ContextMenuItem
             onClick={(event) => {
               event.stopPropagation();
-              onLeaveConversation(conversation);
+              onLeaveConversation(conversation.id);
             }}
             className={className}
           >

@@ -3,12 +3,16 @@ import ConversationModal from './CreateConversationModal';
 import { Session } from 'next-auth';
 import ConversationItem from './ConversationItem';
 import { useRouter } from 'next/router';
-import { ApolloError } from '@apollo/client';
+import { ApolloError, useMutation } from '@apollo/client';
 import ConversationsLoader from './ConversationsLoader';
 import { useConversations } from '@/lib/useConversations';
 import { Button } from '@/components/ui/button';
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from 'components/ui/tooltip';
 import SearchConversation from './SearchConversation';
+import ConversationOperations from 'graphql/operations/conversation';
+import toast from 'react-hot-toast';
+import AddParticipantModal from './AddParticipantsModal';
+import { Conversation } from '@/lib/types';
 
 export default function ConversationList({
   session,
@@ -24,11 +28,34 @@ export default function ConversationList({
   isSmall: boolean;
 }) {
   const [isModalOpen, openModal] = useState(false);
+  const [addParticipantModalConversation, setAddParticipantModalConversation] = useState<Conversation | null>(null);
   const router = useRouter();
   const { conversations } = useConversations();
+  const [leaveConversationMutation] = useMutation<{ leaveConversation: boolean }, { conversationId: string }>(
+    ConversationOperations.Mutations.leaveConversation,
+  );
+  const [deleteConversationMutation] = useMutation<{ deleteConversation: boolean }, { conversationId: string }>(
+    ConversationOperations.Mutations.deleteConversation,
+  );
 
   function onDeleteConversation(conversationId: string) {
-    console.log('delete conversation', conversationId);
+    toast.promise(deleteConversationMutation({ variables: { conversationId } }), {
+      loading: 'Deleting conversation...',
+      success: 'Conversation deleted!',
+      error: 'An error occured',
+    });
+  }
+
+  function onLeaveConversation(conversationId: string) {
+    toast.promise(leaveConversationMutation({ variables: { conversationId } }), {
+      loading: 'Leaving conversation...',
+      success: 'Successfully leaved conversation!',
+      error: 'An error occured',
+    });
+  }
+
+  async function onAddParticipant(conversation: Conversation) {
+    setAddParticipantModalConversation(conversation);
   }
 
   if (error)
@@ -61,8 +88,9 @@ export default function ConversationList({
                 userId={session.user.id}
                 onEditConversation={() => console.log('edit conversation')}
                 onDeleteConversation={onDeleteConversation}
-                onLeaveConversation={() => console.log('leave conversation')}
+                onLeaveConversation={onLeaveConversation}
                 onViewConversation={onViewConversation}
+                onAddParticipant={onAddParticipant}
                 selectedConversationId={router.query.convId as string | undefined}
                 hasSeenAllMessages={conv.participants.find((p) => p.user.id === session.user.id)?.hasSeenAllMessages}
                 isSmall={isSmall}
@@ -72,6 +100,8 @@ export default function ConversationList({
           <div className="text-center">You don&apos;t have any conversations</div>
         )}
       </div>
+
+      <AddParticipantModal activeConversation={addParticipantModalConversation} setActiveConversation={setAddParticipantModalConversation} />
 
       <div className={`flex ${isSmall ? 'flex-col' : 'flex-row'} items-center justify-center`}>
         <TooltipProvider delayDuration={0}>

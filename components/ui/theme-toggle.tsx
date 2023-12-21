@@ -5,13 +5,14 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 export function ThemeToggle() {
-  const { setTheme, resolvedTheme: theme } = useTheme();
+  const { setTheme } = useTheme();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon" className="flex items-center justify-center">
-          {theme === 'dark' ? <i className="fas fa-moon" /> : <i className="fas fa-sun" />}
+          <i className="fas fa-moon hidden dark:block" />
+          <i className="fas fa-sun block dark:hidden" />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>

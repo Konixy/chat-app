@@ -24,10 +24,14 @@ export default function ConversationModal({
 }) {
   const [participants, setParticipants] = useState<User[]>([]);
   const router = useRouter();
-  const { data: users, loading, error } = useQuery<{ getUsers: User[] }>(UserOperations.Queries.getUsers);
+  const { data: users, loading, error, fetchMore } = useQuery<{ getUsers: User[] }>(UserOperations.Queries.getUsers);
   const [createConversationMutation, { loading: convLoading }] = useMutation<{ createConversation: { conversationId: string } }, { participantsIds: string[] }>(
     ConversationOperations.Mutations.createConversation,
   );
+
+  useEffect(() => {
+    if (open) fetchMore({});
+  }, [open]);
 
   async function createConversation() {
     const participantsIds: string[] = [session.user.id, ...participants.map((e) => e.id)];
@@ -60,6 +64,8 @@ export default function ConversationModal({
       toast.error(error.message);
     }
   }, [error]);
+
+  // console.log(Array(200).fill({ id: String(Date.now()), name: nanoid() as string, username: nanoid() as string } as User));
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

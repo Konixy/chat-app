@@ -11,6 +11,7 @@ import { Items } from 'lib/utils';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import { Separator } from '../ui/separator';
+import Head from 'next/head';
 
 // trouver un moyens de ne pas monter et démonter ce component a chaque changement de conversation
 
@@ -27,12 +28,16 @@ export type MessageMap = Items<
 export default function Chat({ session }: { session: Session }) {
   const router = useRouter();
   const {
-    conversationsActions: { set: setConversation, markAsRead: markConversationAsRead },
+    conversationsActions: { set: setConversation, markAsRead: markConversationAsRead, remove: removeConversation },
     conversations,
     messages,
     messagesActions: { editMessage, addMessage },
   } = useConversations();
   const [focus, setFocus] = useState(true);
+  const {
+    user: { id: userId },
+  } = session;
+  const [title, setTitle] = useState('Inbox');
 
   const [fetchConversations, { loading: convsLoading, error: convsError }] = useLazyQuery<{ conversations: Conversation[] }>(
     ConversationOperations.Query.conversations,
@@ -45,7 +50,6 @@ export default function Chat({ session }: { session: Session }) {
           setConversation(e.id, e);
         });
       },
-      // fetchPolicy: 'no-cache',
     },
   );
 
@@ -55,7 +59,7 @@ export default function Chat({ session }: { session: Session }) {
 
   useSubscription<{ newMessage: Message }>(MessageOperations.Subscription.newMessage, {
     onError(err) {
-      toast.error('Network Error');
+      toast.error('NewMessage Subscription Error');
       console.log(err);
     },
     onData({ data }) {
@@ -70,14 +74,13 @@ export default function Chat({ session }: { session: Session }) {
 
   useSubscription<{ conversationUpdated: Conversation }>(ConversationOperations.Subscriptions.conversationUpdated, {
     onError(err) {
-      toast.error('Network Error');
+      toast.error('ConversationUpdated Subscription Error');
       console.log(err);
     },
     onData({ data }) {
       const newConversation = data.data?.conversationUpdated;
 
       if (newConversation) {
-        console.log(newConversation);
         setConversation(newConversation.id, newConversation);
         if (
           newConversation.id === router.query.convId &&
@@ -90,10 +93,47 @@ export default function Chat({ session }: { session: Session }) {
     },
   });
 
+  useSubscription<{ conversationDeleted: { id: string } }>(ConversationOperations.Subscriptions.conversationDeleted, {
+    onError(err) {
+      toast.error('ConversationDeleted Subscription Error');
+      console.log(err);
+    },
+    onData({ data }) {
+      const deletedConversationId = data.data?.conversationDeleted.id;
+
+      if (deletedConversationId) {
+        removeConversation(deletedConversationId);
+        if (router.query.convId === deletedConversationId) router.replace('/app');
+      }
+    },
+  });
+
+  useSubscription<{ conversationParticipantDeleted: { participantId: string; oldConversation: Conversation; newConversation: Conversation } }>(
+    ConversationOperations.Subscriptions.conversationParticipantDeleted,
+    {
+      onError(err) {
+        toast.error('ConversationParticipantDeleted Subscription Error');
+        console.log(err);
+      },
+      onData({ data }) {
+        console.log(data);
+        if (data.data?.conversationParticipantDeleted) {
+          // eslint-disable-next-line no-unsafe-optional-chaining
+          const { oldConversation, newConversation, participantId } = data.data?.conversationParticipantDeleted;
+          console.log(data.data.conversationParticipantDeleted);
+          console.log(conversations.get(oldConversation.id)); //?.participants.find((p) => p.user.id === userId)?.id
+          if (participantId === conversations.get(oldConversation.id)?.participants.find((p) => p.user.id === userId)?.id) {
+            removeConversation(oldConversation.id);
+            router.push('/app');
+          } else setConversation(newConversation.id, newConversation);
+        }
+      },
+    },
+  );
+
   useEffect(() => {
     const onFocusIn = () => {
       setFocus(true);
-      console.log('focus', conversations.get(router.query.convId as string));
       if (router.query.convId && conversations.get(router.query.convId as string)) {
         markConversationAsRead(router.query.convId as string, session.user.id);
       }
@@ -112,8 +152,20 @@ export default function Chat({ session }: { session: Session }) {
     };
   }, [router.query.convId]);
 
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const unreadConversationNumber = Array.from(conversations, ([_, value]) => value)
+      .map((e) => !e.participants.find((p) => p.user.id === userId)?.hasSeenAllMessages)
+      .filter(Boolean).length;
+
+    setTitle(`${unreadConversationNumber > 0 ? `(${unreadConversationNumber})・ ` : ''}Inbox`);
+  }, [conversations]);
+
   return (
     <div className="flex h-[100vh] flex-row">
+      <Head>
+        <title>{title}</title>
+      </Head>
       <ConversationsWrapper session={session} conversationsLoading={convsLoading} conversationsError={convsError} />
       <Separator orientation="vertical" />
       <FeedWrapper session={session} conversationsLoading={convsLoading} conversationsError={convsError} />

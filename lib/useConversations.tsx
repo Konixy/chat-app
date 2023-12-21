@@ -66,7 +66,11 @@ export function ConversationsProvider({ children }: React.PropsWithChildren) {
   };
 
   async function markConversationAsRead(conversationId: string, userId: string) {
-    console.log('marking conversation as read.');
+    await markConversationAsReadMutation({
+      variables: {
+        conversationId,
+      },
+    });
     conversationsActions.set(conversationId, (prev) => {
       if (!prev) return prev;
 
@@ -81,13 +85,8 @@ export function ConversationsProvider({ children }: React.PropsWithChildren) {
         }
         return participant;
       });
-
+      console.log('marking as read');
       return newPrev;
-    });
-    await markConversationAsReadMutation({
-      variables: {
-        conversationId,
-      },
     });
   }
 

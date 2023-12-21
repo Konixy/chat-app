@@ -6,7 +6,6 @@ import Messages from './Messages/Messages';
 import { Session } from 'next-auth';
 import { ApolloError } from '@apollo/client';
 import Image from 'next/image';
-import { useTheme } from 'next-themes';
 import { useConversations } from '@/lib/useConversations';
 
 export default function FeedWrapper({
@@ -19,7 +18,6 @@ export default function FeedWrapper({
   conversationsError: ApolloError | undefined;
 }) {
   const router = useRouter();
-  const theme = useTheme();
   const { conversations } = useConversations();
 
   const {
@@ -40,7 +38,8 @@ export default function FeedWrapper({
       ) : (
         <div className={`ml-4 ${conversations.size > 0 ? 'mt-28' : 'mt-10'}`}>
           <div>
-            <Image src={`/icons/${theme.resolvedTheme === 'dark' ? 'white' : 'black'}-arrow.png`} alt="arrow" width={33} height={88} />
+            <Image src="/icons/white-arrow.png" alt="arrow" width={33} height={88} className="hidden dark:block" />
+            <Image src="/icons/black-arrow.png" alt="arrow" width={33} height={88} className="block dark:hidden" />
           </div>
           <div className="-mt-4 ml-12 font-lato text-2xl font-bold">
             {conversations.size > 0 ? 'Select a conversation and start chatting!' : 'Create a conversation and start chatting!'}

@@ -4,7 +4,9 @@ import { UserFields } from './user';
 
 const ConversationFields = `
   id
+  name
   participants {
+    id
     user {
       ${UserFields}
     }
@@ -16,7 +18,7 @@ const ConversationFields = `
   updatedAt
 `;
 
-const conversations = {
+const ConversationOperations = {
   Query: {
     conversations: gql`
       query Conversations {
@@ -39,6 +41,21 @@ const conversations = {
         markConversationAsRead(conversationId: $conversationId)
       }
     `,
+    leaveConversation: gql`
+      mutation LeaveConversation($conversationId: String!) {
+        leaveConversation(conversationId: $conversationId)
+      }
+    `,
+    deleteConversation: gql`
+      mutation DeleteConversation($conversationId: String!) {
+        deleteConversation(conversationId: $conversationId)
+      }
+    `,
+    addParticipants: gql`
+      mutation AddParticipants($conversationId: String!, $userIds: [String]!) {
+        addParticipants(conversationId: $conversationId, userIds: $userIds)
+      }
+    `,
   },
   Subscriptions: {
     conversationUpdated: gql`
@@ -51,11 +68,24 @@ const conversations = {
     conversationDeleted: gql`
       subscription ConversationDeleted {
         conversationDeleted {
-          id: String
+          id
+        }
+      }
+    `,
+    conversationParticipantDeleted: gql`
+      subscription ConversationParticipantDeleted {
+        conversationParticipantDeleted {
+          participantId
+          oldConversation {
+            ${ConversationFields}
+          }
+          newConversation {
+            ${ConversationFields}
+          }
         }
       }
     `,
   },
 };
 
-export default conversations;
+export default ConversationOperations;

@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { signOut, useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import { ThemeToggle } from './ui/theme-toggle';
-import { useTheme } from 'next-themes';
 import { buttonVariants } from './ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
 import UserAvatar from './UserAvatar';
@@ -13,7 +12,6 @@ import UserAvatar from './UserAvatar';
 export default function Navbar() {
   const router = useRouter();
   const { data: session } = useSession();
-  const { resolvedTheme: theme } = useTheme();
 
   const items = [
     { name: 'Home', url: '/' },
@@ -31,11 +29,8 @@ export default function Navbar() {
     <div className="mx-20 my-6 flex flex-row items-center justify-between">
       <div className="flex flex-row items-center justify-center">
         <Link href="/" className="mr-6 flex translate-y-[-3px] flex-row items-center justify-center">
-          {theme === 'dark' ? (
-            <Image src="/icons/white-logo.svg" alt="Logo" width={30} height={30} />
-          ) : (
-            <Image src="/icons/black-logo.svg" alt="Logo" width={30} height={30} />
-          )}
+          <Image src="/icons/white-logo.svg" alt="Logo" width={30} height={30} className="hidden dark:block" />
+          <Image src="/icons/black-logo.svg" alt="Logo" width={30} height={30} className="block dark:hidden" />
           <div className="font-metana ml-2 items-center text-3xl font-bold">Chat</div>
         </Link>
         <div className="flex flex-row items-center">
@@ -77,8 +72,10 @@ export default function Navbar() {
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
-                  signOut({ redirect: true, callbackUrl: '/login' }).then(() => {
-                    toast.success('Successfully logged out.');
+                  toast.promise(signOut({ redirect: true, callbackUrl: '/login' }), {
+                    loading: 'Logging out...',
+                    success: 'Successfully logged out!',
+                    error: 'An error occured',
                   });
                 }}
                 className="cursor-pointer"

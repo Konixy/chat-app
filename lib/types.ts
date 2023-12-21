@@ -24,7 +24,9 @@ export type ApiUser = {
 
 export type Conversation = {
   id: string;
+  name?: string;
   participants: {
+    id: string;
     user: ApiUser;
     hasSeenAllMessages: boolean;
   }[];
