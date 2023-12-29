@@ -1,6 +1,6 @@
 import React from 'react';
 import { formatRelative } from 'date-fns';
-import enUs from 'date-fns/locale/en-US';
+import { enUS } from 'date-fns/locale';
 import { MessageWithLoading } from 'lib/types';
 import UserAvatar from '@/components/UserAvatar';
 
@@ -29,7 +29,7 @@ export default function MessageItem({ message, sentByMe, isGroup }: { message: M
             <div className="text-sm text-zinc-400">
               {formatRelative(new Date(message.updatedAt), new Date(), {
                 locale: {
-                  ...enUs,
+                  ...enUS,
                   formatRelative: (token) => formatRelativeLocale[token as keyof typeof formatRelativeLocale],
                 },
               })}
@@ -54,7 +54,7 @@ export default function MessageItem({ message, sentByMe, isGroup }: { message: M
                 ? 'Sending...'
                 : formatRelative(new Date(message.updatedAt), new Date(), {
                     locale: {
-                      ...enUs,
+                      ...enUS,
                       formatRelative: (token) => formatRelativeLocale[token as keyof typeof formatRelativeLocale],
                     },
                   })}
