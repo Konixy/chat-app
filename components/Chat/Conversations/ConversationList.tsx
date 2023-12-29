@@ -13,6 +13,7 @@ import ConversationOperations from 'graphql/operations/conversation';
 import toast from 'react-hot-toast';
 import AddParticipantModal from './AddParticipantsModal';
 import { Conversation } from '@/lib/types';
+import { toast as sonner } from 'sonner';
 
 export default function ConversationList({
   session,
@@ -20,12 +21,14 @@ export default function ConversationList({
   error,
   onViewConversation,
   isSmall,
+  collapse,
 }: {
   session: Session;
   loading: boolean;
   error: ApolloError | undefined;
   onViewConversation: (conversationId: string, hasSeenAllMessages?: boolean) => void;
   isSmall: boolean;
+  collapse: () => void;
 }) {
   const [isModalOpen, openModal] = useState(false);
   const [addParticipantModalConversation, setAddParticipantModalConversation] = useState<Conversation | null>(null);
@@ -47,11 +50,17 @@ export default function ConversationList({
   }
 
   function onLeaveConversation(conversationId: string) {
-    toast.promise(leaveConversationMutation({ variables: { conversationId } }), {
+    sonner.promise(leaveConversationMutation({ variables: { conversationId } }), {
       loading: 'Leaving conversation...',
       success: 'Successfully leaved conversation!',
       error: 'An error occured',
     });
+
+    // toast.promise(leaveConversationMutation({ variables: { conversationId } }), {
+    //   loading: 'Leaving conversation...',
+    //   success: 'Successfully leaved conversation!',
+    //   error: 'An error occured',
+    // });
   }
 
   async function onAddParticipant(conversation: Conversation) {
@@ -77,38 +86,48 @@ export default function ConversationList({
   ) : (
     <div className="flex h-full flex-col justify-between">
       <div className={['w-full', isSmall && 'flex flex-col items-center'].join(' ')}>
-        <SearchConversation />
-        {conversations.size > 0 ? (
-          Array.from(conversations.values())
-            .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
-            .map((conv) => (
-              <ConversationItem
-                key={conv.id}
-                conversation={conv}
-                userId={session.user.id}
-                onEditConversation={() => console.log('edit conversation')}
-                onDeleteConversation={onDeleteConversation}
-                onLeaveConversation={onLeaveConversation}
-                onViewConversation={onViewConversation}
-                onAddParticipant={onAddParticipant}
-                selectedConversationId={router.query.convId as string | undefined}
-                hasSeenAllMessages={conv.participants.find((p) => p.user.id === session.user.id)?.hasSeenAllMessages}
-                isSmall={isSmall}
-              />
-            ))
-        ) : (
-          <div className="text-center">You don&apos;t have any conversations</div>
-        )}
+        <SearchConversation isSmall={isSmall} collapse={collapse} />
+        {conversations.size > 0
+          ? Array.from(conversations.values())
+              .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+              .map((conv) => (
+                <ConversationItem
+                  key={conv.id}
+                  conversation={conv}
+                  userId={session.user.id}
+                  onEditConversation={() => console.log('edit conversation')}
+                  onDeleteConversation={onDeleteConversation}
+                  onLeaveConversation={onLeaveConversation}
+                  onViewConversation={onViewConversation}
+                  onAddParticipant={onAddParticipant}
+                  selectedConversationId={router.query.convId as string | undefined}
+                  hasSeenAllMessages={conv.participants.find((p) => p.user.id === session.user.id)?.hasSeenAllMessages}
+                  isSmall={isSmall}
+                />
+              ))
+          : !isSmall && <div className="text-center">You don&apos;t have any conversations</div>}
       </div>
 
       <AddParticipantModal activeConversation={addParticipantModalConversation} setActiveConversation={setAddParticipantModalConversation} />
 
-      <div className={`flex ${isSmall ? 'flex-col' : 'flex-row'} items-center justify-center`}>
+      <div className={`flex ${isSmall ? 'flex-col' : 'mx-6 flex-row'} items-center justify-between gap-4`}>
         <TooltipProvider delayDuration={0}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button size="icon" variant="outline" className="ml-auto rounded-full" onClick={() => openModal(true)}>
-                <i className="fas fa-message-plus text-base" />
+              <Button variant="outline" className={`${isSmall ? 'h-12 w-12' : 'h-16 w-16'} rounded-full`} onClick={() => openModal(true)}>
+                <i className={`fas fa-user-plus ${isSmall ? 'text-base' : 'text-xl'}`} />
+                <span className="sr-only">Add friend</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent className="bg-secondary text-foreground">Add friend</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider delayDuration={0}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="outline" className={`${isSmall ? 'h-12 w-12' : 'h-16 w-16'} rounded-full`} onClick={() => openModal(true)}>
+                <i className={`fas fa-message-plus ${isSmall ? 'text-base' : 'text-xl'}`} />
                 <span className="sr-only">New conversation</span>
               </Button>
             </TooltipTrigger>

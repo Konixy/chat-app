@@ -13,8 +13,6 @@ import { useRouter } from 'next/router';
 import { Separator } from '../ui/separator';
 import Head from 'next/head';
 
-// trouver un moyens de ne pas monter et démonter ce component a chaque changement de conversation
-
 export type ConversationMap = Items<string, Conversation>;
 
 export type MessageMap = Items<
@@ -120,8 +118,6 @@ export default function Chat({ session }: { session: Session }) {
         if (data.data?.conversationParticipantDeleted) {
           // eslint-disable-next-line no-unsafe-optional-chaining
           const { oldConversation, newConversation, participantId } = data.data?.conversationParticipantDeleted;
-          console.log(data.data.conversationParticipantDeleted);
-          console.log(conversations.get(oldConversation.id)); //?.participants.find((p) => p.user.id === userId)?.id
           if (participantId === conversations.get(oldConversation.id)?.participants.find((p) => p.user.id === userId)?.id) {
             removeConversation(oldConversation.id);
             router.push('/app');

@@ -66,12 +66,24 @@ export default function ConversationsWrapper({
     document.body.addEventListener('mouseup', onMouseUp, { once: true });
   };
 
+  function collapse() {
+    setWrapperSizeX(400);
+    setIsSmall(false);
+  }
+
   return (
     <div
       style={{ width: `${wrapperSizeX}px`, minWidth: `${wrapperSizeX}px` }}
       className={`conversationsWrapper ${router.query.convId ? 'hidden' : 'block'} md:w-[${wrapperSizeX}px] w-full resize-x bg-background px-3 py-6 md:block`}
     >
-      <ConversationList session={session} loading={conversationsLoading} error={conversationsError} onViewConversation={onViewConversation} isSmall={isSmall} />
+      <ConversationList
+        session={session}
+        loading={conversationsLoading}
+        error={conversationsError}
+        onViewConversation={onViewConversation}
+        isSmall={isSmall}
+        collapse={collapse}
+      />
       <button
         onMouseDown={dragHandler}
         style={{ left: `${wrapperSizeX - 2}px` }}

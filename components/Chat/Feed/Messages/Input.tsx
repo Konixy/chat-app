@@ -7,7 +7,7 @@ import MessageOperations from 'graphql/operations/message';
 import { nanoid } from 'nanoid';
 import { useConversations } from '@/lib/useConversations';
 import { Input } from '@/components/ui/input';
-import Picker from '@emoji-mart/react';
+import EmojiPicker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
 import { useTheme } from 'next-themes';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -83,7 +83,7 @@ export default function MessageInput({ session, conversationId }: { session: Ses
             </div>
           </PopoverTrigger>
           <PopoverContent className="h-[435px] w-[352px] border-0 bg-transparent p-0 shadow">
-            <Picker
+            <EmojiPicker
               data={data}
               onEmojiSelect={(e: { native: string }) => {
                 setBody((prev) => prev + e.native);
