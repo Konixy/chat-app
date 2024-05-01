@@ -50,17 +50,17 @@ export default function Header({
               >
                 <UserAvatar
                   user={conversation.participants.filter((p) => p.user.id !== userId)[0]?.user}
-                  className="inline-block h-12 w-12 border-2 border-background"
+                  className="inline-block size-12 border-2 border-background"
                 />
                 {/* <div className={`${conversation.participants.length > 4 ? '-ml-8' : '-ml-6'} avatar ring-0`}> */}
                 <UserAvatar
                   user={conversation.participants.filter((p) => p.user.id !== userId)[1]?.user}
-                  className="inline-block h-12 w-12 border-2 border-background"
+                  className="inline-block size-12 border-2 border-background"
                 />
                 {conversation.participants.length > 3 && (
                   <UserAvatar
                     user={conversation.participants.filter((p) => p.user.id !== userId)[2]?.user}
-                    className="inline-block h-12 w-12 border-2 border-background"
+                    className="inline-block size-12 border-2 border-background"
                   />
                 )}
                 {conversation.participants.length > 4 && (
@@ -70,12 +70,12 @@ export default function Header({
                   <UserAvatar
                     user={{ name: `+${conversation.participants.length - 4}`, username: 'null' }}
                     literralName
-                    className="inline-block h-12 w-12 border-2 border-background"
+                    className="inline-block size-12 border-2 border-background"
                   />
                 )}
               </div>
             ) : (
-              <UserAvatar user={conversation.participants.filter((p) => p.user.id !== userId)[0]?.user} className="h-12 w-12" />
+              <UserAvatar user={conversation.participants.filter((p) => p.user.id !== userId)[0]?.user} className="size-12" />
             )}
 
             {conversation.participants.length === 2 ? (
