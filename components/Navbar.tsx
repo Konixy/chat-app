@@ -8,6 +8,8 @@ import { ThemeToggle } from './ui/theme-toggle';
 import { buttonVariants } from './ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
 import UserAvatar from './UserAvatar';
+import { CaretDownIcon } from '@radix-ui/react-icons';
+import { CircleUser, LogOut, Settings } from 'lucide-react';
 
 export default function Navbar() {
   const router = useRouter();
@@ -51,25 +53,25 @@ export default function Navbar() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="flex select-none flex-row items-center justify-center px-4 text-sm text-foreground/80 outline-none transition-colors hover:text-foreground">
-                <UserAvatar user={session.user} className="-ml-2 mr-2 h-8 w-8" />
+                <UserAvatar user={session.user} className="-ml-2 mr-2 size-8" />
                 {session.user.name}
-                <i className="fas fa-caret-down ml-2 text-base" />
+                <CaretDownIcon className="ml-0.5 size-5" />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem asChild className="cursor-pointer">
                 <Link href="/app/me">
-                  <i className="fas fa-user mr-2"></i>
+                  <CircleUser className="mr-2 size-4" />
                   Profile
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
               <DropdownMenuItem asChild className="cursor-pointer">
                 <Link href="/app/settings">
-                  <i className="fas fa-gear mr-2"></i>
+                  <Settings className="mr-2 size-4" />
                   Account settings
                 </Link>
               </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => {
                   toast.promise(signOut({ redirect: true, callbackUrl: '/login' }), {
@@ -78,9 +80,9 @@ export default function Navbar() {
                     error: 'An error occured',
                   });
                 }}
-                className="cursor-pointer"
+                className="cursor-pointer focus:bg-destructive/75"
               >
-                <i className="fas fa-right-from-bracket mr-2"></i>
+                <LogOut className="mr-2 size-4" />
                 Log out
               </DropdownMenuItem>
             </DropdownMenuContent>

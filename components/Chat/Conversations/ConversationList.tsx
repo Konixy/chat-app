@@ -14,6 +14,7 @@ import toast from 'react-hot-toast';
 import AddParticipantModal from './AddParticipantsModal';
 import { Conversation } from '@/lib/types';
 import { toast as sonner } from 'sonner';
+import { CloudOff, MessageCirclePlus, RotateCw, UserPlus2 } from 'lucide-react';
 
 export default function ConversationList({
   session,
@@ -69,14 +70,16 @@ export default function ConversationList({
 
   if (error)
     return (
-      <div className="flex h-full w-full flex-col items-center justify-center space-y-4">
-        <i className="fas fa-cloud-exclamation text-6xl" />
+      <div className="flex size-full flex-col items-center justify-center space-y-4">
+        <CloudOff className="size-20" />
+
         <div className="text-center text-3xl">Failed to fetch conversations</div>
         <div className="text-foreground/50">
           {error.name}: {error.message}
         </div>
-        <Button className="font-semibold" onClick={() => router.reload()}>
-          <i className="fas fa-arrow-rotate-right mr-2" /> Reload page
+        <Button onClick={() => router.reload()} childrenClassName="flex flex-row items-center">
+          <RotateCw className="mr-2 size-4" />
+          Reload page
         </Button>
       </div>
     );
@@ -114,24 +117,24 @@ export default function ConversationList({
         <TooltipProvider delayDuration={0}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="outline" className={`${isSmall ? 'h-12 w-12' : 'h-16 w-16'} rounded-full`} onClick={() => openModal(true)}>
-                <i className={`fas fa-user-plus ${isSmall ? 'text-base' : 'text-xl'}`} />
+              <Button variant="outline" className={`${isSmall ? 'size-12' : 'size-16'} rounded-full`} onClick={() => openModal(true)}>
+                <UserPlus2 className={isSmall ? 'size-5' : 'size-6'} />
                 <span className="sr-only">Add friend</span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent className="bg-secondary text-foreground">Add friend</TooltipContent>
+            <TooltipContent className="bg-secondary-foreground text-foreground">Add friend</TooltipContent>
           </Tooltip>
         </TooltipProvider>
 
         <TooltipProvider delayDuration={0}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="outline" className={`${isSmall ? 'h-12 w-12' : 'h-16 w-16'} rounded-full`} onClick={() => openModal(true)}>
-                <i className={`fas fa-message-plus ${isSmall ? 'text-base' : 'text-xl'}`} />
+              <Button variant="outline" className={`${isSmall ? 'size-12' : 'size-16'} rounded-full`} onClick={() => openModal(true)}>
+                <MessageCirclePlus className={isSmall ? 'size-5' : 'size-6'} />
                 <span className="sr-only">New conversation</span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent className="bg-secondary text-foreground">New conversation</TooltipContent>
+            <TooltipContent className="bg-secondary-foreground text-foreground">New conversation</TooltipContent>
           </Tooltip>
         </TooltipProvider>
         <ConversationModal session={session} open={isModalOpen} setOpen={openModal} />

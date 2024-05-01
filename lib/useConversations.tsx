@@ -85,7 +85,6 @@ export function ConversationsProvider({ children }: React.PropsWithChildren) {
         }
         return participant;
       });
-      console.log('marking as read');
       return newPrev;
     });
   }

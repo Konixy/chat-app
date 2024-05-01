@@ -10,6 +10,7 @@ import { Button } from 'components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from 'components/ui/dialog';
 import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from 'components/ui/command';
 import UserAvatar from '@/components/UserAvatar';
+import { Check } from 'lucide-react';
 
 export type User = Pick<PrismaUser, 'id' | 'username' | 'name' | 'image'>;
 
@@ -96,9 +97,9 @@ export default function ConversationModal({
                     <UserAvatar user={user} />
                     <div className="ml-2">
                       <p className="text-sm font-medium leading-none">{user.name}</p>
-                      <p className="text-sm text-muted-foreground">{user.username}</p>
+                      <p className="text-sm text-secondary/80">{user.username}</p>
                     </div>
-                    {participants.includes(user) ? <i className="fas fa-check ml-auto flex text-xl text-primary" /> : null}
+                    {participants.includes(user) ? <Check className="ml-auto flex text-xl text-primary" /> : null}
                   </CommandItem>
                 ))}
             </CommandGroup>
@@ -108,7 +109,7 @@ export default function ConversationModal({
           {participants.length > 0 ? (
             <div className="flex -space-x-2 overflow-hidden">
               {participants.map((user) => (
-                <UserAvatar key={user.id} user={user} className="inline-block border-2 border-background" />
+                <UserAvatar key={user.id} user={user} className="inline-block size-9" />
               ))}
             </div>
           ) : (

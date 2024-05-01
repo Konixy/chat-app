@@ -11,6 +11,7 @@ import EmojiPicker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
 import { useTheme } from 'next-themes';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { SendIcon, Smile } from 'lucide-react';
 
 export default function MessageInput({ session, conversationId }: { session: Session; conversationId: string }) {
   const { resolvedTheme: theme } = useTheme();
@@ -78,8 +79,8 @@ export default function MessageInput({ session, conversationId }: { session: Ses
       <form onSubmit={onSendMessage} className="flex flex-row items-center">
         <Popover open={emojiOpen} onOpenChange={(e) => setEmojiOpen(e)}>
           <PopoverTrigger asChild>
-            <div className="z-50 -mr-9 ml-4 cursor-pointer text-xl text-primary/80 transition-colors hover:text-primary">
-              <i className="fas fa-smile" />
+            <div className="z-50 -mr-9 ml-4 cursor-pointer text-xl text-primary transition-colors hover:text-primary">
+              <Smile className="size-5" />
             </div>
           </PopoverTrigger>
           <PopoverContent className="h-[435px] w-[352px] border-0 bg-transparent p-0 shadow">
@@ -103,7 +104,7 @@ export default function MessageInput({ session, conversationId }: { session: Ses
           id="chat-input"
         />
         <button type="submit" className="absolute right-0 mr-8 text-primary transition disabled:text-primary/70" disabled={!validate}>
-          <i className="fas fa-paper-plane text-lg" />
+          <SendIcon className="size-5" />
         </button>
       </form>
     </div>

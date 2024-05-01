@@ -5,6 +5,7 @@ import { ApolloError } from '@apollo/client';
 import { useConversations } from 'lib/useConversations';
 import UserAvatar from '@/components/UserAvatar';
 import { Button } from '@/components/ui/button';
+import { ChevronLeft } from 'lucide-react';
 
 export default function Header({
   conversationsLoading,
@@ -27,8 +28,13 @@ export default function Header({
   if (error) return null;
   return (
     <>
-      <Button variant="outline" className={`absolute ml-4 mt-[28px] md:hidden ${conversationId ? 'block' : 'hidden'}`} onClick={() => router.push('/app')}>
-        <i className="fas fa-angle-left mr-2" />
+      <Button
+        variant="outline"
+        className={`absolute ml-4 mt-[28px] pl-2 md:hidden ${conversationId ? 'block' : 'hidden'}`}
+        onClick={() => router.push('/app')}
+        childrenClassName="flex flex-row items-center"
+      >
+        <ChevronLeft className="mr-1.5 size-5" />
         Back
       </Button>
       <div className="flex w-full flex-row items-center justify-center gap-6 border-b px-4 py-5 md:justify-start md:px-0">

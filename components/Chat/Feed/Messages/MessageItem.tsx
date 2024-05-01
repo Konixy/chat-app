@@ -13,13 +13,13 @@ const formatRelativeLocale = {
 
 export default function MessageItem({ message, sentByMe, isGroup }: { message: MessageWithLoading; sentByMe: boolean; isGroup: boolean }) {
   return (
-    <div className={`flex flex-row items-center space-x-2 break-words p-4 ${sentByMe ? 'justify-end' : 'justify-start'}`}>
+    <div className={`flex flex-row items-center space-x-2 break-words p-4 first:pb-0 ${sentByMe ? 'justify-end' : 'justify-start'}`}>
       {isGroup && !sentByMe && (
         <div className="mt-6 flex h-full min-w-[40px] justify-start">
           {/* <Avatar>
             <AvatarImage src={message.sender.image || defaultAvatar} alt={message.sender.username} width={40} height={40} />
           </Avatar> */}
-          <UserAvatar user={message.sender} className="h-10 w-10" />
+          <UserAvatar user={message.sender} className="size-10" />
         </div>
       )}
       <div className="flex w-full flex-col space-y-1">
