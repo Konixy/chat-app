@@ -64,12 +64,11 @@
 
   .dark {
     --background: 240 13.73% 10%;
-    /* --foreground: 229.76 31.78% 74.71%; */
     --foreground: 0 0% 100%;
     --muted: 232.5 15.44% 18.32%;
     --muted-foreground: 233.79 11.37% 50%;
     --popover: 234.55 17.46% 12.35%;
-    --popover-foreground: 234 12.4% 52.55%;
+    --popover-foreground: 234 21% 77%;
     --card: 234.55 17.46% 12.35%;
     --card-foreground: 229.76 31.78% 74.71%;
     --border: 232.5 15.38% 30.59%;
@@ -92,6 +91,10 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  #root {
+    background-color: hsl(var(--card)) !important;
   }
 }
 

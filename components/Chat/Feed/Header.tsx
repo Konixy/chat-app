@@ -37,7 +37,7 @@ export default function Header({
         <ChevronLeft className="mr-1.5 size-5" />
         Back
       </Button>
-      <div className="flex w-full flex-row items-center justify-center gap-6 border-b px-4 py-5 md:justify-start md:px-0">
+      <div className="flex w-full flex-row items-center justify-center gap-6 border-b border-muted px-4 py-5 md:justify-start md:px-0">
         {convNotFound && <div className="mx-6">Conversation Not Found</div>}
         {conversationsLoading && <div className="mx-6">Loading...</div>}
         {conversation && (

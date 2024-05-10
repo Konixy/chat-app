@@ -114,7 +114,6 @@ export default function Chat({ session }: { session: Session }) {
         console.log(err);
       },
       onData({ data }) {
-        console.log(data);
         if (data.data?.conversationParticipantDeleted) {
           // eslint-disable-next-line no-unsafe-optional-chaining
           const { oldConversation, newConversation, participantId } = data.data?.conversationParticipantDeleted;
@@ -163,7 +162,7 @@ export default function Chat({ session }: { session: Session }) {
         <title>{title}</title>
       </Head>
       <ConversationsWrapper session={session} conversationsLoading={convsLoading} conversationsError={convsError} />
-      <Separator orientation="vertical" />
+      <Separator orientation="vertical" className="bg-muted" />
       <FeedWrapper session={session} conversationsLoading={convsLoading} conversationsError={convsError} />
     </div>
   );

@@ -30,19 +30,19 @@ export default function ConversationsLoader({ isSmall }: { isSmall: boolean }) {
     <div className="w-full">
       {isSmall ? (
         <div className="mb-7 flex w-full justify-center">
-          <Skeleton className="h-7 w-7 rounded-lg"></Skeleton>
+          <Skeleton className="size-7 rounded-lg"></Skeleton>
         </div>
       ) : (
         <div className="mb-4 h-10 w-full rounded-xl bg-primary/30"></div>
       )}
       {items.map((e, i) =>
         isSmall ? (
-          <div key={i} className="flex h-20 w-20 items-center justify-center">
-            <Skeleton className="mx-3 h-12 w-12 rounded-full"></Skeleton>
+          <div key={i} className="flex size-20 items-center justify-center">
+            <Skeleton className="mx-3 size-12 rounded-full"></Skeleton>
           </div>
         ) : (
           <div key={i} className="flex w-full flex-row items-center justify-between p-4">
-            <Skeleton className="mx-3 h-12 w-12 rounded-full"></Skeleton>
+            <Skeleton className="mx-3 size-12 rounded-full"></Skeleton>
             <div className="flex w-[72%] flex-row items-center justify-between">
               <div className="flex h-full w-[50%] flex-col space-y-2">
                 <Skeleton className="h-5 rounded-lg" style={{ width: `${e.firstFieldWidth}px` }}></Skeleton>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import Header from './Messages/Header';
+import Header from './Header';
 import MessageInput from './Messages/Input';
 import Messages from './Messages/Messages';
 import { Session } from 'next-auth';
@@ -36,12 +36,24 @@ export default function FeedWrapper({
           <MessageInput session={session} conversationId={convId as string} />
         </>
       ) : (
-        <div className={`ml-4 ${conversations.size > 0 ? 'mt-28' : 'mt-10'}`}>
+        <div className={`ml-4 ${conversations.size > 0 ? 'mt-28' : 'absolute bottom-36'}`}>
           <div>
-            <Image src="/icons/white-arrow.png" alt="arrow" width={33} height={88} className="hidden dark:block" />
-            <Image src="/icons/black-arrow.png" alt="arrow" width={33} height={88} className="block dark:hidden" />
+            <Image
+              src="/icons/white-arrow.png"
+              alt="arrow"
+              width={33}
+              height={88}
+              className={'hidden dark:block' + (conversations.size === 0 ? ' -scale-y-100' : '')}
+            />
+            <Image
+              src="/icons/black-arrow.png"
+              alt="arrow"
+              width={33}
+              height={88}
+              className={'block dark:hidden' + (conversations.size === 0 ? ' -scale-y-100' : '')}
+            />
           </div>
-          <div className="-mt-4 ml-12 font-lato text-2xl font-bold">
+          <div className={`${conversations.size > 0 ? '-mt-4' : 'mt-[-105px]'} ml-12 font-lato text-2xl font-bold`}>
             {conversations.size > 0 ? 'Select a conversation and start chatting!' : 'Create a conversation and start chatting!'}
           </div>
         </div>

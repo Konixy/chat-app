@@ -1,10 +1,8 @@
 import React from 'react';
 import { useTheme } from 'next-themes';
-
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Moon, Sun } from 'lucide-react';
-import { DesktopIcon } from '@radix-ui/react-icons';
+import { Monitor, Moon, Sun } from 'lucide-react';
 
 export function ThemeToggle() {
   const { setTheme } = useTheme();
@@ -27,7 +25,7 @@ export function ThemeToggle() {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => setTheme('system')}>
-          <DesktopIcon className="mr-2 size-4" /> System
+          <Monitor className="mr-2 size-4" /> System
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

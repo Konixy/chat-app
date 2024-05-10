@@ -66,9 +66,9 @@ export default function ConversationsWrapper({
     document.body.addEventListener('mouseup', onMouseUp, { once: true });
   };
 
-  function collapse() {
-    setWrapperSizeX(400);
-    setIsSmall(false);
+  function collapse(state: boolean = true) {
+    setWrapperSizeX(state ? 100 : 400);
+    setIsSmall(state);
   }
 
   return (

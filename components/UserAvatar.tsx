@@ -4,16 +4,15 @@ import { shortenName } from '@/lib/utils';
 
 export const defaultAvatar = '/icons/defaultAvatar.jpg';
 
-export default function UserAvatar(
-  Props: {
-    literralName?: boolean;
-    user: {
-      name?: string | null;
-      image?: string | null;
-      username?: string | null;
-    };
-  } & { className?: string },
-) {
+export default function UserAvatar(Props: {
+  literralName?: boolean;
+  user: {
+    name?: string | null;
+    image?: string | null;
+    username?: string | null;
+  };
+  className?: string;
+}) {
   const { user } = Props;
   return (
     <Avatar {...Props}>

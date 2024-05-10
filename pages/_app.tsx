@@ -21,7 +21,7 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
           <ConversationsProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               <Component {...pageProps} />
-              <Toaster position="bottom-right" />
+              <Toaster position="top-center" />
               <Sonner />
             </ThemeProvider>
           </ConversationsProvider>

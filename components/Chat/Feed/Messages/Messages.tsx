@@ -29,6 +29,7 @@ export default function Messages({ userId, convId }: { userId: string; convId: s
   const [fetchMessagesQuery, { loading, error }] = useLazyQuery<{ messages: Message[] }, { conversationId: string }>(MessageOperations.Query.messages, {
     onError: (err) => {
       console.log(err);
+      if (err.message === 'Conversation Not Found') router.push('/app');
     },
   });
   const router = useRouter();

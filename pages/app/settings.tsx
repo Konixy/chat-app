@@ -1,5 +1,11 @@
+import BackBtn from '@/components/BackBtn';
 import React from 'react';
 
 export default function Settings() {
-  return <div>Settings</div>;
+  return (
+    <div>
+      <BackBtn />
+      Settings
+    </div>
+  );
 }
