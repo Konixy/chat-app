@@ -81,7 +81,9 @@ export default function Header({
             {conversation.participants.length === 2 ? (
               <div className="flex flex-col text-left">
                 <div className="text-lg font-semibold">{conversation.participants.filter((p) => p.user.id !== userId)[0]?.user.name}</div>
-                <div className="text-md text-muted-foreground">{formatUsernames(conversation.participants, userId)}</div>
+                <div className="text-md text-muted-foreground">
+                  {formatUsernames(conversation.participants, userId)} / {conversation.participants.filter((p) => p.user.id !== userId)[0]?.user.id}
+                </div>
               </div>
             ) : (
               <div className="text-lg font-semibold">{formatUsernames(conversation.participants, userId)}</div>

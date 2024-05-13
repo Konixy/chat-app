@@ -12,7 +12,7 @@ export const MessageFields = `
   updatedAt
 `;
 
-const messages = {
+const MessagesOperations = {
   Query: {
     messages: gql`
       query Messages($conversationId: String!) {
@@ -40,4 +40,4 @@ const messages = {
   },
 };
 
-export default messages;
+export default MessagesOperations;

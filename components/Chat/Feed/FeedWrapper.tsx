@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 import Header from './Messages/Header';
 import MessageInput from './Messages/Input';
 import Messages from './Messages/Messages';
-import { Session } from 'next-auth';
-import { ApolloError } from '@apollo/client';
+import type { Session } from 'next-auth';
+import type { ApolloError } from '@apollo/client';
 import Image from 'next/image';
 import { useConversations } from '@/lib/useConversations';
 import Profile from './Profile/Profile';
@@ -38,7 +38,7 @@ export default function FeedWrapper({
         </>
       ) : profileUserId && typeof profileUserId === 'string' ? (
         <>
-          <Profile profileUserId={profileUserId} userId={userId} />
+          <Profile profileUserId={profileUserId} session={session} />
         </>
       ) : (
         <div className={`ml-4 ${conversations.size > 0 ? 'mt-28' : 'absolute bottom-36'}`}>

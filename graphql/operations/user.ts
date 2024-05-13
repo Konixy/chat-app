@@ -5,10 +5,25 @@ export const UserFields = `
   username
   image
   name
+  createdAt
 `;
 
-const user = {
+const UserOperations = {
   Queries: {
+    getUsers: gql`
+      query GetUsers {
+        getUsers {
+          ${UserFields}
+        }
+      }
+    `,
+    getUser: gql`
+      query GetUser($id: String!) {
+        getUser(id: $id) {
+          ${UserFields}
+        }
+      }
+    `,
     searchUsers: gql`
       query SearchUsers($query: String!) {
         searchUsers(query: $query) {
@@ -16,13 +31,6 @@ const user = {
         }
       }
     `,
-    getUsers: gql`
-      query GetUsers {
-        getUsers {
-          ${UserFields}
-        }
-      }
-  `,
   },
   Mutations: {
     createUsername: gql`
@@ -37,4 +45,4 @@ const user = {
   Subscriptions: {},
 };
 
-export default user;
+export default UserOperations;

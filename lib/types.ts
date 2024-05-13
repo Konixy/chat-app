@@ -1,11 +1,13 @@
 import { ISODateString } from 'next-auth';
+
 export type User = {
-  name?: string | null;
-  email?: string | null;
-  emailVerified: boolean | null;
+  id: string;
+  username?: string;
+  name: string;
   image?: string | null;
-  id?: string | null;
-  username?: string | null;
+  createdAt: ISODateString;
+  email: string;
+  emailVerified?: boolean;
 };
 
 export interface CreateUsernameData {
@@ -16,10 +18,11 @@ export interface CreateUsernameData {
 }
 
 export type ApiUser = {
-  name?: string;
-  username: string;
-  image?: string;
   id: string;
+  username?: string;
+  name: string;
+  image?: string;
+  createdAt: ISODateString;
 };
 
 export type Conversation = {

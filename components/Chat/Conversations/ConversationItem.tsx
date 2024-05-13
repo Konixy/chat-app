@@ -4,9 +4,10 @@ import React, { useState } from 'react';
 import { formatDistance } from 'date-fns';
 import { formatUsernames } from 'lib/utils';
 import { Conversation } from 'lib/types';
-import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from 'components/ui/context-menu';
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger } from 'components/ui/context-menu';
 import UserAvatar from '@/components/UserAvatar';
-import { LogOut, Pencil, Trash2, UserPlus } from 'lucide-react';
+import { LogOut, Pencil, Trash2, User, UserPlus } from 'lucide-react';
+import { useRouter } from 'next/router';
 
 export default function ConversationItem({
   userId,
@@ -35,6 +36,7 @@ export default function ConversationItem({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setHover] = useState(false);
   // const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
+  const router = useRouter();
 
   const handleClick = () => {
     onViewConversation(conversation.id, hasSeenAllMessages);
@@ -96,16 +98,31 @@ export default function ConversationItem({
         </div>
       </ContextMenuTrigger>
       <ContextMenuContent>
-        <ContextMenuItem
-          onClick={(event) => {
-            event.stopPropagation();
-            onAddParticipant(conversation);
-          }}
-          className={className}
-        >
-          <UserPlus className="mr-2 size-4" />
-          Add members
-        </ContextMenuItem>
+        {conversation.participants.length > 2 ? (
+          <ContextMenuItem
+            onClick={(event) => {
+              event.stopPropagation();
+              onAddParticipant(conversation);
+            }}
+            className={className}
+          >
+            <UserPlus className="mr-2 size-4" />
+            Add members
+          </ContextMenuItem>
+        ) : (
+          <>
+            <ContextMenuItem
+              onClick={(event) => {
+                event.stopPropagation();
+                router.push(`/app/profile/${conversation.participants.filter((p) => p.user.id !== userId)[0]?.user.id}`);
+              }}
+              className={className}
+            >
+              <User className="mr-2 size-4" /> View profile
+            </ContextMenuItem>
+            <ContextMenuSeparator />
+          </>
+        )}
         <ContextMenuItem
           onClick={(event) => {
             event.stopPropagation();
@@ -114,7 +131,7 @@ export default function ConversationItem({
           className={className}
         >
           <Pencil className="mr-2 size-4" />
-          Edit
+          Edit conversation
         </ContextMenuItem>
         {conversation.participants.length > 2 ? (
           <ContextMenuItem
@@ -124,7 +141,7 @@ export default function ConversationItem({
             }}
             className={className}
           >
-            <LogOut className="mr-2 size-4" /> Leave
+            <LogOut className="mr-2 size-4" /> Leave conversation
           </ContextMenuItem>
         ) : (
           <ContextMenuItem
@@ -134,7 +151,7 @@ export default function ConversationItem({
             }}
             className={className}
           >
-            <Trash2 className="mr-2 size-4" /> Delete
+            <Trash2 className="mr-2 size-4" /> Delete conversation
           </ContextMenuItem>
         )}
       </ContextMenuContent>

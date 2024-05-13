@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { User } from 'lib/types';
+import { ApiUser } from 'lib/types';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatUsernames(participants: { user: Omit<User, 'emailVerified'> }[], userId: string) {
+export function formatUsernames(participants: { user: Omit<ApiUser, 'emailVerified'> }[], userId: string) {
   return participants
     .filter((e) => e.user.id !== userId)
     .map((e) => e.user.username)

@@ -18,7 +18,7 @@ export default function ConversationFooter({
       <TooltipProvider delayDuration={0}>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="outline" className={`${isSmall ? 'size-12' : 'size-16'} rounded-full`} onClick={() => openModal(true)}>
+            <Button variant="outline" className={`${isSmall ? 'size-12' : 'size-16'} rounded-full`}>
               <UserPlus2 className={isSmall ? 'size-5' : 'size-6'} />
               <span className="sr-only">Add friend</span>
             </Button>
