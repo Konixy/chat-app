@@ -133,7 +133,7 @@ export default function ConversationList({
                     isSmall={isSmall}
                   />
                 ))
-            : !isSmall && <div className="mt-6 text-center text-muted-foreground">You don&apos;t have any conversations</div>}
+            : !isSmall && <div className="mt-2 text-center text-muted-foreground">You don&apos;t have any conversations</div>}
         </div>
       </div>
 

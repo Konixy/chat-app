@@ -1,12 +1,13 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import Header from './Header';
+import Header from './Messages/Header';
 import MessageInput from './Messages/Input';
 import Messages from './Messages/Messages';
 import { Session } from 'next-auth';
 import { ApolloError } from '@apollo/client';
 import Image from 'next/image';
 import { useConversations } from '@/lib/useConversations';
+import Profile from './Profile/Profile';
 
 export default function FeedWrapper({
   session,
@@ -21,7 +22,7 @@ export default function FeedWrapper({
   const { conversations } = useConversations();
 
   const {
-    query: { convId },
+    query: { convId, userId: profileUserId },
   } = router;
   const {
     user: { id: userId },
@@ -34,6 +35,10 @@ export default function FeedWrapper({
           <Header conversationId={convId as string} userId={userId} conversationsLoading={conversationsLoading} error={conversationsError} />
           <Messages convId={convId} userId={userId} />
           <MessageInput session={session} conversationId={convId as string} />
+        </>
+      ) : profileUserId && typeof profileUserId === 'string' ? (
+        <>
+          <Profile profileUserId={profileUserId} userId={userId} />
         </>
       ) : (
         <div className={`ml-4 ${conversations.size > 0 ? 'mt-28' : 'absolute bottom-36'}`}>

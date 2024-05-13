@@ -1,10 +1,11 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import prisma from 'lib/prismadb';
+import { CustomPrismaAdapter } from '@/lib/CustomPrismaAdapter';
+import { Adapter } from 'next-auth/adapters';
 
 export default NextAuth({
-  adapter: PrismaAdapter(prisma),
+  adapter: CustomPrismaAdapter(prisma) as unknown as Adapter,
   theme: { colorScheme: 'dark' },
   providers: [
     GoogleProvider({

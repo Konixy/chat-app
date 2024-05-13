@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import Chat from 'components/Chat';
+import Chat from '@/components/Chat/Chat';
 import { Session } from 'next-auth';
 import BackBtn from 'components/BackBtn';
 import { ThreeDots } from 'react-loader-spinner';

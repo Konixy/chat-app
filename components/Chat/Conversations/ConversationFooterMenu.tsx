@@ -35,7 +35,7 @@ export default function ConversationFooterMenu({ session, isSmall }: { session: 
         </DropdownMenuTrigger>
         <DropdownMenuContent className={isSmall ? 'mb-2 ml-3' : 'mb-2'} side={isSmall ? 'right' : 'top'}>
           <DropdownMenuItem asChild className="cursor-pointer">
-            <Link href="/app/me">
+            <Link href="/app/profile/me">
               <CircleUser className="mr-2 size-4" />
               Profile
             </Link>

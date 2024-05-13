@@ -60,7 +60,7 @@ export default function Navbar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem asChild className="cursor-pointer">
-                <Link href="/app/me">
+                <Link href="/app/profile/me">
                   <CircleUser className="mr-2 size-4" />
                   Profile
                 </Link>
