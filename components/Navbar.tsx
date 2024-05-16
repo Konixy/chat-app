@@ -6,10 +6,10 @@ import { signOut, useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import { ThemeToggle } from './ui/theme-toggle';
 import { buttonVariants } from './ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import UserAvatar from './UserAvatar';
 import { CaretDownIcon } from '@radix-ui/react-icons';
-import { CircleUser, LogOut, Settings } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 
 export default function Navbar() {
   const router = useRouter();
@@ -59,7 +59,7 @@ export default function Navbar() {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem asChild className="cursor-pointer">
+              {/* <DropdownMenuItem asChild className="cursor-pointer">
                 <Link href="/app/profile/me">
                   <CircleUser className="mr-2 size-4" />
                   Profile
@@ -71,7 +71,7 @@ export default function Navbar() {
                   Account settings
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
+              <DropdownMenuSeparator /> */}
               <DropdownMenuItem
                 onClick={() => {
                   toast.promise(signOut({ redirect: true, callbackUrl: '/login' }), {

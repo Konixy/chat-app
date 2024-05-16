@@ -4,7 +4,7 @@ import type { Session } from 'next-auth';
 import ConversationItem from './ConversationItem';
 import { useRouter } from 'next/router';
 import { ApolloError, useMutation } from '@apollo/client';
-import ConversationsLoader from './ConversationsLoader';
+import ConversationsLoader from './Loader';
 import { useConversations } from '@/lib/useConversations';
 import { Button } from '@/components/ui/button';
 import SearchConversation from './SearchConversation';
@@ -13,7 +13,7 @@ import toast from 'react-hot-toast';
 import AddParticipantModal from './AddParticipantsModal';
 import { Conversation } from '@/lib/types';
 import { CloudOff, RotateCw } from 'lucide-react';
-import ConversationFooter from './ConversationFooter';
+import ConversationFooter from './Footer';
 import { formatUsernames } from '@/lib/utils';
 
 export default function ConversationList({

@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import MessageOperations from 'graphql/operations/message';
 import MessageItem from './MessageItem';
 import { useRouter } from 'next/router';
-import MessagesLoader from './MessagesLoader';
+import MessagesLoader from './Loader';
 import { useConversations } from '@/lib/useConversations';
 import { Message } from 'lib/types';
 import { Button } from '@/components/ui/button';

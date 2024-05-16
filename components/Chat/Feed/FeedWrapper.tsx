@@ -7,7 +7,6 @@ import type { Session } from 'next-auth';
 import type { ApolloError } from '@apollo/client';
 import Image from 'next/image';
 import { useConversations } from '@/lib/useConversations';
-import Profile from './Profile/Profile';
 
 export default function FeedWrapper({
   session,
@@ -22,7 +21,7 @@ export default function FeedWrapper({
   const { conversations } = useConversations();
 
   const {
-    query: { convId, userId: profileUserId },
+    query: { convId },
   } = router;
   const {
     user: { id: userId },
@@ -35,10 +34,6 @@ export default function FeedWrapper({
           <Header conversationId={convId as string} userId={userId} conversationsLoading={conversationsLoading} error={conversationsError} />
           <Messages convId={convId} userId={userId} />
           <MessageInput session={session} conversationId={convId as string} />
-        </>
-      ) : profileUserId && typeof profileUserId === 'string' ? (
-        <>
-          <Profile profileUserId={profileUserId} session={session} />
         </>
       ) : (
         <div className={`ml-4 ${conversations.size > 0 ? 'mt-28' : 'absolute bottom-36'}`}>

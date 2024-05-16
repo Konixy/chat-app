@@ -40,11 +40,7 @@ export default function MessageInput({ session, conversationId }: { session: Ses
       const messageId = nanoid();
       const message: MessageWithLoading = {
         id: messageId,
-        sender: {
-          id: session.user.id,
-          username: session.user.username,
-          image: session.user.image as string | undefined,
-        },
+        sender: session.user,
         conversationId: convId,
         body,
         // seenByIds: [session.user.id],

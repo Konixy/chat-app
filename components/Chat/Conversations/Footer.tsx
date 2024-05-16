@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { UserPlus2, MessageCirclePlus } from 'lucide-react';
 import type { Session } from 'next-auth';
-import ConversationFooterMenu from './ConversationFooterMenu';
+import ConversationFooterMenu from './FooterMenu';
 
 export default function ConversationFooter({
   session,

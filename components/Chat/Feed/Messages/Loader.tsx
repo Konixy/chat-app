@@ -41,7 +41,7 @@ export default function MessagesLoader({ isGroup }: { isGroup: boolean }) {
     <div id="loader-container" className="mx-4 flex h-full flex-col-reverse space-y-4 space-y-reverse overflow-y-hidden">
       {items.map((e, i) => (
         <div key={i} className={`flex w-full space-x-2 ${e.left ? 'justify-start' : 'justify-end'}`}>
-          {isGroup && e.left && <Skeleton className="h-10 w-10 rounded-full"></Skeleton>}
+          {isGroup && e.left && <Skeleton className="size-10 rounded-full"></Skeleton>}
           <div className={`flex ${e.left ? 'flex-col items-start' : 'flex-col-reverse items-end space-y-reverse'} space-y-2`}>
             <Skeleton className="h-5 rounded-lg" style={{ width: `${e.firstFieldWidth}px` }}></Skeleton>
             <Skeleton className="rounded-lg" style={{ height: `${e.bodyLines * 24}px`, width: `${e.bodyWidth}px` }}></Skeleton>
