@@ -8,8 +8,8 @@ import { Button } from 'components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from 'components/ui/dialog';
 import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from 'components/ui/command';
 import UserAvatar from '@/components/UserAvatar';
-import { Conversation } from '@/lib/types';
 import { Check } from 'lucide-react';
+import { ConversationOrFilteredConversation } from './ConversationList';
 
 export type User = Pick<PrismaUser, 'id' | 'username' | 'name' | 'image'>;
 
@@ -17,8 +17,8 @@ export default function AddParticipantModal({
   activeConversation,
   setActiveConversation,
 }: {
-  activeConversation: Conversation | null;
-  setActiveConversation: React.Dispatch<React.SetStateAction<Conversation | null>>;
+  activeConversation: ConversationOrFilteredConversation | null;
+  setActiveConversation: React.Dispatch<React.SetStateAction<ConversationOrFilteredConversation | null>>;
 }) {
   const [participants, setParticipants] = useState<User[]>([]);
   const { data: users, loading, error, fetchMore } = useQuery<{ getUsers: User[] }>(UserOperations.Queries.getUsers);

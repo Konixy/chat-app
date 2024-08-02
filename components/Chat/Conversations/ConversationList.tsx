@@ -7,7 +7,7 @@ import { ApolloError, useMutation } from '@apollo/client';
 import ConversationsLoader from './Loader';
 import { useConversations } from '@/lib/useConversations';
 import { Button } from '@/components/ui/button';
-import SearchConversation from './SearchConversation';
+import SearchConversation from './Search';
 import ConversationOperations from 'graphql/operations/conversation';
 import toast from 'react-hot-toast';
 import AddParticipantModal from './AddParticipantsModal';
@@ -15,6 +15,8 @@ import { Conversation } from '@/lib/types';
 import { CloudOff, RotateCw } from 'lucide-react';
 import ConversationFooter from './Footer';
 import { formatUsernames } from '@/lib/utils';
+
+export type ConversationOrFilteredConversation = Conversation & { filteredName?: string | Element };
 
 export default function ConversationList({
   session,
@@ -32,10 +34,10 @@ export default function ConversationList({
   collapse: (state?: boolean) => void;
 }) {
   const [isModalOpen, openModal] = useState(false);
-  const [addParticipantModalConversation, setAddParticipantModalConversation] = useState<Conversation | null>(null);
+  const [addParticipantModalConversation, setAddParticipantModalConversation] = useState<ConversationOrFilteredConversation | null>(null);
   const router = useRouter();
   const { conversations } = useConversations();
-  const [filteredConversations, setFilteredConversations] = useState<Conversation[]>([]);
+  const [filteredConversations, setFilteredConversations] = useState<ConversationOrFilteredConversation[]>([]);
   const [leaveConversationMutation] = useMutation<{ leaveConversation: boolean }, { conversationId: string }>(
     ConversationOperations.Mutations.leaveConversation,
   );
@@ -50,17 +52,38 @@ export default function ConversationList({
   }, [conversations]);
 
   useEffect(() => {
-    if (searchQuery === '') setFilteredConversations(Array.from(conversations.values()));
+    if (searchQuery === '') setFilteredConversations([...Array.from(conversations.values())]);
     else {
       setFilteredConversations(
         Array.from(conversations.values()).filter((c) => {
           if (c.name) {
             return c.name?.toLowerCase().includes(searchQuery.toLowerCase());
           } else {
-            return formatUsernames(c.participants, session.user.id).toLowerCase().includes(searchQuery.toLowerCase());
+            const name = formatUsernames(c.participants, session.user.id).toLowerCase();
+            const condition = name.includes(searchQuery.toLowerCase());
+
+            return condition;
           }
         }),
       );
+
+      // const result = new RegExp(searchQuery, 'i');
+
+      // Array.from(conversations.values()).forEach((c, i) => {
+      //   if (result.test(c.name || formatUsernames(c.participants, session.user.id))) {
+      //     setFilteredConversations((old) => {
+      //       const newArr = [...old];
+      //       const el = document.createElement('div');
+      //       el.innerHTML = (c.name || formatUsernames(c.participants, session.user.id)).replace(result, "<div style='background-color: yellow;'>$&</div>");
+      //       newArr[i] = Object.assign({}, c, { filteredName: el });
+      //       console.log(newArr);
+      //       return newArr;
+      //     });
+      //     console.log(filteredConversations);
+      //   } else {
+      //     setFilteredConversations((old) => old && [...old.filter((cc) => cc.id !== c.id)]);
+      //   }
+      // });
     }
   }, [searchQuery]);
 
@@ -86,7 +109,7 @@ export default function ConversationList({
     // });
   }
 
-  async function onAddParticipant(conversation: Conversation) {
+  async function onAddParticipant(conversation: ConversationOrFilteredConversation) {
     setAddParticipantModalConversation(conversation);
   }
 
@@ -131,6 +154,7 @@ export default function ConversationList({
                     selectedConversationId={router.query.convId as string | undefined}
                     hasSeenAllMessages={conv.participants.find((p) => p.user.id === session.user.id)?.hasSeenAllMessages}
                     isSmall={isSmall}
+                    searchQuery={searchQuery}
                   />
                 ))
             : !isSmall && <div className="mt-2 text-center text-muted-foreground">You don&apos;t have any conversations</div>}

@@ -3,11 +3,12 @@
 import React, { useState } from 'react';
 import { formatDistance } from 'date-fns';
 import { formatUsernames } from 'lib/utils';
-import { Conversation } from 'lib/types';
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger } from 'components/ui/context-menu';
 import UserAvatar from '@/components/UserAvatar';
 import { LogOut, Pencil, Trash2, User, UserPlus } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { ConversationOrFilteredConversation } from './ConversationList';
+import Highlighter from 'react-highlight-words';
 
 export default function ConversationItem({
   userId,
@@ -20,17 +21,19 @@ export default function ConversationItem({
   onDeleteConversation,
   onLeaveConversation,
   isSmall,
+  searchQuery,
 }: {
   userId: string;
-  conversation: Conversation;
+  conversation: ConversationOrFilteredConversation;
   onViewConversation: (convId: string, hasSeenAllMessages?: boolean) => void;
   onEditConversation: () => void;
-  onAddParticipant: (conv: Conversation) => void;
+  onAddParticipant: (conv: ConversationOrFilteredConversation) => void;
   hasSeenAllMessages?: boolean;
   selectedConversationId?: string;
   onDeleteConversation: (conversationId: string) => void;
   onLeaveConversation: (conversationId: string) => void;
   isSmall: boolean;
+  searchQuery: string;
 }) {
   // const [menuOpen, toggleMenu] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -81,7 +84,7 @@ export default function ConversationItem({
             <div className="flex h-full w-[85%] justify-between">
               <div className="flex h-full w-[50%] flex-col">
                 <div className="overflow-hidden truncate whitespace-nowrap font-semibold text-foreground">
-                  {formatUsernames(conversation.participants, userId)}
+                  <Highlighter searchWords={[searchQuery]} textToHighlight={formatUsernames(conversation.participants, userId)} />
                 </div>
 
                 <div className="w-[140%] overflow-hidden whitespace-nowrap">
