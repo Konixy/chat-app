@@ -28,11 +28,8 @@ export default function App() {
       <Auth reloadSession={reloadSession} />
     )
   ) : (
-    <>
-      <BackBtn url="/" />
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-        <ThreeDots width={50} height={50} color={theme === 'dark' ? 'white' : 'black'} />
-      </div>
-    </>
+    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+      <ThreeDots width={50} height={50} color={theme === 'dark' ? 'white' : 'black'} />
+    </div>
   );
 }

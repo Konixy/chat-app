@@ -1,7 +1,6 @@
 import React from 'react';
 import { getSession, signIn, useSession } from 'next-auth/react';
 import { NextPageContext } from 'next/types';
-import BackBtn from 'components/BackBtn';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -21,13 +20,19 @@ export default function Auth() {
 
   return (
     <>
-      <BackBtn url="/" />
       <div className="h-[100vh]">
         <div className="absolute right-1/2 top-1/2 inline-block -translate-y-1/2 translate-x-1/2 flex-col items-center justify-center text-center">
           <div className="mb-10 flex w-full flex-row justify-center text-center">
             <Image src={'/icons/white-logo.svg'} alt="Chat" width={50} height={50} className="hidden dark:block" />
             <Image src={'/icons/black-logo.svg'} alt="Chat" width={50} height={50} className="block dark:hidden" />
             <div className="font-metana ml-4 text-6xl font-bold">Chat</div>
+          </div>
+          <div className="mb-10 text-secondary">
+            A Next.Js full-stack chat app by{' '}
+            <a href="https://github.com/Konixy" target="_blank" rel="noreferrer" className="font-bold hover:underline">
+              Konixy
+            </a>
+            .
           </div>
           <Button
             className="w-64 pl-3"
