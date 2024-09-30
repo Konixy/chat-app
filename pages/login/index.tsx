@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { Button } from 'components/ui/button';
+import { GitHubLogoIcon } from '@radix-ui/react-icons';
 
 export default function Auth() {
   const [isLoading, setIsLoading] = useState(false);
@@ -27,13 +28,6 @@ export default function Auth() {
             <Image src={'/icons/black-logo.svg'} alt="Chat" width={50} height={50} className="block dark:hidden" />
             <div className="font-metana ml-4 text-6xl font-bold">Chat</div>
           </div>
-          <div className="mb-10 text-secondary">
-            A Next.Js full-stack chat app by{' '}
-            <a href="https://github.com/Konixy" target="_blank" rel="noreferrer" className="font-bold hover:underline">
-              Konixy
-            </a>
-            .
-          </div>
           <Button
             className="w-64 pl-3"
             onClick={() => {
@@ -49,6 +43,26 @@ export default function Auth() {
             </svg>
             Login or Signup with Google
           </Button>
+        </div>
+      </div>
+      <div className="absolute bottom-10 flex w-full flex-col items-center gap-4 text-center text-secondary">
+        <div>
+          <a
+            href="https://github.com/Konixy/chat"
+            target="_blank"
+            rel="noreferrer"
+            role="button"
+            className="flex size-9 items-center justify-center rounded-md p-1 transition-colors hover:bg-secondary-foreground hover:text-white"
+          >
+            <GitHubLogoIcon className="size-5" />
+          </a>
+        </div>
+        <div>
+          A Next.Js full-stack chat app by{' '}
+          <a href="https://github.com/Konixy" target="_blank" rel="noreferrer" className="font-bold hover:underline">
+            Konixy
+          </a>
+          .
         </div>
       </div>
     </>

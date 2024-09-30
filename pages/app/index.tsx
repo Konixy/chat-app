@@ -3,7 +3,6 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Auth from '@/components/Auth/Auth';
 import { ThreeDots } from 'react-loader-spinner';
-import BackBtn from '@/components/BackBtn';
 import { useTheme } from 'next-themes';
 
 export default function App() {
