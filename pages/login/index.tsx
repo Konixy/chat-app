@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { Button } from 'components/ui/button';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 export default function Auth() {
   const [isLoading, setIsLoading] = useState(false);
@@ -45,17 +46,18 @@ export default function Auth() {
           </Button>
         </div>
       </div>
-      <div className="absolute bottom-10 flex w-full flex-col items-center gap-4 text-center text-secondary">
-        <div>
+      <div className="absolute bottom-10 flex w-full flex-col items-center gap-4 text-center text-secondary-foreground dark:text-secondary">
+        <div className="flex flex-row items-center gap-2">
           <a
             href="https://github.com/Konixy/chat-app"
             target="_blank"
             rel="noreferrer"
             role="button"
-            className="flex size-9 items-center justify-center rounded-md p-1 transition-colors hover:bg-secondary-foreground hover:text-white"
+            className="flex size-9 items-center justify-center rounded-md p-1 transition-colors hover:bg-muted dark:hover:bg-secondary-foreground dark:hover:text-white"
           >
             <GitHubLogoIcon className="size-5" />
           </a>
+          <ThemeToggle className="hover:bg-muted dark:hover:bg-secondary-foreground" variant="ghost" allign="center" />
         </div>
         <div>
           A Next.Js full-stack chat app by{' '}
