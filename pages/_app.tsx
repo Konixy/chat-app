@@ -14,7 +14,7 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
   return (
     <>
       <Head>
-        <title>React chat app by Konixy</title>
+        <title>NextJS Chat App</title>
       </Head>
       <ApolloProvider client={client}>
         <SessionProvider session={session}>
