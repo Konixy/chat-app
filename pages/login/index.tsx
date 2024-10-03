@@ -48,7 +48,7 @@ export default function Auth() {
       <div className="absolute bottom-10 flex w-full flex-col items-center gap-4 text-center text-secondary">
         <div>
           <a
-            href="https://github.com/Konixy/chat"
+            href="https://github.com/Konixy/chat-app"
             target="_blank"
             rel="noreferrer"
             role="button"
