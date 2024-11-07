@@ -51,9 +51,9 @@ export default function ConversationItem({
     <ContextMenu>
       <ContextMenuTrigger>
         <div
-          className={`relative flex h-20 cursor-pointer flex-row items-center rounded-md transition ${
+          className={`relative flex h-20 cursor-pointer flex-row items-center transition ${
             conversation.id === selectedConversationId ? 'bg-muted text-foreground' : 'text-foreground/60 hover:bg-muted/50'
-          } ${isSmall ? 'w-20 justify-center' : 'justify-between p-4'}`}
+          } ${isSmall ? 'w-20 justify-center rounded-2xl' : 'justify-between rounded-md p-4'}`}
           onClick={handleClick}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}

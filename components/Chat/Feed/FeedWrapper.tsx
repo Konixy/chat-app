@@ -53,7 +53,7 @@ export default function FeedWrapper({
               className={'block dark:hidden' + (conversations.size === 0 ? ' -scale-y-100' : '')}
             />
           </div>
-          <div className={`${conversations.size > 0 ? '-mt-4' : 'mt-[-105px]'} ml-12 font-lato text-2xl font-bold`}>
+          <div className={`${conversations.size > 0 ? '-mt-4' : 'mt-[-105px]'} ml-12 font-lato text-3xl font-bold`}>
             {conversations.size > 0 ? 'Select a conversation and start chatting!' : 'Create a conversation and start chatting!'}
           </div>
         </div>

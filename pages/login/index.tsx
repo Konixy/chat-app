@@ -60,7 +60,7 @@ export default function Auth() {
           <ThemeToggle className="hover:bg-muted dark:hover:bg-secondary-foreground" variant="ghost" allign="center" />
         </div>
         <div>
-          A Next.Js full-stack chat app by{' '}
+          A NextJS full-stack chat app by{' '}
           <a href="https://github.com/Konixy" target="_blank" rel="noreferrer" className="font-bold hover:underline">
             Konixy
           </a>

@@ -137,7 +137,7 @@ export default function ConversationList({
         <div className={'w-full pt-1' + (isSmall ? ' flex flex-col items-center' : '')}>
           <SearchConversation isSmall={isSmall} collapse={collapse} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         </div>
-        <div className={'w-full overflow-y-scroll pb-10' + (isSmall ? ' flex flex-col items-center' : '')}>
+        <div className={'w-full overflow-y-scroll no-scrollbar pb-10' + (isSmall ? ' flex flex-col items-center' : '')}>
           {conversations.size > 0
             ? (isSmall ? Array.from(conversations.values()) : filteredConversations)
                 .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
