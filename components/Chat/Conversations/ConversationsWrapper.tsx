@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import ConversationList from './ConversationList';
 import { useRouter } from 'next/router';
 import { useLocalStorage } from 'lib/utils';
 import { ApolloError } from '@apollo/client';
 import { Session } from 'next-auth';
 import { useConversations } from '@/lib/useConversations';
-
-const minXwidth = 350;
-const maxXwidth = typeof window !== 'undefined' ? window.innerWidth / 2 : 700;
-const sizeOnSmall = 100;
 
 export default function ConversationsWrapper({
   session,
@@ -19,6 +17,12 @@ export default function ConversationsWrapper({
   conversationsLoading: boolean;
   conversationsError: ApolloError | undefined;
 }) {
+  const [windowWidth, setWindowWidth] = useState(1400);
+
+  const minXwidth = 350;
+  const maxXwidth = windowWidth / 2;
+  const sizeOnSmall = 100;
+
   const router = useRouter();
   const {
     conversationsActions: { markAsRead: markConversationAsRead },
@@ -36,6 +40,30 @@ export default function ConversationsWrapper({
 
     markConversationAsRead(conversationId, userId);
   }
+
+  useEffect(() => {
+    function updateWindowDimensions() {
+      setWindowWidth(window.innerWidth);
+    }
+
+    window.addEventListener('resize', updateWindowDimensions);
+
+    return () => window.removeEventListener('resize', updateWindowDimensions);
+  }, []);
+
+  useEffect(() => {
+    if (windowWidth < 768 && isSmall) {
+      setIsSmall(false);
+    } else if (windowWidth >= 768 && !isSmall) {
+      if (wrapperSizeX < minXwidth / 2) {
+        setWrapperSizeX(sizeOnSmall);
+        setIsSmall(true);
+      } else if (wrapperSizeX < minXwidth) {
+        setWrapperSizeX(minXwidth);
+        setIsSmall(false);
+      }
+    }
+  }, [windowWidth]);
 
   const dragHandler = (mouseDownEvent: React.MouseEvent<HTMLButtonElement>) => {
     const startSize = wrapperSizeX;

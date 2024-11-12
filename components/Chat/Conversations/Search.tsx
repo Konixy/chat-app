@@ -19,8 +19,11 @@ export default function SearchConversation({
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <button onClick={() => collapse(false)} className="mb-4 flex size-9 flex-row items-center justify-center rounded-full">
-            <ChevronRight className="text-card-foreground transition-colors hover:text-foreground" />
+          <button
+            onClick={() => collapse(false)}
+            className="mb-4 flex size-9 flex-row items-center justify-center rounded-full text-card-foreground transition-colors hover:text-foreground"
+          >
+            <ChevronRight />
           </button>
         </TooltipTrigger>
         <TooltipContent className="bg-secondary text-foreground dark:bg-secondary-foreground">Open sidebar</TooltipContent>
@@ -28,7 +31,7 @@ export default function SearchConversation({
     </TooltipProvider>
   ) : (
     <div className="mb-4 ml-6 flex items-center">
-      <MagnifyingGlassIcon className="-mr-6 ml-2 size-4 shrink-0 opacity-50" />
+      <MagnifyingGlassIcon className="-mr-6 size-4 shrink-0 opacity-50 md:ml-2" />
       <Input
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
@@ -40,7 +43,7 @@ export default function SearchConversation({
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <button onClick={() => collapse(true)} className="ml-2 flex size-6 flex-row items-center justify-center">
+            <button onClick={() => collapse(true)} className="ml-2 hidden size-6 flex-row items-center justify-center md:flex">
               <ChevronLeft className="text-card-foreground transition-colors hover:text-foreground" />
             </button>
           </TooltipTrigger>

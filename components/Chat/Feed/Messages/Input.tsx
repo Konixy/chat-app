@@ -94,7 +94,7 @@ export default function MessageInput({ session, conversationId }: { session: Ses
         <Input
           value={body}
           onChange={(e) => setBody(e.target.value)}
-          className="focus:border-gray-7 py-5 pl-12 pr-4 text-lg transition focus:shadow-none md:text-base"
+          className="focus:border-gray-7 px-12 py-5  text-lg transition focus:shadow-none md:text-base"
           placeholder="New message"
           autoComplete="off"
           id="chat-input"
