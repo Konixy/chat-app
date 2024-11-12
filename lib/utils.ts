@@ -74,7 +74,7 @@ export function useMap<K, V>(initialState: MapOrEntries<K, V> = new Map()): Retu
       setMap((prev) => {
         const copy = new Map(prev);
         const value = v instanceof Function ? v(copy.get(key)) : v;
-        value && copy.set(key, value);
+        if (value) copy.set(key, value);
         return copy;
       });
     }, []),
