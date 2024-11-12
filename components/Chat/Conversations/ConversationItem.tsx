@@ -61,41 +61,42 @@ export default function ConversationItem({
           {isSmall ? (
             <div
               className={`avatar avatar-lg transition ${
-                !hasSeenAllMessages && `bg-transparent before:absolute before:right-2 before:z-30 before:size-4 before:rounded-full before:bg-primary`
+                !hasSeenAllMessages && `bg-transparent before:absolute before:right-0 before:size-4 before:rounded-full before:bg-primary`
               }`}
             >
               <UserAvatar user={conversation.participants.filter((p) => p.user.id !== userId)[0]?.user} className="size-12" />
             </div>
           ) : (
-            <>
-              <div className="relative mr-3 flex flex-row items-center">
-                <div className={`ml-[-6px] mr-1 size-3 rounded-full bg-primary ${hasSeenAllMessages && 'opacity-0'}`}></div>
+            <div className="relative mr-3 flex flex-row items-center">
+              <div className={`ml-[-6px] mr-1 size-3 rounded-full bg-primary ${hasSeenAllMessages && 'opacity-0'}`}></div>
 
-                <UserAvatar
-                  user={
-                    conversation.latestMessage && conversation.latestMessage.sender.id !== userId
-                      ? conversation.latestMessage.sender
-                      : conversation.participants.filter((p) => p.user.id !== userId)[0]?.user
-                  }
-                />
-              </div>
-              <div className="flex h-full w-[85%] justify-between">
-                <div className="flex h-full w-[50%] flex-col">
-                  <div className="overflow-hidden truncate whitespace-nowrap font-semibold text-foreground">
-                    <Highlighter searchWords={[searchQuery]} textToHighlight={formatUsernames(conversation.participants, userId)} />
-                  </div>
+              <UserAvatar
+                user={
+                  conversation.latestMessage && conversation.latestMessage.sender.id !== userId
+                    ? conversation.latestMessage.sender
+                    : conversation.participants.filter((p) => p.user.id !== userId)[0]?.user
+                }
+              />
+            </div>
+          )}
 
-                  <div className="w-[140%] overflow-hidden whitespace-nowrap">
-                    <div className="text-ellipsis">{conversation.latestMessage ? conversation.latestMessage.body : 'Conversation created'}</div>
-                  </div>
+          {!isSmall && (
+            <div className="flex h-full w-[85%] justify-between">
+              <div className="flex h-full w-[50%] flex-col">
+                <div className="overflow-hidden truncate whitespace-nowrap font-semibold text-foreground">
+                  <Highlighter searchWords={[searchQuery]} textToHighlight={formatUsernames(conversation.participants, userId)} />
                 </div>
-                <div className="float-right w-full text-right text-sm">
-                  {formatDistance(new Date(conversation.updatedAt), new Date(), {
-                    addSuffix: true,
-                  })}
+
+                <div className="w-[140%] overflow-hidden whitespace-nowrap">
+                  <div className="text-ellipsis">{conversation.latestMessage ? conversation.latestMessage.body : 'Conversation created'}</div>
                 </div>
               </div>
-            </>
+              <div className="float-right w-full text-right text-sm">
+                {formatDistance(new Date(conversation.updatedAt), new Date(), {
+                  addSuffix: true,
+                })}
+              </div>
+            </div>
           )}
         </div>
       </ContextMenuTrigger>

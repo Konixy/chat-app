@@ -66,6 +66,24 @@ export default function ConversationList({
           }
         }),
       );
+
+      // const result = new RegExp(searchQuery, 'i');
+
+      // Array.from(conversations.values()).forEach((c, i) => {
+      //   if (result.test(c.name || formatUsernames(c.participants, session.user.id))) {
+      //     setFilteredConversations((old) => {
+      //       const newArr = [...old];
+      //       const el = document.createElement('div');
+      //       el.innerHTML = (c.name || formatUsernames(c.participants, session.user.id)).replace(result, "<div style='background-color: yellow;'>$&</div>");
+      //       newArr[i] = Object.assign({}, c, { filteredName: el });
+      //       console.log(newArr);
+      //       return newArr;
+      //     });
+      //     console.log(filteredConversations);
+      //   } else {
+      //     setFilteredConversations((old) => old && [...old.filter((cc) => cc.id !== c.id)]);
+      //   }
+      // });
     }
   }, [searchQuery]);
 
@@ -83,6 +101,12 @@ export default function ConversationList({
       success: 'Successfully leaved conversation!',
       error: 'An error occured',
     });
+
+    // toast.promise(leaveConversationMutation({ variables: { conversationId } }), {
+    //   loading: 'Leaving conversation...',
+    //   success: 'Successfully leaved conversation!',
+    //   error: 'An error occured',
+    // });
   }
 
   async function onAddParticipant(conversation: ConversationOrFilteredConversation) {
@@ -133,17 +157,7 @@ export default function ConversationList({
                     searchQuery={searchQuery}
                   />
                 ))
-            : !isSmall && (
-                <div className="mt-4 text-center text-muted-foreground">
-                  You don&apos;t have any conversations yet,
-                  <br />
-                  you can{' '}
-                  <button className="underline transition-colors hover:text-card-foreground" onClick={() => openModal(true)}>
-                    create one
-                  </button>{' '}
-                  right now
-                </div>
-              )}
+            : !isSmall && <div className="mt-2 text-center text-muted-foreground">You don&apos;t have any conversations</div>}
         </div>
       </div>
 
